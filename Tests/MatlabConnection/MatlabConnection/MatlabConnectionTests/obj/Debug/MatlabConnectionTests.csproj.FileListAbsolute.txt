@@ -1,0 +1,10 @@
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\MatlabConnectionTests.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\MatlabConnectionTests.pdb
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\MatlabConnection.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\Interop.MLApp.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\MatlabConnection.pdb
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\obj\Debug\MatlabConnectionTests.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\obj\Debug\MatlabConnectionTests.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\MatlabConnection\MatlabConnectionTests\obj\Debug\MatlabConnectionTests.pdb

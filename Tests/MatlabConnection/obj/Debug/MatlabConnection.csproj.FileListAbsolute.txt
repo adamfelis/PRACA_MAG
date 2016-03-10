@@ -1,0 +1,9 @@
+E:\PW\PRACA_MAG\Tests\MatlabConnection\bin\Debug\MatlabConnection.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\bin\Debug\MatlabConnection.pdb
+E:\PW\PRACA_MAG\Tests\MatlabConnection\obj\Debug\Interop.MLApp.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\obj\Debug\MatlabConnection.csproj.ResolveComReference.cache
+E:\PW\PRACA_MAG\Tests\MatlabConnection\obj\Debug\MatlabConnection.dll
+E:\PW\PRACA_MAG\Tests\MatlabConnection\obj\Debug\MatlabConnection.pdb
+E:\PW\PRACA_MAG\Tests\MatlabConnection\bin\Debug\Interop.MLApp.dll
+E:\PW\PRACA_MAG\Tests\TestProjectWithMatlab\Assets\MatlabConnection.dll
+E:\PW\PRACA_MAG\Tests\TestProjectWithMatlab\Assets\MatlabConnection.pdb
