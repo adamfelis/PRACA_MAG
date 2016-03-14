@@ -8,29 +8,25 @@ public class LinkSyncSCR : MonoBehaviour
 {
     public Connector test = new Connector();
     string lastMessage;
-    public Transform PlayerCoord;
+    private string sNetIP = "127.0.0.1";
+    private int iPORT_NUM = 10000;//IT MUST BE
 
     void Start()
     {
-        Debug.Log(test.fnConnectResult("192.168.111.49", 10000, System.Environment.MachineName));
-        if (test.res != "")
-        {
-            Debug.Log(test.res);
-        }
-
+        Debug.Log(test.Connect(sNetIP, iPORT_NUM, System.Environment.MachineName));
     }
     void Update()
     {
         if (Input.GetKeyDown("space"))
         {
             Debug.Log("space key was pressed");
-            test.fnPacketTest("space key was pressed");
+            test.Send("space key was pressed");
         }
 
         if (Input.GetKeyDown("escape"))
         {
             Debug.Log("escape key was pressed");
-            test.fnPacketTest("escape key was pressed");
+            test.Send("escape key was pressed");
         }
         if (test.strMessage != "JOIN")
         {
@@ -40,6 +36,7 @@ public class LinkSyncSCR : MonoBehaviour
                 lastMessage = test.res;
             }
         }
+        
         //test.fnPacketTest(PlayerCoord.position[0] + "," + PlayerCoord.position[1] + "," + PlayerCoord.position[2]);
     }
 

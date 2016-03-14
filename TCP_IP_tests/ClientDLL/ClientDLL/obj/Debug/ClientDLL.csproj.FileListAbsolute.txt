@@ -1,0 +1,7 @@
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\ClientDLL\bin\Debug\ClientDLL.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\ClientDLL\bin\Debug\ClientDLL.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\ClientDLL\obj\Debug\ClientDLL.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\ClientDLL\obj\Debug\ClientDLL.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\ClientDLL\obj\Debug\ClientDLL.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\TCP_IP_TEST\Assets\ClientDLL.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ClientDLL\TCP_IP_TEST\Assets\ClientDLL.pdb

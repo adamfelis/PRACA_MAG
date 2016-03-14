@@ -1,0 +1,11 @@
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\bin\Debug\ServerApp.exe.config
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\Interop.MLApp.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.csproj.ResolveComReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\bin\Debug\ServerApp.exe
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\bin\Debug\ServerApp.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.MainForm.resources
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.Properties.Resources.resources
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.csproj.GenerateResource.Cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.exe
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\TCP_IP_tests\ServerApp\ServerApp\obj\Debug\ServerApp.pdb

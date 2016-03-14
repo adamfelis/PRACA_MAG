@@ -25,7 +25,7 @@ namespace SharpConnect
 
         public Connector() { }
 
-        public string fnConnectResult(string sNetIP, int iPORT_NUM, string sUserName)
+        public string Connect(string sNetIP, int iPORT_NUM, string sUserName)
         {
             try
             {
@@ -51,19 +51,14 @@ namespace SharpConnect
             SendData("CONNECT|" + user);
         }
 
-        public void fnPacketTest(string sInfo)
+        public void Send(string sInfo)
         {
-            SendData("CHAT|" + sInfo);
+            SendData("DATA|" + sInfo);
         }
 
         public void fnDisconnect()
         {
             SendData("DISCONNECT");
-        }
-
-        public void fnListUsers()
-        {
-            SendData("REQUESTUSERS");
         }
 
         private void DoRead(IAsyncResult ar)
@@ -107,28 +102,9 @@ namespace SharpConnect
                     // Server acknowledged login.
                     res = "You have joined the chat";
                     break;
-                case "CHAT":
+                case "DATA":
                     // Received chat message, display it.
                     res = dataArray[1].ToString();
-                    break;
-                case "REFUSE":
-                    // Server refused login with this user name, try to log in with another.
-                    AttemptLogin(pUserName);
-                    res = "Attempted Re-Login";
-                    break;
-                case "LISTUSERS":
-                    // Server sent a list of users.
-                    ListUsers(dataArray);
-                    break;
-                case "BROAD":
-                    // Server sent a broadcast message
-                    res = "ServerMessage: " + dataArray[1].ToString();
-                    break;
-                case "7":
-                    res = "7";
-                    break;
-                case "10":
-                    res = "10";
                     break;
             }
         }
