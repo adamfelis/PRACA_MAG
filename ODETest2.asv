@@ -1,0 +1,19 @@
+clc
+clear
+format
+y0 = zeros(9, 1);
+y0(1) = 1;
+y0(4) = 1;
+y0(9) = 1;
+tspan = [0 10];
+[t,y] = ode45(@vdp2,tspan,y0);
+size(y)
+figure
+quiver3(y(:,1) * ,y(:,2),y(:,3),   y(:,1),y(:,2),y(:,3))
+view(-35,45)
+
+% plot(t,y(:,1),'-o',t,y(:,2),'-o',t,y(:,3),'-o')
+% title('Solution of van der Pol Equation (\mu = 1) with ODE45');
+% xlabel('Time t');
+% ylabel('Solution y');
+% legend('y_1','y_2','y_3')

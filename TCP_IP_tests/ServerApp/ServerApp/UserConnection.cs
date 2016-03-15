@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.IO;
+using System.Windows.Forms;
 
 public delegate void LineReceive(UserConnection sender, string Data);
 
@@ -80,6 +81,7 @@ public class UserConnection
         }
         catch (Exception e)
         {
+            MessageBox.Show(e.ToString());
         }
     }
 }
