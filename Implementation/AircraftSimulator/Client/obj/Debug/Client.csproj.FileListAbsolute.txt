@@ -1,0 +1,5 @@
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\UnityVisualization\Assets\dlls\Client.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\UnityVisualization\Assets\dlls\Client.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Client\obj\Debug\Client.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Client\obj\Debug\Client.pdb

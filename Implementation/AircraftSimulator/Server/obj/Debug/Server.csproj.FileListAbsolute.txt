@@ -1,0 +1,9 @@
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\UnityVisualization\Assets\dlls\Server.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\UnityVisualization\Assets\dlls\Server.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\obj\Debug\Server.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\obj\Debug\Server.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\Server.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\Server.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataParser.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataParser.pdb
