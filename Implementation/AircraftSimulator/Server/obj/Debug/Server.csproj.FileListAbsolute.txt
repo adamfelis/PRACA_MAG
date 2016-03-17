@@ -5,5 +5,5 @@ C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\A
 C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\obj\Debug\Server.pdb
 C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\Server.dll
 C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\Server.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataParser.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataParser.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataStorage.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\Server\bin\Debug\DataStorage.pdb
