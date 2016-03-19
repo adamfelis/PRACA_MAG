@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Aircraft
+namespace AircraftsManager.Common
 {
-    enum AircraftType
+    public abstract class Initializer
     {
+        protected abstract void Initialize();
     }
 }

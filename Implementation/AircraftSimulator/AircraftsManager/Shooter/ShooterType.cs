@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Missile.Strategy
+namespace AircraftsManager.Shooter
 {
-    sealed class MissileFlightContext : Common.Context
+    public enum ShooterType
     {
+        F16,
+        F17
     }
 }

@@ -8,5 +8,9 @@ namespace AircraftsManager.Aircraft.Strategy
 {
     abstract class AircraftStrategy : Common.Strategy
     {
+        protected float[,] longitudinalData;
+        protected float[,] lateralData;
+        public abstract float[,] GetLongitudinalData();
+        public abstract float[,] GetLateralData();
     }
 }

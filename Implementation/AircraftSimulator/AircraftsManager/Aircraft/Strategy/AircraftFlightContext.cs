@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace AircraftsManager.Aircraft.Strategy
 {
-    class AircraftFlightContext
+    sealed class AircraftFlightContext : Common.Context
     {
+        public AircraftFlightContext(Shooter.ShooterType shooterType)
+        {
+            Initialize();
+            this.AddStrategy(Common.Strategy.GetSpecificStrategy(shooterType));
+        }
     }
 }

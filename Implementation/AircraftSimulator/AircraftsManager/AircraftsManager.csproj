@@ -41,12 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aircraft\Aircraft.cs" />
-    <Compile Include="Aircraft\AircraftType.cs" />
+    <Compile Include="Aircraft\Creator\AircraftCreator.cs" />
     <Compile Include="Aircraft\Strategy\AircraftFlightContext.cs" />
     <Compile Include="Aircraft\Strategy\AircraftStrategy.cs" />
     <Compile Include="Aircraft\Strategy\ConcreteStrategies\ConcreteAircraftStrategyF16.cs" />
     <Compile Include="Aircraft\Strategy\ConcreteStrategies\ConcreteAircraftStrategyF17.cs" />
     <Compile Include="AircraftsManager.cs" />
+    <Compile Include="Common\Context.cs" />
+    <Compile Include="Common\Initializer.cs" />
+    <Compile Include="Common\InvalidShooterTypeException.cs" />
     <Compile Include="Common\Strategy.cs" />
     <Compile Include="Missile\Missile.cs" />
     <Compile Include="Missile\MissileType.cs" />
@@ -54,6 +57,10 @@
     <Compile Include="Missile\Strategy\MissileFlightContext.cs" />
     <Compile Include="Missile\Strategy\MissileStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShooterCreatorPreparation.cs" />
+    <Compile Include="Shooter\Shooter.cs" />
+    <Compile Include="Shooter\ShooterFactory\ShooterCreator.cs" />
+    <Compile Include="Shooter\ShooterType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

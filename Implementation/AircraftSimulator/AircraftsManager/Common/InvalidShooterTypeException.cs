@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Missile.Strategy
+namespace AircraftsManager.Common
 {
-    sealed class MissileFlightContext : Common.Context
+    class InvalidShooterTypeException : Exception
     {
     }
 }
