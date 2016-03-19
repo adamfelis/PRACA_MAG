@@ -1,0 +1,9 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathToolTest.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathToolTest.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathematicalToolCommunicator.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathematicalToolCommunicator.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.pdb

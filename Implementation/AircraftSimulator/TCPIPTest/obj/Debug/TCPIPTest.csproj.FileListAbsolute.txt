@@ -1,0 +1,13 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\TCPIPTest.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\TCPIPTest.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Client.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\DataParser.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Server.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Client.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\DataParser.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Server.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\obj\Debug\TCPIPTest.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\obj\Debug\TCPIPTest.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\TCPIPTest\obj\Debug\TCPIPTest.pdb

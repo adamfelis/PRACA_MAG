@@ -54,10 +54,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DiagramTool\DiagramTool.csproj">
-      <Project>{0165bcf8-0548-45ae-8222-289649f62c0a}</Project>
-      <Name>DiagramTool</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MathematicalToolCommunicator\MathematicalToolCommunicator.csproj">
       <Project>{57df7af5-9d7e-4c39-9bab-10b1a506644d}</Project>
       <Name>MathematicalToolCommunicator</Name>

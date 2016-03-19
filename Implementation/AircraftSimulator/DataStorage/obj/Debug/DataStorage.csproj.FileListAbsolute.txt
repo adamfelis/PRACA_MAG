@@ -1,0 +1,7 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\bin\Debug\DataStorage.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\bin\Debug\DataStorage.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\bin\Debug\DataParser.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\bin\Debug\DataParser.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\obj\Debug\DataStorage.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\obj\Debug\DataStorage.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataStorage\obj\Debug\DataStorage.pdb

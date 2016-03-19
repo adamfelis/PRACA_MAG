@@ -1,0 +1,14 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\ApplicationManager.exe.config
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\ApplicationManager.exe
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\ApplicationManager.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\AircraftsManager.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\Server.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\ToolsManager.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\AircraftsManager.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\Server.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\bin\Debug\ToolsManager.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\obj\Debug\ApplicationManager.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\obj\Debug\ApplicationManager.Properties.Resources.resources
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\obj\Debug\ApplicationManager.csproj.GenerateResource.Cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\obj\Debug\ApplicationManager.exe
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ApplicationManager\obj\Debug\ApplicationManager.pdb

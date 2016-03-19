@@ -76,6 +76,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AircraftsManager\AircraftsManager.csproj">
+      <Project>{82727286-cc1b-487a-a372-4d2e683d7492}</Project>
+      <Name>AircraftsManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server\Server.csproj">
+      <Project>{1b653224-b39a-4ffb-8222-9ffc76e20cef}</Project>
+      <Name>Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolsManager\ToolsManager.csproj">
+      <Project>{3aafffa9-1772-4453-825c-6459a91a97b7}</Project>
+      <Name>ToolsManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

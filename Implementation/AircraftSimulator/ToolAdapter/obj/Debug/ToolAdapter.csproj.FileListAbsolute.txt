@@ -1,0 +1,4 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolAdapter\bin\Debug\ToolAdapter.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolAdapter\bin\Debug\ToolAdapter.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolAdapter\obj\Debug\ToolAdapter.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolAdapter\obj\Debug\ToolAdapter.pdb

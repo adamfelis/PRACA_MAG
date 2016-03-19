@@ -1,0 +1,9 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolsManager.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolsManager.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\MathematicalToolCommunicator.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolAdapter.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\MathematicalToolCommunicator.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolAdapter.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.pdb

@@ -1,0 +1,7 @@
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\bin\Debug\DiagramTool.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\bin\Debug\DiagramTool.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\bin\Debug\ToolAdapter.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\bin\Debug\ToolAdapter.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\obj\Debug\DiagramTool.csprojResolveAssemblyReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\obj\Debug\DiagramTool.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DiagramTool\obj\Debug\DiagramTool.pdb
