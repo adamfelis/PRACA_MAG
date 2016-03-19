@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DiagramTool")]
+[assembly: AssemblyTitle("ApplicationManager")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DiagramTool")]
+[assembly: AssemblyProduct("ApplicationManager")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("18c86d31-9a09-4428-bb27-3da7f1141bdd")]
+[assembly: Guid("a9101c41-dcf8-4bb6-93d6-589a1215e712")]
 
 // Version information for an assembly consists of the following four values:
 //
