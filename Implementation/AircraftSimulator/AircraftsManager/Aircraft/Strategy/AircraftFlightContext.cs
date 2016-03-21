@@ -10,8 +10,8 @@ namespace AircraftsManager.Aircraft.Strategy
     {
         public AircraftFlightContext(Shooter.ShooterType shooterType)
         {
-            Initialize();
-            this.AddStrategy(Common.Strategy.GetSpecificStrategy(shooterType));
+            this.Initialize();
+            this.AddStrategy(Common.Strategy.GetSpecificShooterStrategy(shooterType));
         }
     }
 }

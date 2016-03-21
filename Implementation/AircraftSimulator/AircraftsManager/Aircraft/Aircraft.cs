@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AircraftsManager.Aircraft
 {
-    class Aircraft : Shooter.Shooter
+    sealed class Aircraft : Shooter.Shooter
     {
         public Shooter.ShooterType AircraftType
         {
@@ -24,6 +24,7 @@ namespace AircraftsManager.Aircraft
 
         protected override void Initialize()
         {
+            base.Initialize();
             this.context = new Strategy.AircraftFlightContext(shooterType);
         }
     }

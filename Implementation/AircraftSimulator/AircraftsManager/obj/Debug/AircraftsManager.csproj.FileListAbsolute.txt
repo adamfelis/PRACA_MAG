@@ -2,3 +2,4 @@ E:\PW\PRACA_MAG\Implementation\AircraftSimulator\AircraftsManager\bin\Debug\Airc
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\AircraftsManager\bin\Debug\AircraftsManager.pdb
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\AircraftsManager\obj\Debug\AircraftsManager.dll
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\AircraftsManager\obj\Debug\AircraftsManager.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\AircraftsManager\obj\Debug\AircraftsManager.csprojResolveAssemblyReference.cache

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Missile.Strategy.ConcreteStrategy
+namespace AircraftsManager.Missile
 {
-    sealed class ConcreteMissileStrategyF16 : Strategy.MissileStrategy
+    class InvalidMissileIdException : Exception
     {
     }
 }
