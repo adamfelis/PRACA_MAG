@@ -8,7 +8,17 @@ namespace AircraftsManager.Common
 {
     abstract class Strategy
     {
-        public static Common.Strategy GetSpecificStrategy(Shooter.ShooterType shooterType)
+        protected Shooter.ShooterType shooterType;
+
+        public Shooter.ShooterType ShooterType
+        {
+            get
+            {
+                return shooterType;
+            }
+        }
+
+        public static Common.Strategy GetSpecificShooterStrategy(Shooter.ShooterType shooterType)
         {
             Common.Strategy strategy = null;
             switch (shooterType)
@@ -22,6 +32,7 @@ namespace AircraftsManager.Common
                 default:
                     throw new Common.InvalidShooterTypeException();
             }
+            strategy.shooterType = shooterType;
             return strategy;
         }
     }

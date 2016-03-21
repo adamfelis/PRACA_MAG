@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace AircraftsManager.Missile
 {
-    public enum MissileType
+    class InvalidMissileTypeException : Exception
     {
-        M1,
-        M2
     }
 }

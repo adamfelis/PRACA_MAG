@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Missile
+namespace AircraftsManager.Shooter
 {
-    public enum MissileType
+    class InvalidShooterIdException : Exception
     {
-        M1,
-        M2
     }
 }

@@ -14,7 +14,7 @@ namespace AircraftsManager
             {
                 case Shooter.ShooterType.F16:
                 case Shooter.ShooterType.F17:
-                    shooterCreator = new Aircraft.Creator.AircraftCreator();
+                    instance.shooterCreator = new Aircraft.Creator.AircraftCreator();
                     break;
                 default:
                     throw new Common.InvalidShooterTypeException();

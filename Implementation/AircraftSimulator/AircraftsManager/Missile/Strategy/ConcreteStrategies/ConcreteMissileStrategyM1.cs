@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Missile
+namespace AircraftsManager.Missile.Strategy.ConcreteStrategies
 {
-    public enum MissileType
+    sealed class ConcreteMissileStrategyM1 : Strategy.MissileStrategy
     {
-        M1,
-        M2
     }
 }
