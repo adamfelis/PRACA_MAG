@@ -1,7 +1,0 @@
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\BackupTool.dll
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\BackupTool.pdb
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\ToolAdapter.dll
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\ToolAdapter.pdb
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.csprojResolveAssemblyReference.cache
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.dll
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.pdb

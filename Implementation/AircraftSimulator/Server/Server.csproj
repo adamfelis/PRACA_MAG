@@ -40,10 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Priveleges\ServerInputPrivileges.cs" />
+    <Compile Include="Priveleges\IServerOutputPriveleges.cs" />
+    <Compile Include="Priveleges\ServerOutputPrivileges.cs" />
+    <Compile Include="Priveleges\IServerInputPriveleges.cs" />
+    <Compile Include="Priveleges\IServerPrivileges.cs" />
+    <Compile Include="IServer.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataStorage\DataStorage.csproj">
       <Project>{1a7dc041-bd60-4945-8185-9424183b6c99}</Project>
       <Name>DataStorage</Name>

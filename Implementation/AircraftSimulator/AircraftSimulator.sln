@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiagramTool", "DiagramTool\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackupTool", "BackupTool\BackupTool.csproj", "{15ADB7C2-155C-400D-9828-559619326899}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{631A99D6-D51E-4F03-855B-9625663C7EE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{15ADB7C2-155C-400D-9828-559619326899}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15ADB7C2-155C-400D-9828-559619326899}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15ADB7C2-155C-400D-9828-559619326899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631A99D6-D51E-4F03-855B-9625663C7EE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631A99D6-D51E-4F03-855B-9625663C7EE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631A99D6-D51E-4F03-855B-9625663C7EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631A99D6-D51E-4F03-855B-9625663C7EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

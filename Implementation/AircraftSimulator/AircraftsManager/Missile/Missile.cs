@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace AircraftsManager.Missile
 {
-    sealed class Missile : Common.Initializer
+    sealed class Missile : Initializer
     {
         private MissileType missileType;
         private Common.Context missileFlightContext;

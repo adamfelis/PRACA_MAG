@@ -1,8 +1,0 @@
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.pdb
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser.dll
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser.pdb
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.dll
-E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.pdb

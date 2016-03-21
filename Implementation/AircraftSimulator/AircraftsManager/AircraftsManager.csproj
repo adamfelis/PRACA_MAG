@@ -48,7 +48,6 @@
     <Compile Include="Aircraft\Strategy\ConcreteStrategies\ConcreteAircraftStrategyF17.cs" />
     <Compile Include="AircraftsManager.cs" />
     <Compile Include="Common\Context.cs" />
-    <Compile Include="Common\Initializer.cs" />
     <Compile Include="Common\InvalidShooterTypeException.cs" />
     <Compile Include="Common\Strategy.cs" />
     <Compile Include="Missile\InvalidMissileIdException.cs" />
@@ -65,6 +64,12 @@
     <Compile Include="Shooter\Shooter.cs" />
     <Compile Include="Shooter\ShooterFactory\ShooterCreator.cs" />
     <Compile Include="Shooter\ShooterType.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
