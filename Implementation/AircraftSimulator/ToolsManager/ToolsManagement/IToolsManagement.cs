@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolAdapter.Observing.ConcreteObserving;
 
 namespace ToolsManager.ToolsManagement
 {
-    interface IToolsManagement
+    public interface IToolsManagement
     {
+        ConcreteObservableSubject ConcreteObservableSubject
+        {
+            get;
+        }
     }
 }

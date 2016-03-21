@@ -7,7 +7,7 @@ using MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.P
 
 namespace MathematicalToolCommunicator.CommunicationBridge
 {
-    sealed class RefinedMathToolCommunicator : MathToolCommunicator
+    public sealed class RefinedMathToolCommunicator : MathToolCommunicator
     {
         protected override Parameters Compute(Parameters parameters)
         {

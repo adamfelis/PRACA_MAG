@@ -7,7 +7,7 @@ using MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.P
 
 namespace MathematicalToolCommunicator.CommunicationBridge
 {
-    abstract class MathToolCommunicator
+    public abstract class MathToolCommunicator
     {
         private static ExternalMathToolCommunicationFacade.MathToolFacade mathToolFacade; 
 

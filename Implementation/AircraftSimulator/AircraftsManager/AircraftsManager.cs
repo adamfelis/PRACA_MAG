@@ -18,7 +18,9 @@ namespace AircraftsManager
             get
             {
                 if (instance == null)
+                {
                     instance = new AircraftsManager();
+                }
                 return instance;
             }
         }
@@ -30,7 +32,7 @@ namespace AircraftsManager
 
         protected override void Initialize()
         {
-            instance.activeShooters = new Dictionary<int, Shooter.Shooter>();
+            this.activeShooters = new Dictionary<int, Shooter.Shooter>();
         }
 
         public void AddShooter(Shooter.ShooterType shooterType, int sender)

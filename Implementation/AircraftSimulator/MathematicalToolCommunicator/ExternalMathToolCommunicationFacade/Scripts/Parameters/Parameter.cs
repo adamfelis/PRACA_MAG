@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.Parameters
 {
-    abstract class Parameter
+    public abstract class Parameter
     {
         protected object value;
         internal object Value

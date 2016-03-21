@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.Parameters
 {
-    sealed class Parameters
+    public sealed class Parameters
     {
         private List<Parameter> parameters;
 

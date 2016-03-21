@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.Parameters
 {
-    enum ParameterType
+    public enum ParameterType
     {
         Float,
         Vector,

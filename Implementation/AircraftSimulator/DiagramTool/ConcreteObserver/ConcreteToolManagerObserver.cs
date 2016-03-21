@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace DiagramTool.ConcreteObserver
             throw new NotImplementedException();
         }
 
-        public override void OnNext(ToolAdapter.Observing.ConcreteObserving.ConcreteObservableSubject value)
+        public override void OnNext(IData value)
         {
             throw new NotImplementedException();
         }

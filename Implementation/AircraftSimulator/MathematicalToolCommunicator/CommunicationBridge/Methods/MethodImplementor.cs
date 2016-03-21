@@ -7,7 +7,7 @@ using MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.P
 
 namespace MathematicalToolCommunicator.CommunicationBridge.Methods
 {
-    abstract class MethodImplementor
+    public abstract class MethodImplementor
     {
         public virtual Parameters TemplateComputeMethod(Parameters parameters)
         {
