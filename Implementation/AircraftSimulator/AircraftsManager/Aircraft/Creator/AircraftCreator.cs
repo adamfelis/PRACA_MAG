@@ -9,7 +9,7 @@ namespace AircraftsManager.Aircraft.Creator
 {
     class AircraftCreator : Shooter.ShooterFactory.ShooterCreator
     {
-        public override Shooter.Shooter ShooterFactoryMethod(ShooterType shooterType)
+        internal override Shooter.Shooter ShooterFactoryMethod(ShooterType shooterType)
         {
             return new Aircraft(shooterType);
         }

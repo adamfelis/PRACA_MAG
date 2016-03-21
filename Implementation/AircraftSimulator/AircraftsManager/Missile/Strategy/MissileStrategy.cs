@@ -10,7 +10,7 @@ namespace AircraftsManager.Missile.Strategy
     {
         private MissileType missileType;
 
-        public MissileType MissileType
+        internal MissileType MissileType
         {
             get
             {
@@ -18,7 +18,7 @@ namespace AircraftsManager.Missile.Strategy
             }
         }
 
-        public static Common.Strategy GetSpecificMissileStrategy(MissileType missileType)
+        internal static Common.Strategy GetSpecificMissileStrategy(MissileType missileType)
         {
             Common.Strategy strategy = null;
             switch (missileType)

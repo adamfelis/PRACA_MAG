@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts
 {
-    public enum ScriptType
+    class InvalidScriptTypeException : Exception
     {
-        RungeKutta,
-        LaplaceTransform
     }
 }

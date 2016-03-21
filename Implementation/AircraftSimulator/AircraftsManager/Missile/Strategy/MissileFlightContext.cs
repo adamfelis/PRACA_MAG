@@ -8,7 +8,7 @@ namespace AircraftsManager.Missile.Strategy
 {
     sealed class MissileFlightContext : Common.Context
     {
-        public MissileFlightContext(MissileType missileType)
+        internal MissileFlightContext(MissileType missileType)
         {
             this.Initialize();
             this.AddStrategy(MissileStrategy.GetSpecificMissileStrategy(missileType));

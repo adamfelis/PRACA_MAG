@@ -8,5 +8,14 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
 {
     sealed class ConcreteScriptRungeKutta : Scripts.Script
     {
+        private new const String scriptName = "RungeKutta";
+
+        protected override String ScriptName
+        {
+            get
+            {
+                return scriptName;
+            }
+        }
     }
 }

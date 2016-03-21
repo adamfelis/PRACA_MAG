@@ -10,7 +10,7 @@ namespace AircraftsManager.Aircraft.Strategy
     {
         protected float[,] longitudinalData;
         protected float[,] lateralData;
-        public abstract float[,] GetLongitudinalData();
-        public abstract float[,] GetLateralData();
+        internal abstract float[,] GetLongitudinalData();
+        internal abstract float[,] GetLateralData();
     }
 }

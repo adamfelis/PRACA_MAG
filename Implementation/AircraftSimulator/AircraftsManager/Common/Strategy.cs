@@ -10,7 +10,7 @@ namespace AircraftsManager.Common
     {
         protected Shooter.ShooterType shooterType;
 
-        public Shooter.ShooterType ShooterType
+        internal Shooter.ShooterType ShooterType
         {
             get
             {
@@ -18,7 +18,7 @@ namespace AircraftsManager.Common
             }
         }
 
-        public static Common.Strategy GetSpecificShooterStrategy(Shooter.ShooterType shooterType)
+        internal static Common.Strategy GetSpecificShooterStrategy(Shooter.ShooterType shooterType)
         {
             Common.Strategy strategy = null;
             switch (shooterType)

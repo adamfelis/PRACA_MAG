@@ -8,19 +8,19 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
 {
     sealed class ConcreteAircraftStrategyF16 : Strategy.AircraftStrategy
     {
-        public ConcreteAircraftStrategyF16()
+        internal ConcreteAircraftStrategyF16()
         {
             // TODO: file reader
             //this.longitudinalData = longitudinalData;
             //this.lateralData = lateralData;
         }
 
-        public override float[,] GetLateralData()
+        internal override float[,] GetLateralData()
         {
             throw new NotImplementedException();
         }
 
-        public override float[,] GetLongitudinalData()
+        internal override float[,] GetLongitudinalData()
         {
             throw new NotImplementedException();
         }

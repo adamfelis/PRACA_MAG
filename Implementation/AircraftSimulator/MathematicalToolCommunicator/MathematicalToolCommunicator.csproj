@@ -48,6 +48,9 @@
     <Compile Include="ExternalMathToolCommunicationFacade\MathToolFacade.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptLaplaceTransform.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptRungeKutta.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\InvalidScriptTypeException.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\ConcreteParameters\Matrix.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\ConcreteParameters\Vector.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\Parameter.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\Parameters.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\ParameterType.cs" />
@@ -55,7 +58,17 @@
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ScriptType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="MLApp">
+      <Guid>{C36E46AB-6A81-457B-9F91-A7719A06287F}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

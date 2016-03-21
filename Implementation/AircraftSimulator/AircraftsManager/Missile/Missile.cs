@@ -11,7 +11,7 @@ namespace AircraftsManager.Missile
         private MissileType missileType;
         private Common.Context missileFlightContext;
 
-        public MissileType MissileType
+        internal MissileType MissileType
         {
             get
             {
@@ -19,7 +19,7 @@ namespace AircraftsManager.Missile
             }
         }
 
-        public Common.Context MissileFlightContext
+        internal Common.Context MissileFlightContext
         {
             get
             {
@@ -27,7 +27,7 @@ namespace AircraftsManager.Missile
             }
         }
 
-        public Missile(MissileType missileType)
+        internal Missile(MissileType missileType)
         {
             this.missileType = missileType;
             Initialize();

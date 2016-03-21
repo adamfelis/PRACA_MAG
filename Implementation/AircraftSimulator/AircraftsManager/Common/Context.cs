@@ -10,7 +10,7 @@ namespace AircraftsManager.Common
     {
         protected List<Strategy> strategies;
 
-        public List<Strategy> Strategies
+        internal List<Strategy> Strategies
         {
             get
             {
@@ -18,7 +18,7 @@ namespace AircraftsManager.Common
             }
         }
 
-        public void AddStrategy(Common.Strategy strategy)
+        internal void AddStrategy(Common.Strategy strategy)
         {
             this.strategies.Add(strategy);
         }

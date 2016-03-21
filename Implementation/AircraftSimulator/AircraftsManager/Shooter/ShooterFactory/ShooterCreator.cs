@@ -8,6 +8,6 @@ namespace AircraftsManager.Shooter.ShooterFactory
 {
     abstract class ShooterCreator
     {
-        public abstract Shooter ShooterFactoryMethod(ShooterType shooterType);
+        internal abstract Shooter ShooterFactoryMethod(ShooterType shooterType);
     }
 }

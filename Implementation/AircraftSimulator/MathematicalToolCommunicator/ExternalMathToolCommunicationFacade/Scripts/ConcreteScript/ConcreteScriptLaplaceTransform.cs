@@ -8,5 +8,14 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
 {
     sealed class ConcreteScriptLaplaceTransform : Scripts.Script
     {
+        private new const String scriptName = "LaplaceTransform";
+
+        protected override String ScriptName
+        {
+            get
+            {
+                return scriptName;
+            }
+        }
     }
 }

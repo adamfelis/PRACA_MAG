@@ -7,3 +7,6 @@ E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\bi
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\bin\Debug\MathematicalToolCommunicator.pdb
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.dll
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.pdb
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\Interop.MLApp.dll
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.csproj.ResolveComReference.cache
+E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.csprojResolveAssemblyReference.cache

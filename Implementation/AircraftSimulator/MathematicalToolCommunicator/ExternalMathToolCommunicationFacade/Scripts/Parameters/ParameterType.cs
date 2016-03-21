@@ -8,5 +8,8 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
 {
     enum ParameterType
     {
+        Float,
+        Vector,
+        Matrix
     }
 }

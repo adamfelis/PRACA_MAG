@@ -44,7 +44,7 @@ namespace AircraftsManager
         {
             if(!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
-            instance.activeShooters[sender].context.AddStrategy(Common.Strategy.GetSpecificShooterStrategy(shooterType));
+            instance.activeShooters[sender].Context.AddStrategy(Common.Strategy.GetSpecificShooterStrategy(shooterType));
         }
 
         public void AddMissile(Missile.MissileType missileType, int sender)
@@ -59,7 +59,7 @@ namespace AircraftsManager
         {
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
-            List<Common.Strategy> strategies = instance.activeShooters[sender].context.Strategies;
+            List<Common.Strategy> strategies = instance.activeShooters[sender].Context.Strategies;
             foreach (Common.Strategy strategy in strategies)
             {
                 switch (strategy.ShooterType)

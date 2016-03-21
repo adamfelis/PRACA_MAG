@@ -8,5 +8,19 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
 {
     sealed class Parameters
     {
+        private List<Parameter> parameters;
+
+        internal List<Parameter> ParametersList
+        {
+            get
+            {
+                return parameters;
+            }
+        }
+
+        public Parameters(List<Parameter> parameters)
+        {
+            this.parameters = parameters;
+        }
     }
 }
