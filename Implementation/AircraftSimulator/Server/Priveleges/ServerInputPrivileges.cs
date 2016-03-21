@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class Class1
+    public class ServerInputPrivileges : IServerInputPriveleges
     {
+        public void RespondToClient(int id, float[,] arr)
+        {
+        }
     }
 }

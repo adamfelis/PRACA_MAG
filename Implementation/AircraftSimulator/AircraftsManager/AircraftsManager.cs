@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace AircraftsManager
 {
-    sealed public partial class AircraftsManager : Common.Initializer
+    sealed public partial class AircraftsManager : Initializer
     {
         private static AircraftsManager instance;
         private Dictionary<int, Shooter.Shooter> activeShooters;

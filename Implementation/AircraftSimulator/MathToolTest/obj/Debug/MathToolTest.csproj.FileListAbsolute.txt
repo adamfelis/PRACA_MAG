@@ -7,3 +7,11 @@ E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\Microsof
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.csprojResolveAssemblyReference.cache
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.dll
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathToolTest.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathToolTest.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathematicalToolCommunicator.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\bin\Debug\MathematicalToolCommunicator.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathToolTest\obj\Debug\MathToolTest.pdb

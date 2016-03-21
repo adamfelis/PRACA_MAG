@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftsManager.Common
+namespace Server
 {
-    public abstract class Initializer
+    public interface IServerInputPriveleges
     {
-        protected abstract void Initialize();
+        void RespondToClient(int id, float[,] arr);
     }
 }

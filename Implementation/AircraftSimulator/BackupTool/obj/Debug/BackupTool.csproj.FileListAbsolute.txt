@@ -5,3 +5,10 @@ E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\ToolAdapte
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.csprojResolveAssemblyReference.cache
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.dll
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\BackupTool.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\BackupTool.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\ToolAdapter.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\bin\Debug\ToolAdapter.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\BackupTool\obj\Debug\BackupTool.pdb

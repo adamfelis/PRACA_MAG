@@ -6,3 +6,6 @@ E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\DataParser.pdb
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.dll
 E:\PW\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.pdb
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\obj\Debug\DataParser.csprojResolveAssemblyReference.cache
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\Common.dll
+C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\DataParser\bin\Debug\Common.pdb

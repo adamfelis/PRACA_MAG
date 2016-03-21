@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataStorage
+namespace Common
 {
-    public class Class1
+    public abstract class Initializer
     {
+        protected abstract void Initialize();
     }
 }

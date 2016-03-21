@@ -40,10 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Client.cs" />
+    <Compile Include="Priveleges\ClientOutputPrivileges.cs" />
+    <Compile Include="IClient.cs" />
+    <Compile Include="Priveleges\IClientOutputPrivileges.cs" />
+    <Compile Include="Priveleges\IClientPrivileges.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataParser\DataParser.csproj">
       <Project>{8d3c5568-3d72-444f-af16-fd87774481fa}</Project>
       <Name>DataParser</Name>
