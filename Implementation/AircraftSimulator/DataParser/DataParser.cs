@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using Common;
 using Common.Containers;
@@ -27,10 +28,13 @@ namespace DataParser
         public string Serialize(IData data)
         {
             string toRet = String.Empty;
-            using (StringWriter dataWriter = new StringWriter())
+            using (StringWriter stringWriter = new StringWriter())
             {
-                serializer.Serialize(dataWriter, data);
-                toRet = dataWriter.ToString();
+                using (XmlWriter dataWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings() {Indent = true}))
+                {
+                    serializer.Serialize(dataWriter, data);
+                    toRet = stringWriter.ToString();
+                }
             }
             return toRet;
         }

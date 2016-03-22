@@ -43,6 +43,7 @@ namespace DataStorageNamespace
         protected override void Initialize()
         {
             _dataParser = new global::DataParser.DataParser();
+            //TOREMOVE
             var a = _dataParser.Serialize(new Data()
             {
                 Array = new float[][]

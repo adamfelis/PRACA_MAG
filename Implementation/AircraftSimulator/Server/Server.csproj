@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientConnection.cs" />
     <Compile Include="Priveleges\ServerInputPrivileges.cs" />
     <Compile Include="Priveleges\IServerOutputPriveleges.cs" />
     <Compile Include="Priveleges\ServerOutputPrivileges.cs" />

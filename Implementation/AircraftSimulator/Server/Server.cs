@@ -1,4 +1,7 @@
-﻿using Common;
+﻿using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using Common;
 using DataStorageNamespace;
 using Server;
 
@@ -9,6 +12,9 @@ namespace Server
         private readonly IServerOutputPriveleges _serverOutputPriveleges;
         private IServerInputPriveleges _serverInputPriveleges;
         private IDataStorage _dataStorage; 
+        private TcpListener _listener;
+        private Thread _listenerThread;
+        const int PORT_NUM = 10000;
 
         public IServerInputPriveleges ServerInputPrivileges => _serverInputPriveleges;
 
@@ -27,11 +33,27 @@ namespace Server
 
         public void StartServer()
         {
+            _listenerThread = new Thread(() =>
+            {
+                _listener = new TcpListener(IPAddress.Any, PORT_NUM);
+                _listener.Start();
+                do
+                {
+                    ClientConnection client = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived);
+
+                } while (true);
+            });
+            _listenerThread.Start();
+        }
+
+        private void onMessageReceived(ClientConnection sender, string data)
+        {
             
         }
 
         public void StopServer()
         {
+            _listener.Stop();
         }
 
         protected override void Initialize()
