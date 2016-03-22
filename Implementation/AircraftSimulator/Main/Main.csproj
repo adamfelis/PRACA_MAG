@@ -20,7 +20,8 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\BIN\Main\</OutputPath>
+    <IntermediateOutputPath>..\..\..\..\OBJ\Main\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,6 +34,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Main.ApplicationStartup</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,10 +55,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Compile Include="ApplicationStartup.cs" />
     <Compile Include="ServerCommunication\ExplicitServerCommunication.cs" />
     <Compile Include="ServerCommunication\IServerCommunication.cs" />
     <Compile Include="ServerCommunication\ServerCommunication.cs" />
@@ -66,10 +67,6 @@
     </Page>
     <Compile Include="AircraftsManagerCommunication\AircraftsManagerCommunication.cs" />
     <Compile Include="AircraftsManagerCommunication\IAircraftsManagerCommunication.cs" />
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -24,9 +24,7 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
-            //mainApplication = Main.MainApplication.Instance;
-            //var toolsManagerCommunication = ToolsManager.ToolsManager.Instance;
-            var server = new Server.Server();
+            var a = MainApplication.Instance;    
         }
     }
 }
