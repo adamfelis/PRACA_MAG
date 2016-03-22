@@ -46,13 +46,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MathematicalToolCommunicator\MathematicalToolCommunicator.csproj">
       <Project>{57df7af5-9d7e-4c39-9bab-10b1a506644d}</Project>
       <Name>MathematicalToolCommunicator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ToolAdapter\ToolAdapter.csproj">
-      <Project>{30525078-0ea5-4cf6-849b-60d7f4d5af14}</Project>
-      <Name>ToolAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

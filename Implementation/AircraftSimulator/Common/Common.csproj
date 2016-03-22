@@ -45,9 +45,15 @@
     <Compile Include="EventArgs\DataEventArgs.cs" />
     <Compile Include="Containers\IData.cs" />
     <Compile Include="Initializer.cs" />
+    <Compile Include="Patterns\Observator\Observing\ConcreteObserving\ConcreteObservableSubject.cs" />
+    <Compile Include="Patterns\Observator\Observing\ObservableSubject.cs" />
+    <Compile Include="Patterns\Observator\Observing\Observer.cs" />
+    <Compile Include="Patterns\Observator\Tool\ITool.cs" />
+    <Compile Include="Patterns\Observator\Tool\ToolType.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

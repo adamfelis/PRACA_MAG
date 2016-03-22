@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToolAdapter.Observing.ConcreteObserving;
+using Common.Patterns.Observator.Observing;
 
 namespace BackupTool.ConcreteObserver
 {
-    sealed class ConcreteToolManagerObserver : ToolAdapter.Observing.Observer
+    sealed class ConcreteToolManagerObserver : Observer
     {
         public override void OnCompleted()
         {

@@ -33,7 +33,7 @@ namespace ToolsManager
 
         private ToolsManager()
         {
-            //mathToolCommunicator = new RefinedMathToolCommunicator();
+            mathToolCommunicator = new RefinedMathToolCommunicator();
             toolsManagement = new ToolsManagement.ToolsManagement();
         }
     }

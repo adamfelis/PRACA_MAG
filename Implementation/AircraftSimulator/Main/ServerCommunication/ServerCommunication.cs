@@ -10,7 +10,6 @@ namespace ApplicationManager.ServerCommunication
     partial class ServerCommunication : IServerCommunication
     {
         private IServer serverInstance;
-
         public IServer ServerInstance
         {
             get

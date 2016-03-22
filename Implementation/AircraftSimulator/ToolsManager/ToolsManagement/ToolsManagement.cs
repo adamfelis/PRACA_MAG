@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToolAdapter.Observing.ConcreteObserving;
+using Common.Patterns.Observator.Observing.ConcreteObserving;
+using Common.Patterns.Observator.Observing;
 
 namespace ToolsManager.ToolsManagement
 {
@@ -34,8 +35,13 @@ namespace ToolsManager.ToolsManagement
             //string s2 = s + @"..\..\..\AppInput\DLLFiles\DiagramTool.dll";
             //var DLL = Assembly.LoadFile(s2);
             //var toolDLL = DLL.GetType("DiagramTool.DiagramTool");
-
+            
             //dynamic c = Activator.CreateInstance(toolDLL);
+
+
+            //int a = 0;
+            //a++;
+            //c.
         }
 
     }

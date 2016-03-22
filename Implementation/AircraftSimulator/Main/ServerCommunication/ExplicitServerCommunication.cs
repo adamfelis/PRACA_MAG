@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.EventArgs;
 using Server;
 
 namespace ApplicationManager.ServerCommunication
 {
     partial class ServerCommunication : Server.IServerPrivileges
     {
-        public AddClientHandler OnClientAdded
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
+        public AddClientHandler OnClientAdded => a;
 
-            set
-            {
-                throw new NotImplementedException();
-            }
+        void a(object b, ClientEventArgs c)
+        {
+            
         }
 
         public PresentDataOfTheClientHandler OnClientDataPresented
@@ -28,21 +23,11 @@ namespace ApplicationManager.ServerCommunication
             {
                 throw new NotImplementedException();
             }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
         }
 
         public RemoveClientHandler OnClientRemoved
         {
             get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
             {
                 throw new NotImplementedException();
             }

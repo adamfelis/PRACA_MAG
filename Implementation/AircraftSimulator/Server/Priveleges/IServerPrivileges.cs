@@ -13,8 +13,8 @@ namespace Server
     public delegate void PresentDataOfTheClientHandler(object sender, DataEventArgs eventHandler);
     public interface IServerPrivileges
     {
-        AddClientHandler OnClientAdded { get; set; }
-        RemoveClientHandler OnClientRemoved { get; set; }
-        PresentDataOfTheClientHandler OnClientDataPresented { get; set; }
+        AddClientHandler OnClientAdded { get; }
+        RemoveClientHandler OnClientRemoved { get; }
+        PresentDataOfTheClientHandler OnClientDataPresented { get; }
     }
 }

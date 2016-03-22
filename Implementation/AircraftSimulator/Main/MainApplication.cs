@@ -7,19 +7,19 @@ using Common;
 
 namespace ApplicationManager
 {
-    public sealed partial class ApplicationManager : Initializer
+    public sealed class MainApplication : Initializer
     {
-        private static ApplicationManager instance;
+        private static MainApplication instance;
         private AircraftsManagerCommunication.IAircraftsManagerCommunication aircraftsManagerCommunication;
         private ToolsManagerCommunication.IToolsManagerCommunication toolsManagerCommunication;
         private ServerCommunication.IServerCommunication serverCommunication;
 
-        public static ApplicationManager Instance
+        public static MainApplication Instance
         {
             get
             {
                 if (instance == null)
-                    instance = new ApplicationManager();
+                    instance = new MainApplication();
                 return instance;
             }
         }
@@ -39,7 +39,7 @@ namespace ApplicationManager
             this.serverCommunication = new ServerCommunication.ServerCommunication();
         }
 
-        private ApplicationManager()
+        private MainApplication()
         {
             Initialize();
         }

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToolAdapter;
-using ToolAdapter.Tool;
+using Common.Patterns.Observator.Tool;
 
 namespace DiagramTool
 {
-    public sealed class DiagramTool : ToolAdapter.Tool.ITool
+    public sealed class DiagramTool : ITool
     {
         private ToolType toolType;
         public ToolType ToolType
