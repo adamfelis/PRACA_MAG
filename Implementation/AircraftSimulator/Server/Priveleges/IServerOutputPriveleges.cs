@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Containers;
+using Common.EventArgs;
 
 namespace Server
 {
@@ -15,8 +16,8 @@ namespace Server
         event PresentDataOfTheClientHandler PresentDataOfTheClient;
         void Subscribe(IServerPrivileges serverPrivileges);
 
-        void OnClientAdded(int id);
-        void OnClientRemoved(int id);
-        void OnClientDataPresented(int id, IData data);
+        void OnClientAdded(DataEventArgs eventHandler);
+        void OnClientRemoved(DataEventArgs eventHandler);
+        void OnClientDataPresented(DataEventArgs eventHandler);
     }
 }

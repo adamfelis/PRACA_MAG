@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventArgs\ClientEventArgs.cs" />
     <Compile Include="Containers\Data.cs" />
     <Compile Include="EventArgs\DataEventArgs.cs" />
     <Compile Include="Containers\IData.cs" />

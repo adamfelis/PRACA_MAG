@@ -14,30 +14,37 @@ namespace DataStorageNamespace
     public class DataStorage : Initializer, IDataStorage
     {
         private IDataParser _dataParser;
-        public IDictionary<int, Queue<IData>> Messages { get; }
-        public IData ClientDataReceived(int id, string data)
+        public IDictionary<int, Queue<IData>> ClientRequests { get; }
+        public IData PrepareDataReceivedFromClient(int id, string data)
         {
-            return null;
+            IData readableData = _dataParser.Deserialize(data);
+            ClientRequests[id].Enqueue(readableData);
+            return readableData;
         }
 
-        public string MathToolDataReceived(int id, IData data)
+        public string PrepareDataForClient(int id, IData data)
         {
-            return null;
+            IData request = ClientRequests[id].Dequeue();
+            if (request.Response == ActionType.NoResponse)
+                throw new MessageIgnoreException();
+            data.InputType = request.OutputType;
+            string toSend = _dataParser.Serialize(data);
+            return toSend;
         }
 
         public DataStorage()
         {
-            Messages = new Dictionary<int, Queue<IData>>();
+            ClientRequests = new Dictionary<int, Queue<IData>>();
             Initialize();
         }
-        public void ClientAdded(object sender, ClientEventArgs args)
+        public void ClientAdded(object sender, DataEventArgs args)
         {
-            Messages.Add(new KeyValuePair<int, Queue<IData>>(args.Id, new Queue<IData>()));
+            ClientRequests.Add(new KeyValuePair<int, Queue<IData>>(args.Id, new Queue<IData>()));
         }
 
-        public void ClientRemoved(object sender, ClientEventArgs args)
+        public void ClientRemoved(object sender, DataEventArgs args)
         {
-            Messages.Remove(args.Id);
+            ClientRequests.Remove(args.Id);
         }
 
         protected override void Initialize()

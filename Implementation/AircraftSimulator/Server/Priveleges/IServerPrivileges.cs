@@ -8,8 +8,8 @@ using Common.EventArgs;
 
 namespace Server
 {
-    public delegate void AddClientHandler(object sender, ClientEventArgs eventHandler);
-    public delegate void RemoveClientHandler(object sender, ClientEventArgs eventHandler);
+    public delegate void AddClientHandler(object sender, DataEventArgs eventHandler);
+    public delegate void RemoveClientHandler(object sender, DataEventArgs eventHandler);
     public delegate void PresentDataOfTheClientHandler(object sender, DataEventArgs eventHandler);
     public interface IServerPrivileges
     {

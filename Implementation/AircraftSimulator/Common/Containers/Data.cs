@@ -8,10 +8,31 @@ namespace Common.Containers
     }
     public class Data : IData
     {
-        public DataType Type
+        public string Sender
         {
             get; set;
         }
+
+        public MessageType MessageType
+        {
+            get; set;
+        }
+
+        public ActionType Response
+        {
+            get; set;
+        }
+
+        public DataType InputType
+        {
+            get; set;
+        }
+
+        public DataType OutputType
+        {
+            get; set;
+        }
+
 
         private float[][] array;
         public float[][] Array

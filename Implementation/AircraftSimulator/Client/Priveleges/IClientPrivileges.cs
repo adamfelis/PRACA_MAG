@@ -2,11 +2,9 @@
 
 namespace Client.Priveleges
 {
-    public delegate void MathToolDataHandler(object sender, DataEventArgs eventHandler);
-    public delegate void ClientJoinHandler(object sender, ClientEventArgs eventHandler);
+    public delegate void ServerDataReceivedHandler(object sender, DataEventArgs eventHandler);
     public interface IClientPrivileges
     {
-        MathToolDataHandler OnMathToolDataReceived { get; set; }
-        ClientJoinHandler OnClientJoined { get; set; }
+        ServerDataReceivedHandler ServerDataReceived { get; set; }
     }
 }

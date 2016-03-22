@@ -1,14 +1,39 @@
-﻿namespace Common.Containers
+﻿using System;
+
+namespace Common.Containers
 {
     public enum DataType
     {
+        NotSet,
         Float,
         Vector,
         Matrix
     }
+
+    public enum MessageType
+    {
+        NotSet,
+        ClientJoinRequest,
+        ClientJoinResponse,
+        ClientDisconnected,
+        ClientDataRequest,
+        ClientDataResponse
+    }
+
+    public enum ActionType
+    {
+        NotSet,
+        ResponseRequired,
+        NoResponse
+    }
+
     public interface IData
     {
-        DataType Type { get; set; }
+        string Sender { get; set; }
+        MessageType MessageType { get; set; }
+        ActionType Response { get; set; }
+        DataType InputType { get; set; }
+        DataType OutputType { get; set; }
         float[][] Array { get; set; }
         float [,] Get2DimArray();
         void Set2DimArray(float [,] value);

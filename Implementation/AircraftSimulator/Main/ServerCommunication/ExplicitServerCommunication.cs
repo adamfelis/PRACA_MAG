@@ -8,9 +8,9 @@ namespace Main.ServerCommunication
     {
         public AddClientHandler OnClientAdded => a;
 
-        void a(object b, ClientEventArgs c)
+        void a(object b, DataEventArgs c)
         {
-            
+          
         }
 
         public PresentDataOfTheClientHandler OnClientDataPresented

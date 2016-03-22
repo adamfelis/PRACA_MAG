@@ -10,27 +10,34 @@ using DataParser;
 
 namespace DataStorageNamespace
 {
+    public class MessageIgnoreException : Exception
+    {
+        public override string ToString()
+        {
+            return "Message should be ignored";
+        }
+    }
     public interface IDataStorage
     {
         /// <summary>
         /// stores communication messages for each client connected to the server
         /// </summary>
-        IDictionary<int, Queue<IData>> Messages { get; }
+        IDictionary<int, Queue<IData>> ClientRequests { get; }
         /// <summary>
         /// Converts client data into IData
         /// </summary>
         /// <param name="id">client's id</param>
         /// <param name="data">data received through the socket</param>
         /// <returns>converted data into IData object</returns>
-        IData ClientDataReceived(int id, string data);
+        IData PrepareDataReceivedFromClient(int id, string data);
         /// <summary>
         /// Prepares math tool data to be sent through the socket
         /// </summary>
         /// <param name="id">id of the client who requested data</param>
         /// <param name="data">data received from math tool</param>
         /// <returns>converted data into string</returns>
-        string MathToolDataReceived(int id, IData data);
-        void ClientAdded(object sender, ClientEventArgs args);
-        void ClientRemoved(object sender, ClientEventArgs args);
+        string PrepareDataForClient(int id, IData data);
+        void ClientAdded(object sender, DataEventArgs args);
+        void ClientRemoved(object sender, DataEventArgs args);
     }
 }

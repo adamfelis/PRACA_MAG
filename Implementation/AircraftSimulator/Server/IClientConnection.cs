@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.EventArgs;
 
 namespace Server
 {
-    public interface IServerInputPriveleges
+    public interface IClientConnection
     {
-        void RespondToClient(DataEventArgs dataEventArgs);
+        int Id { get; }
+
+        string ClientName { get; set; }
+
+        void SendMessage(string data);
     }
 }

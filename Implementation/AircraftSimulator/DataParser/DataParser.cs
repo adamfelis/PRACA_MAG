@@ -30,7 +30,7 @@ namespace DataParser
             string toRet = String.Empty;
             using (StringWriter stringWriter = new StringWriter())
             {
-                using (XmlWriter dataWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings() {Indent = true}))
+                using (XmlWriter dataWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings() {Indent = false}))
                 {
                     serializer.Serialize(dataWriter, data);
                     toRet = stringWriter.ToString();

@@ -24,19 +24,19 @@ namespace Server
             PresentDataOfTheClient += serverPrivileges.OnClientDataPresented;
         }
 
-        public void OnClientAdded(int id)
+        public void OnClientAdded(DataEventArgs eventArgs)
         {
-            ClientAdded?.Invoke(this, new ClientEventArgs{Id = id});
+            ClientAdded?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data });
         }
 
-        public void OnClientRemoved(int id)
+        public void OnClientRemoved(DataEventArgs eventArgs)
         {
-            ClientRemoved?.Invoke(this, new ClientEventArgs{Id = id});
+            ClientRemoved?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data });
         }
 
-        public void OnClientDataPresented(int id, IData data)
+        public void OnClientDataPresented(DataEventArgs eventArgs)
         {
-            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() {Id = id, Data = data});
+            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() { Id = eventArgs.Id, Data = eventArgs.Data });
         }
     }
 }
