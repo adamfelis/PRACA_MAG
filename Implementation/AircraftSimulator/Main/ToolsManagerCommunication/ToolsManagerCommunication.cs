@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ApplicationManager.ToolsManagerCommunication
+﻿namespace Main.ToolsManagerCommunication
 {
     class ToolsManagerCommunication : IToolsManagerCommunication
     {
-        public ToolsManager.ToolsManager ManagerInstance
-        {
-            get
-            {
-                return ToolsManager.ToolsManager.Instance;
-            }
-        }
+        public ToolsManager.ToolsManager ManagerInstance => ToolsManager.ToolsManager.Instance;
     }
 }

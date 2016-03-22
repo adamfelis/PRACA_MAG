@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
+﻿using Common;
+using Main.AircraftsManagerCommunication;
+using Main.ServerCommunication;
+using Main.ToolsManagerCommunication;
 
-namespace ApplicationManager
+namespace Main
 {
     public sealed class MainApplication : Initializer
     {
         private static MainApplication instance;
-        private AircraftsManagerCommunication.IAircraftsManagerCommunication aircraftsManagerCommunication;
-        private ToolsManagerCommunication.IToolsManagerCommunication toolsManagerCommunication;
-        private ServerCommunication.IServerCommunication serverCommunication;
+        private IAircraftsManagerCommunication aircraftsManagerCommunication;
+        private IToolsManagerCommunication toolsManagerCommunication;
+        private IServerCommunication serverCommunication;
 
         public static MainApplication Instance
         {
@@ -24,7 +22,7 @@ namespace ApplicationManager
             }
         }
 
-        internal ToolsManagerCommunication.IToolsManagerCommunication ToolsManagerCommunication
+        internal IToolsManagerCommunication ToolsManagerCommunication
         {
             get
             {
@@ -34,12 +32,12 @@ namespace ApplicationManager
 
         protected override void Initialize()
         {
-            this.aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
-            this.toolsManagerCommunication = new ToolsManagerCommunication.ToolsManagerCommunication();
-            this.serverCommunication = new ServerCommunication.ServerCommunication();
+            aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
+            toolsManagerCommunication = new ToolsManagerCommunication.ToolsManagerCommunication();
+            serverCommunication = new ServerCommunication.ServerCommunication();
         }
 
-        private MainApplication()
+        public MainApplication()
         {
             Initialize();
         }

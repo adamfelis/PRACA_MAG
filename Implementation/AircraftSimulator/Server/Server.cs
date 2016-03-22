@@ -21,6 +21,7 @@ namespace Server
 
         public Server()
         {
+            _serverOutputPriveleges = new ServerOutputPrivileges();
             Initialize();
         }
 

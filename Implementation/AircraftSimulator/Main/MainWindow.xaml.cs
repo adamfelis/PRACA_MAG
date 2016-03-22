@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ApplicationManager;
 
 namespace Main
 {
@@ -21,11 +20,13 @@ namespace Main
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainApplication mainApplication;
         public MainWindow()
         {
             InitializeComponent();
-            var a = MainApplication.Instance;
+            //mainApplication = Main.MainApplication.Instance;
             //var toolsManagerCommunication = ToolsManager.ToolsManager.Instance;
+            var server = new Server.Server();
         }
     }
 }

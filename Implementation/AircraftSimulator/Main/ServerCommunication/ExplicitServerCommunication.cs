@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.EventArgs;
 using Server;
 
-namespace ApplicationManager.ServerCommunication
+namespace Main.ServerCommunication
 {
     partial class ServerCommunication : Server.IServerPrivileges
     {

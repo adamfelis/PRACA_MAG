@@ -7,11 +7,13 @@ using Common;
 using Common.Containers;
 using Common.EventArgs;
 using DataParser;
+using DataParser = DataParser.DataParser;
 
 namespace DataStorageNamespace
 {
-    public class DataStorage : IDataStorage
+    public class DataStorage : Initializer, IDataStorage
     {
+        private IDataParser _dataParser;
         public IDictionary<int, Queue<IData>> Messages { get; }
         public IData ClientDataReceived(int id, string data)
         {
@@ -26,6 +28,7 @@ namespace DataStorageNamespace
         public DataStorage()
         {
             Messages = new Dictionary<int, Queue<IData>>();
+            Initialize();
         }
         public void ClientAdded(object sender, ClientEventArgs args)
         {
@@ -35,6 +38,31 @@ namespace DataStorageNamespace
         public void ClientRemoved(object sender, ClientEventArgs args)
         {
             Messages.Remove(args.Id);
+        }
+
+        protected override void Initialize()
+        {
+            _dataParser = new global::DataParser.DataParser();
+            var a = _dataParser.Serialize(new Data()
+            {
+                Array = new float[][]
+                {
+                    new float[3]
+                    {
+                        1, 2, 3
+                    },
+                    new float[3]
+                    {
+                        4, 5, 6
+                    }
+                }
+            });
+            var b = _dataParser.Deserialize(a);
+            var n = b.N;
+            var m = b.M;
+            var d = b.Get2DimArray();
+            b.Set2DimArray(d);
+            var c = false;
         }
     }
 }
