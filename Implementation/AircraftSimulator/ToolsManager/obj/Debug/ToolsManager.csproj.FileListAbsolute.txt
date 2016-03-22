@@ -1,9 +1,0 @@
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolsManager.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolsManager.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\MathematicalToolCommunicator.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolAdapter.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\MathematicalToolCommunicator.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\bin\Debug\ToolAdapter.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.csprojResolveAssemblyReference.cache
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\ToolsManager\obj\Debug\ToolsManager.pdb

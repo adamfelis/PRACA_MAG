@@ -24,8 +24,8 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
-            var a = MainApplication.Instance;
-            //var toolsManagerCommunication = ToolsManager.ToolsManager.Instance;
+            int b = 0;
+            b++;
         }
     }
 }

@@ -1,5 +1,0 @@
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\bin\Debug\MathematicalToolCommunicator.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\bin\Debug\MathematicalToolCommunicator.pdb
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.csprojResolveAssemblyReference.cache
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.dll
-C:\Users\Qba\Documents\Studia_magisterskie\magisterka\PRACA_MAG\Implementation\AircraftSimulator\MathematicalToolCommunicator\obj\Debug\MathematicalToolCommunicator.pdb
