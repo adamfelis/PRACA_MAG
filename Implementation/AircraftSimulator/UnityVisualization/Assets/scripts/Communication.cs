@@ -31,6 +31,9 @@ public class Communication : MonoBehaviour, IClientPrivileges
             case MessageType.ClientJoinResponse:
                 Debug.Log("connected to the server");
                 break;
+            case MessageType.ServerDisconnected:
+                Debug.Log("disconnected from the server");
+                break;
             default:
                 break;
         }

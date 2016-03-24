@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.Sockets;
+using Common.Containers;
 
 namespace Common.Connection
 {
@@ -16,6 +17,9 @@ namespace Common.Connection
         protected TcpClient client;
         protected MessageReceivedHandler onMessageReceived;
         protected bool ReadingWithBlocking { get; set; }
+        protected string Disconnected { get; set; }
+        private const char Carret = (char)13;
+        private const char LineBreak = (char)10;
 
         protected override void Initialize()
         {
@@ -37,6 +41,12 @@ namespace Common.Connection
                 {
                     bytesRead = client.GetStream().EndRead(asyncResult);
                 }
+                if (bytesRead < 2)
+                {
+                    //DISCONNECTED
+                    SendMessage(Disconnected);
+                    return;
+                }
                 messageRead = Encoding.ASCII.GetString(readBuffer, 0, bytesRead - 2);
                 onMessageReceived(this, messageRead);
                 lock (client.GetStream())
@@ -56,9 +66,10 @@ namespace Common.Connection
             int bytesRead;
             string messageRead;
             bytesRead = client.GetStream().EndRead(asyncResult);
-            if (bytesRead < 1)
+            if (bytesRead < 2)
             {
-                // Disconnected
+                //DISCONNECTED
+                SendMessage(Disconnected);
                 return;
             }
             messageRead = Encoding.ASCII.GetString(readBuffer, 0, bytesRead - 2);
@@ -71,7 +82,7 @@ namespace Common.Connection
             lock (client.GetStream())
             {
                 StreamWriter writer = new StreamWriter(client.GetStream());
-                writer.Write(data + (char)13 + (char)10);
+                writer.Write(data + Carret + LineBreak);
                 writer.Flush();
             }
         }

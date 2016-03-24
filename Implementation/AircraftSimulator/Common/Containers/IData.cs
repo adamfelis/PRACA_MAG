@@ -17,7 +17,8 @@ namespace Common.Containers
         ClientJoinResponse,
         ClientDisconnected,
         ClientDataRequest,
-        ClientDataResponse
+        ClientDataResponse,
+        ServerDisconnected
     }
 
     public enum ActionType
