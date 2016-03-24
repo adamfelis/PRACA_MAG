@@ -11,9 +11,9 @@ namespace Client.Priveleges
             ServerDataReceived += clientPrivileges.ServerDataReceived;
         }
 
-        public void OnMathToolDataReceived(int id, IData data)
+        public void OnServerDataPresented(DataEventArgs eventArgs)
         {
-            ServerDataReceived?.Invoke(this, new DataEventArgs {Id = id, Data = data });
+            ServerDataReceived?.Invoke(this, eventArgs);
         }
     }
 }

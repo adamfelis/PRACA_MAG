@@ -27,6 +27,8 @@ namespace Main
             var a = MainApplication.Instance;
             a.ToolsManagerCommunication.ManagerInstance.ToString();
             var s = new Server.Server();
+            //var c = new Client.Client();
+            //c.ConnectToServer();
         }
     }
 }

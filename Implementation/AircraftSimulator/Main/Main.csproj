@@ -105,6 +105,10 @@
       <Project>{82727286-cc1b-487a-a372-4d2e683d7492}</Project>
       <Name>AircraftsManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Client\Client.csproj">
+      <Project>{a50922a2-21d7-4bc6-94d5-d636ba47ed5b}</Project>
+      <Name>Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
       <Name>Common</Name>
@@ -119,6 +123,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>start xcopy "$(SolutionDir)AppInput\" "$(SolutionDir)UnityVisualization\" /Y /E /D</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

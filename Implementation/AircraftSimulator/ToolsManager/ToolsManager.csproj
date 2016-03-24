@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Observator\Observing\ConcreteObserving\ConcreteObservableSubject.cs" />
+    <Compile Include="Observator\Observing\ObservableSubject.cs" />
+    <Compile Include="Observator\Observing\Observer.cs" />
     <Compile Include="ToolsManagement\IToolsManagement.cs" />
     <Compile Include="ToolsManagement\ToolsManagement.cs" />
     <Compile Include="ToolsManager.cs" />

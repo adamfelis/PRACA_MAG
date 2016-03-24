@@ -1,4 +1,5 @@
 ﻿using Common.Containers;
+using Common.EventArgs;
 
 namespace Client.Priveleges
 {
@@ -8,6 +9,6 @@ namespace Client.Priveleges
 
         void Subscribe(IClientPrivileges clientPrivileges);
 
-        void OnMathToolDataReceived(int id, IData data);
+        void OnServerDataPresented(DataEventArgs eventArgs);
     }
 }

@@ -18,16 +18,20 @@ namespace DataStorageNamespace
         public IData PrepareDataReceivedFromClient(int id, string data)
         {
             IData readableData = _dataParser.Deserialize(data);
-            ClientRequests[id].Enqueue(readableData);
+            if (ClientRequests.ContainsKey(id))
+                ClientRequests[id].Enqueue(readableData);
             return readableData;
         }
 
         public string PrepareDataForClient(int id, IData data)
         {
-            IData request = ClientRequests[id].Dequeue();
-            if (request.Response == ActionType.NoResponse)
-                throw new MessageIgnoreException();
-            data.InputType = request.OutputType;
+            if (ClientRequests[id].Count > 0)
+            {
+                IData request = ClientRequests[id].Dequeue();
+                if (request.Response == ActionType.NoResponse)
+                    throw new MessageIgnoreException();
+                data.InputType = request.OutputType;
+            }
             string toSend = _dataParser.Serialize(data);
             return toSend;
         }
@@ -40,6 +44,7 @@ namespace DataStorageNamespace
         public void ClientAdded(object sender, DataEventArgs args)
         {
             ClientRequests.Add(new KeyValuePair<int, Queue<IData>>(args.Id, new Queue<IData>()));
+            ClientRequests[args.Id].Enqueue(args.Data);
         }
 
         public void ClientRemoved(object sender, DataEventArgs args)

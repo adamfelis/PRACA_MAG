@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Common;
+using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
 using DataStorageNamespace;
@@ -33,6 +34,7 @@ namespace Server
         public Server()
         {
             _serverOutputPriveleges = new ServerOutputPrivileges();
+            StartServer();
             Initialize();
         }
 
@@ -44,16 +46,18 @@ namespace Server
                 _listener.Start();
                 do
                 {
-                    new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived);
+                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived);
+                    var a = true;
                 } while (true);
             });
             _listenerThread.Start();
         }
 
-        private void onMessageReceived(IClientConnection sender, string data)
+        private void onMessageReceived(IConnector sender, string data)
         {
-            IData readableData = _dataStorage.PrepareDataReceivedFromClient(sender.Id, data);
-            interpretClientMessages(sender, new DataEventArgs() {Data = readableData, Id = sender.Id});
+            var client = sender as IClientConnection;
+            IData readableData = _dataStorage.PrepareDataReceivedFromClient(client.Id, data);
+            interpretClientMessages(client, new DataEventArgs() {Data = readableData, Id = client.Id});
         }
 
         private void interpretClientMessages(IClientConnection client, DataEventArgs eventHandler)
@@ -61,18 +65,18 @@ namespace Server
             switch (eventHandler.Data.MessageType)
             {
                 case MessageType.ClientJoinRequest:
-                    connectClient(client, eventHandler.Data);
                     _serverOutputPriveleges.OnClientAdded(eventHandler);
-                break;
+                    connectClient(client, eventHandler.Data);
+                    break;
                 case MessageType.ClientDisconnected:
-                    disconnectClient(client, eventHandler.Data);
                     _serverOutputPriveleges.OnClientRemoved(eventHandler);
-                break;
+                    disconnectClient(client, eventHandler.Data);
+                    break;
                 case MessageType.ClientDataRequest:
                     _serverOutputPriveleges.OnClientDataPresented(eventHandler);
-                break;
+                    break;
                 default:
-                break;
+                    break;
             }
         }
 

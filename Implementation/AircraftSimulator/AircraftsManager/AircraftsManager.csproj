@@ -59,6 +59,11 @@
     <Compile Include="Missile\Strategy\ConcreteStrategies\ConcreteMissileStrategyM2.cs" />
     <Compile Include="Missile\Strategy\MissileFlightContext.cs" />
     <Compile Include="Missile\Strategy\MissileStrategy.cs" />
+    <Compile Include="Observator\Observing\ConcreteObserving\ConcreteObservableSubject.cs" />
+    <Compile Include="Observator\Observing\ObservableSubject.cs" />
+    <Compile Include="Observator\Observing\Observer.cs" />
+    <Compile Include="Observator\Tool\ITool.cs" />
+    <Compile Include="Observator\Tool\ToolType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShooterCreatorPreparation.cs" />
     <Compile Include="Shooter\InvalidShooterIdException.cs" />
