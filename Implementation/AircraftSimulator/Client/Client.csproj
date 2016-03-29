@@ -44,8 +44,10 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="IServerConnection.cs" />
+    <Compile Include="Priveleges\ClientInputPriveleges.cs" />
     <Compile Include="Priveleges\ClientOutputPrivileges.cs" />
     <Compile Include="IClient.cs" />
+    <Compile Include="Priveleges\IClientInputPriveleges.cs" />
     <Compile Include="Priveleges\IClientOutputPrivileges.cs" />
     <Compile Include="Priveleges\IClientPrivileges.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

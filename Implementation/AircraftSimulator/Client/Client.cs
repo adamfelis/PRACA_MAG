@@ -18,6 +18,7 @@ namespace Client
     {
         private IClientOutputPrivileges clientOutputPrivileges;
         public IClientOutputPrivileges ClientOutputPrivileges => clientOutputPrivileges;
+        private IClientInputPriveleges clientInputPriveleges;
        
         private IServerConnection serverConnection;
         private IDataParser dataParser;
@@ -35,10 +36,13 @@ namespace Client
             Initialize();
         }
 
+        public IClientInputPriveleges ClientInputPriveleges => clientInputPriveleges;
+
         protected override void Initialize()
         {
             dataParser = new global::DataParser.DataParser();
             serverConnection = new ServerConnection(onMessageReceived, clientOutputPrivileges.OnServerDisconnected);
+            clientInputPriveleges = new ClientInputPriveleges(ref dataParser, ref serverConnection);
         }
 
         public string ConnectToServer()

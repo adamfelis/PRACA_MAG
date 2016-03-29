@@ -96,11 +96,18 @@ namespace Common.Connection
         {
             if (client == null)
                 return;
-            lock (client.GetStream())
+            try
             {
-                StreamWriter writer = new StreamWriter(client.GetStream());
-                writer.Write(data + Carret + LineBreak);
-                writer.Flush();
+                lock (client.GetStream())
+                {
+                    StreamWriter writer = new StreamWriter(client.GetStream());
+                    writer.Write(data + Carret + LineBreak);
+                    writer.Flush();
+                }
+            }
+            catch (Exception e)
+            {
+                
             }
         }
     }

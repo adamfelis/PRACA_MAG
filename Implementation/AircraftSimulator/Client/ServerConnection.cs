@@ -29,7 +29,7 @@ namespace Client
             });
         }
 
-        public string getLocalIPAddress()
+        private string getLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)

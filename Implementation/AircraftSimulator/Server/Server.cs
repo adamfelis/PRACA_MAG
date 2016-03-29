@@ -73,6 +73,12 @@ namespace Server
                     break;
                 case MessageType.ClientDataRequest:
                     _serverOutputPriveleges.OnClientDataPresented(eventHandler);
+
+                    //TOREMOVE
+                {
+                    eventHandler.Data.MessageType = MessageType.ClientDataResponse;
+                    _serverInputPriveleges.RespondToClient(eventHandler);
+                }
                     break;
                 default:
                     break;
