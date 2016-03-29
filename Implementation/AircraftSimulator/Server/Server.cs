@@ -46,7 +46,7 @@ namespace Server
                 _listener.Start();
                 do
                 {
-                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived);
+                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived, _serverOutputPriveleges.OnClientRemoved);
                 } while (true);
             });
             _listenerThread.Start();

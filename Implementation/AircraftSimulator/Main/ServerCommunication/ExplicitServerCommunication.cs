@@ -6,28 +6,25 @@ namespace Main.ServerCommunication
 {
     partial class ServerCommunication : Server.IServerPrivileges
     {
-        public AddClientHandler OnClientAdded => a;
+        public AddClientHandler OnClientAdded => onClientAdded;
 
-        void a(object b, DataEventArgs c)
+        void onClientAdded(object sender, DataEventArgs dataEventArgs)
         {
           
         }
 
-        public PresentDataOfTheClientHandler OnClientDataPresented
+        public PresentDataOfTheClientHandler OnClientDataPresented => onClientDataPresented;
+
+        void onClientDataPresented(object sender, DataEventArgs dataEventArgs)
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+
         }
 
-        public RemoveClientHandler OnClientRemoved
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public RemoveClientHandler OnClientRemoved => onClientRemoved;
 
+        void onClientRemoved(object sender, DataEventArgs dataEventArgs)
+        {
+
+        }
     }
 }

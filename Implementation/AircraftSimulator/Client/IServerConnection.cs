@@ -6,7 +6,8 @@ using Common.Connection;
 
 namespace Client
 {
-    public interface IServerConnection : IConnector
+    public interface IServerConnection : IConnector, IClient
     {
+
     }
 }

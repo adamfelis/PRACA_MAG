@@ -19,23 +19,39 @@ public class Communication : MonoBehaviour, IClientPrivileges
 	
 	}
 
-    public ServerDataReceivedHandler ServerDataReceived
-    {
-        get { return serverDataReceived; }
+    void OnApplicationQuit(){
+        communicator.DisconnectFromServer();
     }
 
-    private void serverDataReceived(object sender, DataEventArgs eventArgs)
+    public ServerDataReceivedHandler ServerDataReceived
     {
-        switch (eventArgs.Data.MessageType)
+        get
         {
-            case MessageType.ClientJoinResponse:
-                Debug.Log("connected to the server");
-                break;
-            case MessageType.ServerDisconnected:
-                Debug.Log("disconnected from the server");
-                break;
-            default:
-                break;
+          return delegate (object sender, DataEventArgs eventArgs)
+          {
+              switch (eventArgs.Data.MessageType)
+              {
+                  case MessageType.ClientJoinResponse:
+                      Debug.Log("Connected to the server");
+                      break;
+                  case MessageType.ServerDisconnected:
+                      Debug.Log("Disconnected from the server");
+                      break;
+                  default:
+                      break;
+              }
+          };
+        }
+    }
+
+    public ServerDisconnectedHandler ServerDisconnected
+    {
+        get
+        {
+            return delegate(object sender) 
+            {
+                Debug.Log("Server connection interrupted.");
+            };
         }
     }
 

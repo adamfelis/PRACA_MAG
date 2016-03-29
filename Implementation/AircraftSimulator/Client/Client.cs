@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using Client.Priveleges;
 using Common;
@@ -15,29 +16,29 @@ namespace Client
 {
     public class Client : Initializer, IClient
     {
-        private IClientOutputPrivileges _clientOutputPrivileges;
-        public IClientOutputPrivileges ClientOutputPrivileges => _clientOutputPrivileges;
+        private IClientOutputPrivileges clientOutputPrivileges;
+        public IClientOutputPrivileges ClientOutputPrivileges => clientOutputPrivileges;
        
-        private ServerConnection serverConnection;
+        private IServerConnection serverConnection;
         private IDataParser dataParser;
 
         public Client(IClientPrivileges clientPrivileges)
         {
-            _clientOutputPrivileges = new ClientOutputPrivileges();
-            _clientOutputPrivileges.Subscribe(clientPrivileges);
+            clientOutputPrivileges = new ClientOutputPrivileges();
+            clientOutputPrivileges.Subscribe(clientPrivileges);
             Initialize();
         }
 
         public Client()
         {
-            _clientOutputPrivileges = new ClientOutputPrivileges();
+            clientOutputPrivileges = new ClientOutputPrivileges();
             Initialize();
         }
 
         protected override void Initialize()
         {
             dataParser = new global::DataParser.DataParser();
-            serverConnection = new ServerConnection(onMessageReceived);
+            serverConnection = new ServerConnection(onMessageReceived, clientOutputPrivileges.OnServerDisconnected);
         }
 
         public string ConnectToServer()
@@ -54,18 +55,27 @@ namespace Client
                 string toSend = dataParser.Serialize(join);
                 serverConnection.SendMessage(toSend);
             }
-            catch (Exception e)
+            catch (SocketException e)
             {
                 return "Server is unreachable, please trigger server";
             }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
             return "Join request sent to server";
+        }
+
+        public void DisconnectFromServer()
+        {
+            serverConnection.DisconnectFromServer();
         }
 
         private void onMessageReceived(IConnector sender, string data)
         {
             var client = sender as IServerConnection;
             IData readableData = dataParser.Deserialize(data);
-            _clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() {Data = readableData});
+            clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() {Data = readableData});
         }
     }
 }

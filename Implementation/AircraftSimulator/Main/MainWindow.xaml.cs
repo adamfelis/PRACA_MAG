@@ -22,20 +22,16 @@ namespace Main
     public partial class MainWindow : Window
     {
         private MainApplication mainApplication;
-        private Server.Server s;
         public MainWindow()
         {
             InitializeComponent();
-            var a = MainApplication.Instance;
-            a.ToolsManagerCommunication.ManagerInstance.ToString();
-            s = new Server.Server();
-            //var c = new Client.Client();
-            //c.ConnectToServer();
+            mainApplication = MainApplication.Instance;
+            mainApplication.ToolsManagerCommunication.ManagerInstance.ToString();
         }
 
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
-            s.StopServer();
+            mainApplication.ServerCommunication.ServerInstance.StopServer();
         }
     }
 }

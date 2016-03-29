@@ -8,5 +8,7 @@ namespace Client
     public interface IClient
     {
         string ConnectToServer();
+
+        void DisconnectFromServer();
     }
 }

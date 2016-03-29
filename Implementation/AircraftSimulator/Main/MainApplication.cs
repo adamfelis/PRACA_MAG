@@ -30,6 +30,14 @@ namespace Main
             }
         }
 
+        internal IServerCommunication ServerCommunication
+        {
+            get
+            {
+                return serverCommunication;
+            }
+        }
+
         protected override void Initialize()
         {
             aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
@@ -40,6 +48,10 @@ namespace Main
         public MainApplication()
         {
             Initialize();
+            serverCommunication.ServerInstance.StartServer();
+            //Client.Client c = new Client.Client();
+            //c.ConnectToServer();
+
         }
     }
 }
