@@ -9,7 +9,7 @@ namespace MathematicalToolCommunicator.CommunicationBridge
 {
     public sealed class RefinedMathToolCommunicator : MathToolCommunicator
     {
-        protected override Parameters Compute(Parameters parameters)
+        public override Parameters Compute(Parameters parameters)
         {
             Parameters result = null;
             result = base.Compute(parameters);

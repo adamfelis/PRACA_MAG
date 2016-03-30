@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathematicalToolCommunicator.CommunicationBridge;
+using Common.Containers;
 
 namespace ToolsManager
 {
-    public class ToolsManager
+    public sealed class ToolsManager
     {
         private static ToolsManager instance;
         private MathToolCommunicator mathToolCommunicator;
@@ -35,6 +36,12 @@ namespace ToolsManager
         {
             mathToolCommunicator = new RefinedMathToolCommunicator();
             toolsManagement = new ToolsManagement.ToolsManagement();
+        }
+        public IData Compute(IData parameters)
+        {
+            IData result = null;
+            return result;
+            //return methodImplementor.Compute(parameters);
         }
     }
 }

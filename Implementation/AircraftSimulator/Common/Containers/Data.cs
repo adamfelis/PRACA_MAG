@@ -6,6 +6,8 @@ namespace Common.Containers
     {
         public override string Message => "Matrix cannot be empty";
     }
+
+    [Serializable]
     public class Data : IData
     {
         public string Sender

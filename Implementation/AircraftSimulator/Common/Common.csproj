@@ -47,6 +47,7 @@
     <Compile Include="Containers\Data.cs" />
     <Compile Include="EventArgs\DataEventArgs.cs" />
     <Compile Include="Containers\IData.cs" />
+    <Compile Include="Exceptions\XMLFileNotFoundException.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

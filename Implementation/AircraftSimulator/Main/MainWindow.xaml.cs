@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using Common.Containers;
 
 namespace Main
 {
@@ -26,7 +27,13 @@ namespace Main
         {
             InitializeComponent();
             mainApplication = MainApplication.Instance;
-            mainApplication.ToolsManagerCommunication.ManagerInstance.ToString();
+            //mainApplication.ToolsManagerCommunication.ManagerInstance.ToString();
+            //mainApplication.AircraftsManagerCommunication.ManagerInstance.AddShooter(AircraftsManager.Shooter.ShooterType.F16, 1);
+            //List<IData> data = mainApplication.AircraftsManagerCommunication.ManagerInstance.GetShooterData(1);
+            //foreach(IData concreteData in data)
+            //{
+            //    mainApplication.ToolsManagerCommunication.ManagerInstance.Compute(concreteData);
+            //}
         }
 
         void DataWindow_Closing(object sender, CancelEventArgs e)

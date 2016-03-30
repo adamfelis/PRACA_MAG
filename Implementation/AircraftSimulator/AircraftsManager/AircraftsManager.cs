@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using Common.Containers;
 
 namespace AircraftsManager
 {
@@ -56,36 +57,38 @@ namespace AircraftsManager
                 throw new Shooter.InvalidShooterIdException();
             instance.activeShooters[sender].AddMissile(missileType);
         }
-
-        // TODO : return type has to be changed
-        public void GetShooterData(int sender)
+        
+        public List<IData> GetShooterData(int sender)
         {
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
+            List<IData> data = new List<IData>();
             List<Common.Strategy> strategies = instance.activeShooters[sender].Context.Strategies;
             foreach (Common.Strategy strategy in strategies)
             {
                 switch (strategy.ShooterType)
                 {
                     case Shooter.ShooterType.F16:
-                        (strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLateralData();
-                        (strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLongitudinalData();
+                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLateralData());
+                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLongitudinalData());
                         break;
                     case Shooter.ShooterType.F17:
-                        (strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLateralData();
-                        (strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLongitudinalData();
+                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLateralData());
+                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLongitudinalData());
                         break;
                     default:
                         throw new Common.InvalidShooterTypeException();
                 }
             }
+            return data;
         }
 
         // TODO : return type has to be changed
-        public void GetMissileData(int sender, int missileId)
+        public List<IData> GetMissileData(int sender, int missileId)
         {
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
+            List<IData> data = new List<IData>();
             Missile.Missile missile = instance.activeShooters[sender].GetMissile(missileId);
             List <Common.Strategy> strategies = missile.MissileFlightContext.Strategies;
             foreach (Common.Strategy strategy in strategies)
@@ -102,6 +105,7 @@ namespace AircraftsManager
                         throw new Common.InvalidShooterTypeException();
                 }
             }
+            return data;
         }
     }
 }

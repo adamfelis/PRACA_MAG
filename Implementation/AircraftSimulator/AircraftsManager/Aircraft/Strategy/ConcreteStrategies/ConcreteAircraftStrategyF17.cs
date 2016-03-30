@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +11,16 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
     {
         internal ConcreteAircraftStrategyF17()
         {
-            // TODO: file reader
-            //this.longitudinalData = longitudinalData;
-            //this.lateralData = lateralData;
+            this.lateralDataFileName = "F17_lateral.xml";
+            this.longitudinalDataFileName = "F17_longitudinal.xml";
+            Initialize();
         }
-        internal override float[,] GetLateralData()
+        internal override IData GetLateralData()
         {
             throw new NotImplementedException();
         }
 
-        internal override float[,] GetLongitudinalData()
+        internal override IData GetLongitudinalData()
         {
             throw new NotImplementedException();
         }

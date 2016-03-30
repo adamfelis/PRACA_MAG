@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AircraftsManager.Missile;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AircraftsManager.Common
 {
-    abstract class Strategy
+    abstract class Strategy : global::Common.Initializer
     {
         protected Shooter.ShooterType shooterType;
 
@@ -33,6 +34,26 @@ namespace AircraftsManager.Common
                     throw new Common.InvalidShooterTypeException();
             }
             strategy.shooterType = shooterType;
+            return strategy;
+        }
+
+        internal static Common.Strategy GetSpecificMissileStrategy(MissileType missileType)
+        {
+            Common.Strategy strategy = null;
+            switch (missileType)
+            {
+                case MissileType.M1:
+                    strategy = new Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM1();
+                    (strategy as Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM1).MissileType = missileType;
+                    break;
+                case MissileType.M2:
+                    strategy = new Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM2();
+                    (strategy as Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM2).MissileType = missileType;
+                    break;
+                default:
+                    throw new InvalidMissileTypeException();
+            }
+
             return strategy;
         }
     }

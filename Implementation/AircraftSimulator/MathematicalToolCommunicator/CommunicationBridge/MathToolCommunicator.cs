@@ -21,7 +21,7 @@ namespace MathematicalToolCommunicator.CommunicationBridge
 
         protected Methods.MethodImplementor methodImplementor;
 
-        protected virtual Parameters Compute(Parameters parameters)
+        public virtual Parameters Compute(Parameters parameters)
         {
             return methodImplementor.Compute(parameters);
         }

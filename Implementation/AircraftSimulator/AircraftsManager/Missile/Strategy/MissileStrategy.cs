@@ -16,26 +16,15 @@ namespace AircraftsManager.Missile.Strategy
             {
                 return missileType;
             }
+            set
+            {
+                missileType = value;
+            }
         }
 
-        internal static Common.Strategy GetSpecificMissileStrategy(MissileType missileType)
+        protected override void Initialize()
         {
-            Common.Strategy strategy = null;
-            switch (missileType)
-            {
-                case MissileType.M1:
-                    strategy = new Strategy.ConcreteStrategies.ConcreteMissileStrategyM1();
-                    (strategy as Strategy.ConcreteStrategies.ConcreteMissileStrategyM1).missileType = missileType;
-                    break;
-                case MissileType.M2:
-                    strategy = new Strategy.ConcreteStrategies.ConcreteMissileStrategyM2();
-                    (strategy as Strategy.ConcreteStrategies.ConcreteMissileStrategyM2).missileType = missileType;
-                    break;
-                default:
-                    throw new InvalidMissileTypeException();
-            }
-
-            return strategy;
+            throw new NotImplementedException();
         }
     }
 }
