@@ -22,11 +22,27 @@ namespace Main
             }
         }
 
+        internal IAircraftsManagerCommunication AircraftsManagerCommunication
+        {
+            get
+            {
+                return aircraftsManagerCommunication;
+            }
+        }
+
         internal IToolsManagerCommunication ToolsManagerCommunication
         {
             get
             {
                 return toolsManagerCommunication;
+            }
+        }
+
+        internal IServerCommunication ServerCommunication
+        {
+            get
+            {
+                return serverCommunication;
             }
         }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Type>Matrix</Type>
+  <Array>
+    <ArrayOfFloat>
+      <float>1</float>
+      <float>2</float>
+      <float>3</float>
+      <float>4</float>
+    </ArrayOfFloat>
+    <ArrayOfFloat>
+      <float>5</float>
+      <float>6</float>
+      <float>7</float>
+      <float>8</float>
+    </ArrayOfFloat>
+    <ArrayOfFloat>
+      <float>9</float>
+      <float>10</float>
+      <float>11</float>
+      <float>12</float>
+    </ArrayOfFloat>
+  </Array>
+</Data>
