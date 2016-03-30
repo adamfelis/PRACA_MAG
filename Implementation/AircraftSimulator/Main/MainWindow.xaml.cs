@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace Main
 {
@@ -24,9 +25,13 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
-            var a = MainApplication.Instance;
-            a.ToolsManagerCommunication.ManagerInstance.ToString();
-            var s = new Server.Server();
+            mainApplication = MainApplication.Instance;
+            mainApplication.ToolsManagerCommunication.ManagerInstance.ToString();
+        }
+
+        void DataWindow_Closing(object sender, CancelEventArgs e)
+        {
+            mainApplication.ServerCommunication.ServerInstance.StopServer();
         }
     }
 }

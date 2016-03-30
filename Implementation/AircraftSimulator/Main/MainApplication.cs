@@ -56,6 +56,10 @@ namespace Main
         public MainApplication()
         {
             Initialize();
+            serverCommunication.ServerInstance.StartServer();
+            //Client.Client c = new Client.Client();
+            //c.ConnectToServer();
+
         }
     }
 }

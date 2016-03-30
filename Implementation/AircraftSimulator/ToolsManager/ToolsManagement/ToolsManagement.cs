@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.Patterns.Observator.Observing.ConcreteObserving;
-using Common.Patterns.Observator.Observing;
+using ToolsManager.Observator.Observing.ConcreteObserving;
 
 namespace ToolsManager.ToolsManagement
 {
