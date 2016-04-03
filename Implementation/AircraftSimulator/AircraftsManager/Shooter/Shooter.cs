@@ -11,7 +11,7 @@ namespace AircraftsManager.Shooter
     {
         protected Dictionary<int, Missile.Missile> activeMissiles;
         protected Common.Context context;
-        protected ShooterType shooterType;
+        protected Shooters.ShooterType shooterType;
 
         internal Common.Context Context
         {

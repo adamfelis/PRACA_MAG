@@ -55,12 +55,23 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationDataContext\ApplicationDataContext.cs" />
     <Compile Include="ApplicationStartup.cs" />
+    <Compile Include="Common\Dispatchable.cs" />
+    <Compile Include="Common\IDispatchable.cs" />
+    <Compile Include="ExtraWindows\AircraftsStrategiesManagement.xaml.cs">
+      <DependentUpon>AircraftsStrategiesManagement.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ServerCommunication\ExplicitServerCommunication.cs" />
     <Compile Include="ServerCommunication\IServerCommunication.cs" />
     <Compile Include="ServerCommunication\ServerCommunication.cs" />
     <Compile Include="ToolsManagerCommunication\IToolsManagerCommunication.cs" />
+    <Compile Include="AircraftsManagerCommunication\IAircraftsManagerCommunicationImplementor.cs" />
     <Compile Include="ToolsManagerCommunication\ToolsManagerCommunication.cs" />
+    <Page Include="ExtraWindows\AircraftsStrategiesManagement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

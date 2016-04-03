@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common.Containers;
+using Common.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +10,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
 {
     sealed class MathToolFacade
     {
-        private Dictionary<Scripts.ScriptType, Scripts.Script> availableScripts;
+        private Dictionary<ScriptType, Scripts.Script> availableScripts;
         private MLApp.MLApp mlApp; 
 
         internal MathToolFacade()
@@ -17,7 +19,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
             this.mlApp = new MLApp.MLApp();
         }
         
-        internal Scripts.Parameters.Parameters RunScript(Scripts.ScriptType scriptType, Scripts.Parameters.Parameters parameters)
+        internal IData RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
         {
             if (!availableScripts.ContainsKey(scriptType))
                 throw new Scripts.InvalidScriptTypeException();
@@ -26,17 +28,17 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
 
         private void InitializeScripts()
         {
-            this.availableScripts = new Dictionary<Scripts.ScriptType, Scripts.Script>();
+            this.availableScripts = new Dictionary<ScriptType, Scripts.Script>();
 
-            var scriptTypeValues = Enum.GetValues(typeof(Scripts.ScriptType)).Cast<Scripts.ScriptType>();
+            var scriptTypeValues = Enum.GetValues(typeof(ScriptType)).Cast<ScriptType>();
             foreach(var scriptTypeValue in scriptTypeValues)
             {
                 switch(scriptTypeValue)
                 {
-                    case Scripts.ScriptType.RungeKutta:
+                    case ScriptType.RungeKutta:
                         availableScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptRungeKutta());
                         break;
-                    case Scripts.ScriptType.LaplaceTransform:
+                    case ScriptType.LaplaceTransform:
                         availableScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptLaplaceTransform());
                         break;
                     default:

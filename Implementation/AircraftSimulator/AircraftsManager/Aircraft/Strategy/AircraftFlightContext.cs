@@ -8,7 +8,7 @@ namespace AircraftsManager.Aircraft.Strategy
 {
     sealed class AircraftFlightContext : Common.Context
     {
-        internal AircraftFlightContext(Shooter.ShooterType shooterType)
+        internal AircraftFlightContext(Shooters.ShooterType shooterType)
         {
             this.Initialize();
             this.AddStrategy(Common.Strategy.GetSpecificShooterStrategy(shooterType));

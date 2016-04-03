@@ -34,14 +34,18 @@ namespace ToolsManager
 
         private ToolsManager()
         {
-            mathToolCommunicator = new RefinedMathToolCommunicator();
             toolsManagement = new ToolsManagement.ToolsManagement();
+            mathToolCommunicator = new RefinedMathToolCommunicator();
         }
+
+        public void SetScriptTypeForComputations(Common.Scripts.ScriptType scriptType)
+        {
+            mathToolCommunicator.SetMethodImplementor(scriptType);
+        }
+
         public IData Compute(IData parameters)
         {
-            IData result = null;
-            return result;
-            //return methodImplementor.Compute(parameters);
+            return mathToolCommunicator.Compute(parameters);
         }
     }
 }

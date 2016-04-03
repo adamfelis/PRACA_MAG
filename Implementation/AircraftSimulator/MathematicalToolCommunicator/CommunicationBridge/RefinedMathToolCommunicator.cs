@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.Parameters;
+using Common.Containers;
 
 namespace MathematicalToolCommunicator.CommunicationBridge
 {
     public sealed class RefinedMathToolCommunicator : MathToolCommunicator
     {
-        public override Parameters Compute(Parameters parameters)
+        public override IData Compute(IData parameters)
         {
-            Parameters result = null;
+            IData result = null;
             result = base.Compute(parameters);
 
             return result;

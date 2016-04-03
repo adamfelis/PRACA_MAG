@@ -6,8 +6,53 @@
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
         Closing ="DataWindow_Closing"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="800" Width="1000">
     <Grid>
-        
+        <TabControl x:Name="tabControl" Margin="169,0,0,0">
+            <TabItem Header="Aircrafts Manager">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock x:Name="playerBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Player: " VerticalAlignment="Top"/>
+                    <TextBlock x:Name="concretePlayerBlock" HorizontalAlignment="Left" Margin="64,10,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedItem.Name}" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="aircraftBlock" HorizontalAlignment="Left" Margin="10,47,0,0" TextWrapping="Wrap" Text="Aircraft's Type: " VerticalAlignment="Top"/>
+                    <TextBlock x:Name="concreteAircraftBlock" HorizontalAlignment="Left" Margin="107,47,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedValue.Aircraft}" VerticalAlignment="Top"/>
+                    <TextBlock x:Name="aircraftStartegiesBlock" HorizontalAlignment="Left" Margin="10,88,0,0" TextWrapping="Wrap" Text="Strategies: " VerticalAlignment="Top"/>
+                    <ComboBox x:Name="aircraftStrategiesComboBox" HorizontalAlignment="Left" Margin="107,88,0,0" VerticalAlignment="Top" Width="120"
+                              ItemsSource="{Binding Path=StrategiesCollection}"/>
+                    <Button x:Name="manageStrategiesButton" Content="Add extra strategy" HorizontalAlignment="Left" Margin="262,88,0,0" VerticalAlignment="Top" Width="auto" Click="manageStrategiesButton_Click"
+                           />
+                    <TextBlock x:Name="longitudinalMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Longitudinal matrix: " VerticalAlignment="Top" Margin="262,143,0,0"/>
+                    <TextBlock x:Name="lateralMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lateral matrix: " VerticalAlignment="Top" Margin="76,143,0,0"/>
+                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="180" Margin="10,128,0,0" VerticalAlignment="Top" Width="452">
+                        
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Math Tool">
+                <Grid Background="#FFE5E5E5">
+                    <TextBlock x:Name="activeAlgorithm" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Active Algorithm: " VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <ComboBox x:Name="algorithmsComboBox" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" Width="120"
+                              ItemsSource="{Binding Path=AlgorithmsCollection}" SelectedIndex="0" SelectionChanged="algorithmsComboBox_SelectionChanged"/>
+                    <TextBlock x:Name="algorithmParameters" HorizontalAlignment="Left" Margin="10,53,0,0" TextWrapping="Wrap" Text="Algorithm parameters: " VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <ListView x:Name="clientsListView" HorizontalAlignment="Left" Width="169" 
+            SelectionChanged="clientsListView_SelectionChanged"
+                  ItemsSource="{Binding Path=ClientsCollection}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Player" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Aircraft" Width="auto" DisplayMemberBinding="{Binding Aircraft}"/>
+                </GridView>
+            </ListView.View>
+            <!--<Style x:Key="clientListViewStyle" TargetType="{x:Type ListView}">
+                <Style.Triggers>
+                    <Trigger Property="SelectedValue" Value="{x:Null}">
+                        <Setter TargetName="addStrategyButton" Property="IsEnabled" Value="False"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>-->
+        </ListView>
+
     </Grid>
 </Window>

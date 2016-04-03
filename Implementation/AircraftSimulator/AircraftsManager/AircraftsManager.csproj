@@ -69,7 +69,6 @@
     <Compile Include="Shooter\InvalidShooterIdException.cs" />
     <Compile Include="Shooter\Shooter.cs" />
     <Compile Include="Shooter\ShooterFactory\ShooterCreator.cs" />
-    <Compile Include="Shooter\ShooterType.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

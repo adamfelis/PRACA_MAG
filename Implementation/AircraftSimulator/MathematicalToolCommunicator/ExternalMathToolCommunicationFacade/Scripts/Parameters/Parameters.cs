@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Containers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,32 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         public Parameters(List<Parameter> parameters)
         {
             this.parameters = parameters;
+        }
+        
+
+        public static Parameters PrepareParameters(IData data)
+        {
+            List<Parameter> parameters = new List<Parameter>();
+
+            switch(data.InputType)
+            {
+                case DataType.Float:
+                    //TODO
+                    break;
+                case DataType.Matrix:
+                    parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, data.Array));
+                    break;
+                case DataType.Vector:
+                    parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, data.Array));
+                    break;
+                case DataType.NotSet:
+
+                    break;
+                default:
+                    break;
+            }
+
+            return new Parameters(parameters); ;
         }
     }
 }

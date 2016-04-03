@@ -39,7 +39,7 @@ namespace Common.Connection
         {
             int bytesRead;
             string messageRead;
-            try
+            //try
             {
                 lock (client.GetStream())
                 {
@@ -59,11 +59,11 @@ namespace Common.Connection
                         .BeginRead(readBuffer, offset, readBufferSize, new AsyncCallback(MessageReceivedBlocking), null);
                 }
             }
-            catch (Exception e)
-            {
-                //DISCONNECTED FROM THE CLIENT
-                onDisconnected();
-            }
+            //catch (Exception e)
+            //{
+            //    //DISCONNECTED FROM THE CLIENT
+            //    onDisconnected();
+            //}
         }
 
         protected void MessageReceivedNonBlocking(IAsyncResult asyncResult)

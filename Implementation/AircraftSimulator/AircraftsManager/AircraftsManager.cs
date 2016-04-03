@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Common.Containers;
+using System.Collections.ObjectModel;
 
 namespace AircraftsManager
 {
@@ -34,9 +35,11 @@ namespace AircraftsManager
         protected override void Initialize()
         {
             this.activeShooters = new Dictionary<int, Shooter.Shooter>();
+            this.activeStrategies = new ObservableCollection<Shooters.ShooterType>();
+            this.optionalStrategies = new ObservableCollection<Shooters.ShooterType>();
         }
 
-        public void AddShooter(Shooter.ShooterType shooterType, int sender)
+        public void AddShooter(Shooters.ShooterType shooterType, int sender)
         {
             if (instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
@@ -44,11 +47,20 @@ namespace AircraftsManager
             instance.activeShooters.Add(sender, shooterCreator.ShooterFactoryMethod(shooterType));
         }
 
-        public void AddStrategy(Shooter.ShooterType shooterType, int sender)
+        public void AddStrategy(Shooters.ShooterType shooterType, int sender)
         {
-            if(!instance.activeShooters.ContainsKey(sender))
+            if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             instance.activeShooters[sender].Context.AddStrategy(Common.Strategy.GetSpecificShooterStrategy(shooterType));
+            SetActiveStrategies(sender);
+        }
+
+        public void RemoveStrategy(Shooters.ShooterType shooterType, int sender)
+        {
+            if (!instance.activeShooters.ContainsKey(sender))
+                throw new Shooter.InvalidShooterIdException();
+            instance.activeShooters[sender].Context.RemoveStrategy(shooterType);
+            SetActiveStrategies(sender);
         }
 
         public void AddMissile(Missile.MissileType missileType, int sender)
@@ -68,11 +80,11 @@ namespace AircraftsManager
             {
                 switch (strategy.ShooterType)
                 {
-                    case Shooter.ShooterType.F16:
+                    case Shooters.ShooterType.F16:
                         data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLateralData());
                         data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLongitudinalData());
                         break;
-                    case Shooter.ShooterType.F17:
+                    case Shooters.ShooterType.F17:
                         data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLateralData());
                         data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLongitudinalData());
                         break;
@@ -106,6 +118,46 @@ namespace AircraftsManager
                 }
             }
             return data;
+        }
+
+
+        private ObservableCollection<Shooters.ShooterType> optionalStrategies;
+        public ObservableCollection<Shooters.ShooterType> OptionalStrategies
+        {
+            get
+            {
+                return optionalStrategies;
+            }
+        }
+
+        private ObservableCollection<Shooters.ShooterType> activeStrategies;
+        public ObservableCollection<Shooters.ShooterType> ActiveStrategies
+        {
+            get
+            {
+                return activeStrategies;
+            }
+        }
+
+        public void SetActiveStrategies(int sender)
+        {
+            //ObservableCollection<Shooter.ShooterType> result = new ObservableCollection<Shooter.ShooterType>();
+            this.activeStrategies.Clear();
+            this.optionalStrategies.Clear();
+            foreach (Shooters.ShooterType shooterType in Enum.GetValues(typeof(Shooters.ShooterType)))
+            {
+                this.optionalStrategies.Add(shooterType);
+            }
+            
+            if (instance.activeShooters.ContainsKey(sender))
+            {
+                //this.activeStrategies = instance.activeShooters[sender].Context.TypesOfStrategies;
+                foreach (Common.Strategy strategy in instance.activeShooters[sender].Context.Strategies)
+                {
+                    this.activeStrategies.Add(strategy.ShooterType);
+                    this.optionalStrategies.Remove(strategy.ShooterType);
+                }
+            }
         }
     }
 }

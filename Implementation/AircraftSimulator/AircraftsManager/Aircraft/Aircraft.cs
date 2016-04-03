@@ -8,7 +8,7 @@ namespace AircraftsManager.Aircraft
 {
     sealed class Aircraft : Shooter.Shooter
     {
-        internal Shooter.ShooterType AircraftType
+        internal Shooters.ShooterType AircraftType
         {
             get
             {
@@ -16,7 +16,7 @@ namespace AircraftsManager.Aircraft
             }
         }
 
-        internal Aircraft(Shooter.ShooterType aircraftType)
+        internal Aircraft(Shooters.ShooterType aircraftType)
         {
             this.shooterType = aircraftType;
             Initialize();

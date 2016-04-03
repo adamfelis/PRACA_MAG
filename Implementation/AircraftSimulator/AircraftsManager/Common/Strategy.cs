@@ -9,9 +9,9 @@ namespace AircraftsManager.Common
 {
     abstract class Strategy : global::Common.Initializer
     {
-        protected Shooter.ShooterType shooterType;
+        protected Shooters.ShooterType shooterType;
 
-        internal Shooter.ShooterType ShooterType
+        internal Shooters.ShooterType ShooterType
         {
             get
             {
@@ -19,15 +19,15 @@ namespace AircraftsManager.Common
             }
         }
 
-        internal static Common.Strategy GetSpecificShooterStrategy(Shooter.ShooterType shooterType)
+        internal static Common.Strategy GetSpecificShooterStrategy(Shooters.ShooterType shooterType)
         {
             Common.Strategy strategy = null;
             switch (shooterType)
             {
-                case Shooter.ShooterType.F16:
+                case Shooters.ShooterType.F16:
                     strategy = new Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16();
                     break;
-                case Shooter.ShooterType.F17:
+                case Shooters.ShooterType.F17:
                     strategy = new Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17();
                     break;
                 default:

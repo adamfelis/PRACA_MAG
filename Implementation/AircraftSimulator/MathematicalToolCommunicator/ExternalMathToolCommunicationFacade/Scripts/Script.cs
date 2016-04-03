@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common.Containers;
+using Common.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,9 +19,9 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         }
 
         // TODO: return type has to be changed
-        internal Scripts.Parameters.Parameters RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
+        internal IData RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
         {
-            Scripts.Parameters.Parameters result = null;
+            IData result = null;
             //mlApp.Execute()
             return result;
         } 

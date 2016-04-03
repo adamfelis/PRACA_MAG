@@ -1,6 +1,6 @@
 ﻿namespace Main.AircraftsManagerCommunication
 {
-    interface IAircraftsManagerCommunication
+    public interface IAircraftsManagerCommunication
     {
         AircraftsManager.AircraftsManager ManagerInstance
         {

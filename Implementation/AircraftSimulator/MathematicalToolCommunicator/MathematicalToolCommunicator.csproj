@@ -56,7 +56,6 @@
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\Parameters.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\ParameterType.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Script.cs" />
-    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ScriptType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +68,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

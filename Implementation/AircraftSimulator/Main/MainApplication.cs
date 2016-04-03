@@ -5,12 +5,13 @@ using Main.ToolsManagerCommunication;
 
 namespace Main
 {
-    public sealed class MainApplication : Initializer
+    public sealed class MainApplication : Initializer, IAircraftsManagerCommunicationImplementor
     {
         private static MainApplication instance;
         private IAircraftsManagerCommunication aircraftsManagerCommunication;
         private IToolsManagerCommunication toolsManagerCommunication;
         private IServerCommunication serverCommunication;
+
 
         public static MainApplication Instance
         {
@@ -22,7 +23,7 @@ namespace Main
             }
         }
 
-        internal IAircraftsManagerCommunication AircraftsManagerCommunication
+        public IAircraftsManagerCommunication AircraftsManagerCommunication
         {
             get
             {
@@ -50,16 +51,22 @@ namespace Main
         {
             aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
             toolsManagerCommunication = new ToolsManagerCommunication.ToolsManagerCommunication();
-            serverCommunication = new ServerCommunication.ServerCommunication();
+        }
+
+        public void InformAboutDispatcher(Common.IDispatchable iDispatchable)
+        {
+            serverCommunication = new ServerCommunication.ServerCommunication(iDispatchable, this as IAircraftsManagerCommunicationImplementor);
+            serverCommunication.ServerInstance.StartServer();
+        }
+
+        public void InformAboutScriptTypeForComputations(global::Common.Scripts.ScriptType scriptType)
+        {
+            ToolsManagerCommunication.ManagerInstance.SetScriptTypeForComputations(scriptType);
         }
 
         public MainApplication()
         {
             Initialize();
-            serverCommunication.ServerInstance.StartServer();
-            //Client.Client c = new Client.Client();
-            //c.ConnectToServer();
-
         }
     }
 }

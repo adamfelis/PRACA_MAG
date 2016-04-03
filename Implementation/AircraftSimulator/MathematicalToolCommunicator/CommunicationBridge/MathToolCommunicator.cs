@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.Parameters;
+using Common.Containers;
 
 namespace MathematicalToolCommunicator.CommunicationBridge
 {
@@ -21,14 +22,19 @@ namespace MathematicalToolCommunicator.CommunicationBridge
 
         protected Methods.MethodImplementor methodImplementor;
 
-        public virtual Parameters Compute(Parameters parameters)
+        public virtual IData Compute(IData parameters)
         {
-            return methodImplementor.Compute(parameters);
+            return methodImplementor.Compute(Parameters.PrepareParameters(parameters));
         }
 
         protected MathToolCommunicator()
         {
             MathToolCommunicator.mathToolFacade = new ExternalMathToolCommunicationFacade.MathToolFacade();
+        }
+
+        public void SetMethodImplementor(Common.Scripts.ScriptType scriptType)
+        {
+            this.methodImplementor = Methods.MethodImplementor.PrepareConcreteMethodImplementor(scriptType);
         }
     }
 }

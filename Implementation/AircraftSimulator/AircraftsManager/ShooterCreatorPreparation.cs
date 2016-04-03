@@ -8,12 +8,12 @@ namespace AircraftsManager
 {
     public partial class AircraftsManager
     {
-        private void PrepareShooterCreator(Shooter.ShooterType shooterType)
+        private void PrepareShooterCreator(Shooters.ShooterType shooterType)
         {
             switch (shooterType)
             {
-                case Shooter.ShooterType.F16:
-                case Shooter.ShooterType.F17:
+                case Shooters.ShooterType.F16:
+                case Shooters.ShooterType.F17:
                     instance.shooterCreator = new Aircraft.Creator.AircraftCreator();
                     break;
                 default:
