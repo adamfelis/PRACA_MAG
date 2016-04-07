@@ -57,10 +57,6 @@
       <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataParser\DataParser.csproj">
-      <Project>{8d3c5568-3d72-444f-af16-fd87774481fa}</Project>
-      <Name>DataParser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DataStorage\DataStorage.csproj">
       <Project>{1a7dc041-bd60-4945-8185-9424183b6c99}</Project>
       <Name>DataStorage</Name>

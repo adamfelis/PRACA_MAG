@@ -1,0 +1,2 @@
+1. Klasa do przetrzymywania sta³ych zwi¹zanych z samolotami - ShooterParameters
+2. 

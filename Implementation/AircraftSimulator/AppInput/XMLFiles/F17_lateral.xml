@@ -1,27 +1,26 @@
 <?xml version="1.0"?>
-<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <MessageType>NotSet</MessageType>
-  <Response>NotSet</Response>
-  <InputType>Matrix</InputType>
-  <OutputType>NotSet</OutputType>
-  <Array>
-    <ArrayOfFloat>
-      <float>1</float>
-      <float>2</float>
-      <float>3</float>
-      <float>4</float>
-    </ArrayOfFloat>
-    <ArrayOfFloat>
-      <float>5</float>
-      <float>6</float>
-      <float>7</float>
-      <float>8</float>
-    </ArrayOfFloat>
-    <ArrayOfFloat>
-      <float>9</float>
-      <float>10</float>
-      <float>11</float>
-      <float>12</float>
-    </ArrayOfFloat>
-  </Array>
-</Data>
+<AircraftParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <p>0</p>
+  <U_e>0</U_e>
+  <m>0</m>
+  <I_y>0</I_y>
+  <g>0</g>
+  <X_dot_u>0</X_dot_u>
+  <Z_dot_u>0</Z_dot_u>
+  <M_dot_u>0</M_dot_u>
+  <X_dot_w>0</X_dot_w>
+  <Z_dot_w>0</Z_dot_w>
+  <M_dot_w>0</M_dot_w>
+  <X_dot_w_dot>0</X_dot_w_dot>
+  <Z_dot_w_dot>0</Z_dot_w_dot>
+  <M_dot_w_dot>0</M_dot_w_dot>
+  <X_dot_q>0</X_dot_q>
+  <Z_dot_q>0</Z_dot_q>
+  <M_dot_q>0</M_dot_q>
+  <X_dot_ni>0</X_dot_ni>
+  <Z_dot_ni>0</Z_dot_ni>
+  <M_dot_ni>0</M_dot_ni>
+  <X_dot_tau>0</X_dot_tau>
+  <Z_dot_tau>0</Z_dot_tau>
+  <M_dot_tau>0</M_dot_tau>
+</AircraftParameters>

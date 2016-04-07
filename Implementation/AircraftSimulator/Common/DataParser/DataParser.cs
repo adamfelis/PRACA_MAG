@@ -8,9 +8,9 @@ using System.Xml.Serialization;
 using Common;
 using Common.Containers;
 
-namespace DataParser
+namespace Common.DataParser
 {
-    public class DataParser : Initializer, IDataParser
+    public class DataParser<T> : Initializer, IDataParser
     {
         private XmlSerializer serializer;
         public DataParser()
@@ -21,7 +21,7 @@ namespace DataParser
 
         protected override void Initialize()
         {
-            serializer = new XmlSerializer(typeof(Data));
+            serializer = new XmlSerializer(typeof(T));
         }
 
         public string Serialize(IData data)

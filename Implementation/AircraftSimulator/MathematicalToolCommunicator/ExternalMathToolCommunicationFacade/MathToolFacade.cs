@@ -11,7 +11,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
     sealed class MathToolFacade
     {
         private Dictionary<ScriptType, Scripts.Script> availableScripts;
-        private MLApp.MLApp mlApp; 
+        private MLApp.MLApp mlApp;
 
         internal MathToolFacade()
         {

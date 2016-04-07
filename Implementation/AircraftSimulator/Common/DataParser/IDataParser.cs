@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Common.Containers;
 
-namespace DataParser
+namespace Common.DataParser
 {
     public interface IDataParser
     {

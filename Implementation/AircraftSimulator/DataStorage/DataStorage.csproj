@@ -50,10 +50,6 @@
       <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataParser\DataParser.csproj">
-      <Project>{8d3c5568-3d72-444f-af16-fd87774481fa}</Project>
-      <Name>DataParser</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

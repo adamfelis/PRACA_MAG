@@ -59,10 +59,6 @@
       <Project>{a50922a2-21d7-4bc6-94d5-d636ba47ed5b}</Project>
       <Name>Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataParser\DataParser.csproj">
-      <Project>{8d3c5568-3d72-444f-af16-fd87774481fa}</Project>
-      <Name>DataParser</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Server\Server.csproj">
       <Project>{1b653224-b39a-4ffb-8222-9ffc76e20cef}</Project>
       <Name>Server</Name>

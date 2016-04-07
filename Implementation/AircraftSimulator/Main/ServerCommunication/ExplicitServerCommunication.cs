@@ -62,7 +62,7 @@ namespace Main.ServerCommunication
 
         void onClientDataPresented(object sender, DataEventArgs dataEventArgs)
         {
-
+            bool a = true;
         }
 
         public RemoveClientHandler OnClientRemoved => onClientRemoved;

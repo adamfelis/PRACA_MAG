@@ -45,6 +45,8 @@
     <Compile Include="Connection\Connector.cs" />
     <Compile Include="Connection\IConnector.cs" />
     <Compile Include="Containers\Data.cs" />
+    <Compile Include="DataParser\DataParser.cs" />
+    <Compile Include="DataParser\IDataParser.cs" />
     <Compile Include="EventArgs\DataEventArgs.cs" />
     <Compile Include="Containers\IData.cs" />
     <Compile Include="Exceptions\XMLFileNotFoundException.cs" />

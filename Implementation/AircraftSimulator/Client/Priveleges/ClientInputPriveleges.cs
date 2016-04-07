@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common.Containers;
-using DataParser;
+using Common.DataParser;
 
 namespace Client.Priveleges
 {

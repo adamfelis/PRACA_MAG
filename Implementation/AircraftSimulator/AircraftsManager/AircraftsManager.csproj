@@ -44,10 +44,12 @@
     <Compile Include="Aircraft\Aircraft.cs" />
     <Compile Include="Aircraft\Creator\AircraftCreator.cs" />
     <Compile Include="Aircraft\Strategy\AircraftFlightContext.cs" />
+    <Compile Include="Aircraft\Strategy\AircraftParameters.cs" />
     <Compile Include="Aircraft\Strategy\AircraftStrategy.cs" />
     <Compile Include="Aircraft\Strategy\ConcreteStrategies\ConcreteAircraftStrategyF16.cs" />
     <Compile Include="Aircraft\Strategy\ConcreteStrategies\ConcreteAircraftStrategyF17.cs" />
     <Compile Include="AircraftsManager.cs" />
+    <Compile Include="Aircraft\Strategy\IAircraftParameters.cs" />
     <Compile Include="Common\Context.cs" />
     <Compile Include="Common\InvalidShooterTypeException.cs" />
     <Compile Include="Common\Strategy.cs" />

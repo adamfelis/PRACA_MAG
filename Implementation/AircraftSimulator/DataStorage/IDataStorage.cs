@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common;
 using Common.Containers;
 using Common.EventArgs;
-using DataParser;
+using Common.DataParser;
 
 namespace DataStorageNamespace
 {

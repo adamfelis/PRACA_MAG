@@ -9,8 +9,7 @@ using Common;
 using Common.Containers;
 using Common.EventArgs;
 using Common.Connection;
-using DataParser;
-using DataParser = DataParser.DataParser;
+using Common.DataParser;
 
 namespace Client
 {
@@ -40,7 +39,7 @@ namespace Client
 
         protected override void Initialize()
         {
-            dataParser = new global::DataParser.DataParser();
+            dataParser = new DataParser<Data>();
             serverConnection = new ServerConnection(onMessageReceived, clientOutputPrivileges.OnServerDisconnected);
             clientInputPriveleges = new ClientInputPriveleges(ref dataParser, ref serverConnection);
         }

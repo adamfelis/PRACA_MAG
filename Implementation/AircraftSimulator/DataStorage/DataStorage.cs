@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Common;
 using Common.Containers;
 using Common.EventArgs;
-using DataParser;
-using DataParser = DataParser.DataParser;
+using Common.DataParser;
+using Common.DataParser;
 
 namespace DataStorageNamespace
 {
@@ -54,7 +54,7 @@ namespace DataStorageNamespace
 
         protected override void Initialize()
         {
-            _dataParser = new global::DataParser.DataParser();
+            _dataParser = new DataParser<Data>();
             //TOREMOVE
             var a = _dataParser.Serialize(new Data()
             {

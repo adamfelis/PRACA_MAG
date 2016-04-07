@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\BIN\Client\</OutputPath>
+    <OutputPath>..\UnityVisualization\Assets\dlls\Client\</OutputPath>
     <IntermediateOutputPath>..\..\..\..\OBJ\Client\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -58,12 +58,12 @@
       <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataParser\DataParser.csproj">
-      <Project>{8d3c5568-3d72-444f-af16-fd87774481fa}</Project>
-      <Name>DataParser</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

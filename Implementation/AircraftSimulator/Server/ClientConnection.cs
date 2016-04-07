@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
-using DataParser;
+using Common.DataParser;
 
 namespace Server
 {
@@ -25,7 +25,7 @@ namespace Server
             base.client = client;
             base.onMessageReceived = onMessageReceived;
             base.ReadingWithBlocking = true;
-            base.Disconnected = new DataParser.DataParser().Serialize(new Data
+            base.Disconnected = new DataParser<Data>().Serialize(new Data
             {
                 MessageType = MessageType.ServerDisconnected,
                 Response = ActionType.NoResponse

@@ -6,6 +6,7 @@ using Common.Connection;
 using System.Net.Sockets;
 using Common.Containers;
 using System.Net;
+using Common.DataParser;
 
 namespace Client
 {
@@ -22,7 +23,7 @@ namespace Client
             onServerDisconnected = onConnectionInterruptedHandler;
             base.onMessageReceived = onMessageReceivedHandler;
             base.ReadingWithBlocking = false;
-            base.Disconnected = new DataParser.DataParser().Serialize(new Data
+            base.Disconnected = new DataParser<Data>().Serialize(new Data
             {
                 MessageType = MessageType.ClientDisconnected,
                 Response = ActionType.NoResponse

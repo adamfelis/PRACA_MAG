@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Common.DataParser;
 
 namespace AircraftsManager.Aircraft.Strategy
 {
@@ -31,8 +32,9 @@ namespace AircraftsManager.Aircraft.Strategy
             {
                 using (TextReader reader = new StreamReader(@"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\" + dataFileName))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Data));
-                    data = (IData)serializer.Deserialize(reader);
+                    XmlSerializer serializer = new XmlSerializer(typeof(AircraftParameters));
+                    var dat1 = (AircraftParameters)serializer.Deserialize(reader);
+                    bool a = false;
                 }
             }
             catch (Exception e)
