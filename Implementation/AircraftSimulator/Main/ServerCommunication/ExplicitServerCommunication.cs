@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Main.ToolsManagerCommunication;
 using Main.AircraftsManagerCommunication;
 using AircraftsManager.Shooter;
+using Common.Containers;
 
 namespace Main.ServerCommunication
 {
@@ -35,11 +36,14 @@ namespace Main.ServerCommunication
 
         private Dispatcher dispatcher;
         private IAircraftsManagerCommunicationImplementor aircraftsManagerCommunicationImplementor;
+        private IToolsManagerCommunicationImplementor toolsManagerCommunicationImplementor;
 
-        public ServerCommunication(Common.IDispatchable iDispatchable, IAircraftsManagerCommunicationImplementor toolsManagerComunicationImplementor)
+        public ServerCommunication(Common.IDispatchable iDispatchable, IAircraftsManagerCommunicationImplementor aircraftsManagerCommunicationImplementor,
+            IToolsManagerCommunicationImplementor toolsManagerCommunicationImplementor)
         {
             this.dispatcher = iDispatchable.Dispatcher;
-            this.aircraftsManagerCommunicationImplementor = toolsManagerComunicationImplementor;
+            this.aircraftsManagerCommunicationImplementor = aircraftsManagerCommunicationImplementor;
+            this.toolsManagerCommunicationImplementor = toolsManagerCommunicationImplementor;
             this.clientsCollection = new ObservableCollection<Client>();
             this.clientsDictionary = new Dictionary<int, Client>();
         }
@@ -50,7 +54,7 @@ namespace Main.ServerCommunication
         {
             dispatcher.BeginInvoke((Action)(()=>
             {
-                Shooters.ShooterType shooterType = Shooters.ShooterType.F16;
+                Shooters.ShooterType shooterType = Shooters.ShooterType.F16;//dataEventArgs.Data.ShooterType;
                 Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
                 this.clientsCollection.Add(addedClient);
                 this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
@@ -62,7 +66,12 @@ namespace Main.ServerCommunication
 
         void onClientDataPresented(object sender, DataEventArgs dataEventArgs)
         {
-            bool a = true;
+            List<IData> solution =
+            this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id)
+                );
+            ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() { Data = solution[0], Id = dataEventArgs.Id});
+            //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext()
         }
 
         public RemoveClientHandler OnClientRemoved => onClientRemoved;

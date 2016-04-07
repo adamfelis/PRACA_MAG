@@ -25,26 +25,28 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         }
         
 
-        public static Parameters PrepareParameters(IData data)
+        public static Parameters PrepareParameters(List<IData> data)
         {
             List<Parameter> parameters = new List<Parameter>();
-
-            switch(data.InputType)
+            foreach(IData d in data)
             {
-                case DataType.Float:
-                    //TODO
-                    break;
-                case DataType.Matrix:
-                    parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, data.Array));
-                    break;
-                case DataType.Vector:
-                    parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, data.Array));
-                    break;
-                case DataType.NotSet:
+                switch (d.InputType)
+                {
+                    case DataType.Float:
+                        //TODO
+                        break;
+                    case DataType.Matrix:
+                        parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, d.Array));
+                        break;
+                    case DataType.Vector:
+                        parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, d.Array));
+                        break;
+                    case DataType.NotSet:
 
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             return new Parameters(parameters); ;

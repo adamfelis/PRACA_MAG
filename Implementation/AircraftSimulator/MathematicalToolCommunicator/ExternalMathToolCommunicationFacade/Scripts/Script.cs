@@ -19,9 +19,9 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         }
 
         // TODO: return type has to be changed
-        internal IData RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
+        internal List<IData> RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
         {
-            IData result = null;
+            List<IData> result = null;
             //mlApp.Execute()
             return result;
         } 

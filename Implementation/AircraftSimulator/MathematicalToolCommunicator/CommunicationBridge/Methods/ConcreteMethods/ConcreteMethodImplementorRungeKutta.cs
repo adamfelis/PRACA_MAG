@@ -13,7 +13,7 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods.ConcreteMetho
     sealed class ConcreteMethodImplementorRungeKutta : Methods.MethodImplementor
     {
         private const ScriptType scriptType = ScriptType.RungeKutta;
-        internal override IData Compute(Parameters parameters)
+        internal override List<IData> Compute(Parameters parameters)
         {
             return MathToolCommunicator.MathToolFacade.RunScript(scriptType, parameters);
         }

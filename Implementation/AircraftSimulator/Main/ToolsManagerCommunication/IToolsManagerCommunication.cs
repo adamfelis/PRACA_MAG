@@ -1,6 +1,6 @@
 ﻿namespace Main.ToolsManagerCommunication
 {
-    interface IToolsManagerCommunication
+    public interface IToolsManagerCommunication
     {
         ToolsManager.ToolsManager ManagerInstance
         {

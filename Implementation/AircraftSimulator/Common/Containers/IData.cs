@@ -34,6 +34,7 @@ namespace Common.Containers
         MessageType MessageType { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
+        Shooters.ShooterType ShooterType { get; set; }
         DataType OutputType { get; set; }
         float[][] Array { get; set; }
         float [,] Get2DimArray();

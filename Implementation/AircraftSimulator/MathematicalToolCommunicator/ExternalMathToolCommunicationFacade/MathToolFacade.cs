@@ -19,7 +19,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
             this.mlApp = new MLApp.MLApp();
         }
         
-        internal IData RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
+        internal List<IData> RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
         {
             if (!availableScripts.ContainsKey(scriptType))
                 throw new Scripts.InvalidScriptTypeException();

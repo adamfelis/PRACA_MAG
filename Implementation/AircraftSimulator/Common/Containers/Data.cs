@@ -35,6 +35,11 @@ namespace Common.Containers
             get; set;
         }
 
+        public Shooters.ShooterType ShooterType
+        {
+            get; set;
+        }
+
 
         private float[][] array;
         public float[][] Array
