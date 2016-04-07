@@ -43,7 +43,7 @@ namespace ToolsManager
             mathToolCommunicator.SetMethodImplementor(scriptType);
         }
 
-        public IData Compute(IData parameters)
+        public List<IData> Compute(List<IData> parameters)
         {
             return mathToolCommunicator.Compute(parameters);
         }

@@ -17,7 +17,7 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
             return result; 
         }
 
-        internal abstract IData Compute(Parameters parameters);
+        internal abstract List<IData> Compute(Parameters parameters);
 
         public static MethodImplementor PrepareConcreteMethodImplementor(Common.Scripts.ScriptType scriptType)
         {

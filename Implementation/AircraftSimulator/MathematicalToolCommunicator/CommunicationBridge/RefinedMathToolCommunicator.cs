@@ -10,9 +10,9 @@ namespace MathematicalToolCommunicator.CommunicationBridge
 {
     public sealed class RefinedMathToolCommunicator : MathToolCommunicator
     {
-        public override IData Compute(IData parameters)
+        public override List<IData> Compute(List<IData> parameters)
         {
-            IData result = null;
+            List<IData> result = null;
             result = base.Compute(parameters);
 
             return result;

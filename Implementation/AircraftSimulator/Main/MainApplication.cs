@@ -5,7 +5,7 @@ using Main.ToolsManagerCommunication;
 
 namespace Main
 {
-    public sealed class MainApplication : Initializer, IAircraftsManagerCommunicationImplementor
+    public sealed class MainApplication : Initializer, IAircraftsManagerCommunicationImplementor, IToolsManagerCommunicationImplementor
     {
         private static MainApplication instance;
         private IAircraftsManagerCommunication aircraftsManagerCommunication;
@@ -31,7 +31,7 @@ namespace Main
             }
         }
 
-        internal IToolsManagerCommunication ToolsManagerCommunication
+        public IToolsManagerCommunication ToolsManagerCommunication
         {
             get
             {
@@ -55,7 +55,8 @@ namespace Main
 
         public void InformAboutDispatcher(Common.IDispatchable iDispatchable)
         {
-            serverCommunication = new ServerCommunication.ServerCommunication(iDispatchable, this as IAircraftsManagerCommunicationImplementor);
+            serverCommunication = new ServerCommunication.ServerCommunication(iDispatchable, this as IAircraftsManagerCommunicationImplementor,
+                this as IToolsManagerCommunicationImplementor);
             serverCommunication.ServerInstance.StartServer();
         }
 

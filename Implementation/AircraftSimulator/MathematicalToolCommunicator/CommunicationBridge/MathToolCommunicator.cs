@@ -22,7 +22,7 @@ namespace MathematicalToolCommunicator.CommunicationBridge
 
         protected Methods.MethodImplementor methodImplementor;
 
-        public virtual IData Compute(IData parameters)
+        public virtual List<IData> Compute(List<IData> parameters)
         {
             return methodImplementor.Compute(Parameters.PrepareParameters(parameters));
         }

@@ -11,7 +11,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
     sealed class MathToolFacade
     {
         private Dictionary<ScriptType, Scripts.Script> availableScripts;
-        private MLApp.MLApp mlApp; 
+        private MLApp.MLApp mlApp;
 
         internal MathToolFacade()
         {
@@ -19,7 +19,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
             this.mlApp = new MLApp.MLApp();
         }
         
-        internal IData RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
+        internal List<IData> RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
         {
             if (!availableScripts.ContainsKey(scriptType))
                 throw new Scripts.InvalidScriptTypeException();

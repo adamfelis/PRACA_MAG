@@ -67,6 +67,7 @@
     <Compile Include="ServerCommunication\ServerCommunication.cs" />
     <Compile Include="ToolsManagerCommunication\IToolsManagerCommunication.cs" />
     <Compile Include="AircraftsManagerCommunication\IAircraftsManagerCommunicationImplementor.cs" />
+    <Compile Include="ToolsManagerCommunication\IToolsManagerCommunicationImplementor.cs" />
     <Compile Include="ToolsManagerCommunication\ToolsManagerCommunication.cs" />
     <Page Include="ExtraWindows\AircraftsStrategiesManagement.xaml">
       <SubType>Designer</SubType>
