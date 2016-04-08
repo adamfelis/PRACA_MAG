@@ -125,6 +125,10 @@
       <Project>{631a99d6-d51e-4f03-855b-9625663c7ee4}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Patterns\Patterns.csproj">
+      <Project>{4B2F41BA-76B7-4371-8E72-F66250BE173B}</Project>
+      <Name>Patterns</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Server\Server.csproj">
       <Project>{1b653224-b39a-4ffb-8222-9ffc76e20cef}</Project>
       <Name>Server</Name>

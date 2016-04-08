@@ -8,7 +8,7 @@ using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
 using DataStorageNamespace;
-using Server;
+using Server.Executors;
 
 namespace Server
 {
@@ -16,7 +16,7 @@ namespace Server
     {
         private readonly IServerOutputPriveleges _serverOutputPriveleges;
         private IServerInputPriveleges _serverInputPriveleges;
-        private IDataStorage _dataStorage;
+        private IDataStorage dataStorage;
         private IDictionary<int, IClientConnection> clients;
         private TcpListener _listener;
         private Thread _listenerThread;
@@ -46,7 +46,7 @@ namespace Server
                 _listener.Start();
                 do
                 {
-                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived, _serverOutputPriveleges.OnClientRemoved);
+                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived, _serverOutputPriveleges.OnClientRemoved, clients);
                 } while (true);
             });
             _listenerThread.Start();
@@ -55,7 +55,7 @@ namespace Server
         private void onMessageReceived(IConnector sender, string data)
         {
             var client = sender as IClientConnection;
-            IData readableData = _dataStorage.PrepareDataReceivedFromClient(client.Id, data);
+            IData readableData = dataStorage.PrepareDataReceivedFromClient(client.Id, data);
             interpretClientMessages(client, new DataEventArgs() {Data = readableData, Id = client.Id});
         }
 
@@ -64,15 +64,13 @@ namespace Server
             switch (eventHandler.Data.MessageType)
             {
                 case MessageType.ClientJoinRequest:
-                    _serverOutputPriveleges.OnClientAdded(eventHandler);
-                    connectClient(client, eventHandler.Data);
+                    _serverOutputPriveleges.OnClientAdded(eventHandler, new ClientAddedExecutor(ref client, ref eventHandler, ref clients, ref dataStorage));
                     break;
                 case MessageType.ClientDisconnected:
-                    _serverOutputPriveleges.OnClientRemoved(eventHandler);
-                    disconnectClient(client, eventHandler.Data);
+                    _serverOutputPriveleges.OnClientRemoved(eventHandler, new ClientRemovedExecutor(ref client, ref eventHandler, ref clients));
                     break;
                 case MessageType.ClientDataRequest:
-                    _serverOutputPriveleges.OnClientDataPresented(eventHandler);
+                    _serverOutputPriveleges.OnClientDataPresented(eventHandler, new ClientDataPresentedExecutor(_serverInputPriveleges, ref eventHandler));
 
                     //TOREMOVE
                 {
@@ -85,22 +83,6 @@ namespace Server
             }
         }
 
-        private void connectClient(IClientConnection client, IData data)
-        {
-            client.ClientName = data.Sender;
-            clients.Add(new KeyValuePair<int, IClientConnection>(client.Id, client));
-            IData response = new Data()
-            {
-                MessageType = MessageType.ClientJoinResponse
-            };
-            client.SendMessage(_dataStorage.PrepareDataForClient(client.Id, response));
-        }
-
-        private void disconnectClient(IClientConnection client, IData data)
-        {
-            clients.Remove(client.Id);
-        }
-
         public void StopServer()
         {
             _listener.Stop();
@@ -110,10 +92,8 @@ namespace Server
         protected override void Initialize()
         {
             clients = new Dictionary<int, IClientConnection>();
-            _dataStorage = new DataStorage();
-            _serverInputPriveleges = new ServerInputPrivileges(ref clients, ref _dataStorage);
-            _serverOutputPriveleges.ClientAdded += _dataStorage.ClientAdded;
-            _serverOutputPriveleges.ClientRemoved += _dataStorage.ClientRemoved;
+            dataStorage = new DataStorage();
+            _serverInputPriveleges = new ServerInputPrivileges(ref clients, ref dataStorage);
         }
     }
 }

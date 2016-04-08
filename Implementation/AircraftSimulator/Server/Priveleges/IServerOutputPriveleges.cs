@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Containers;
 using Common.EventArgs;
+using Patterns.Executors;
+using Server.Executors;
 
 namespace Server
 {
@@ -16,8 +18,8 @@ namespace Server
         event PresentDataOfTheClientHandler PresentDataOfTheClient;
         void Subscribe(IServerPrivileges serverPrivileges);
 
-        void OnClientAdded(DataEventArgs eventHandler);
-        void OnClientRemoved(DataEventArgs eventHandler);
-        void OnClientDataPresented(DataEventArgs eventHandler);
+        void OnClientAdded(DataEventArgs eventHandler, IClientAddedExecutor clientAddedExecutor);
+        void OnClientRemoved(DataEventArgs eventHandler, IClientRemovedExecutor clientRemovedExecutor);
+        void OnClientDataPresented(DataEventArgs eventHandler, IClientDataPresentedExecutor clientDataPresentedExecutor);
     }
 }

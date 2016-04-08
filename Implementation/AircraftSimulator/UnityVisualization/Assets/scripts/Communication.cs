@@ -16,7 +16,6 @@ public class Communication : MonoBehaviour, IClientPrivileges
         communicator = new global::Client.Client(this);
         random = new Random();
         Debug.Log(communicator.ConnectToServer());
-        sendDataToTheServer(4);
     }
 	
 	// Update is called once per frame
@@ -61,6 +60,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
               {
                   case MessageType.ClientJoinResponse:
                       Debug.Log("Connected to the server");
+                      sendDataToTheServer(4);
                       break;
                   case MessageType.ServerDisconnected:
                       Debug.Log("Disconnected from the server");

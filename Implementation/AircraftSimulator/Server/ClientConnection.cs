@@ -9,19 +9,22 @@ using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
 using Common.DataParser;
+using Server.Executors;
 
 namespace Server
 {
-    public delegate void ClientConnectionInterruptedHandler(DataEventArgs eventArgs);
+    public delegate void ClientConnectionInterruptedHandler(DataEventArgs eventArgs, IClientRemovedExecutor clientRemovedExecutor);
     public class ClientConnection : Connector, IClientConnection
     {
         private static int id_counter = 0;
         private ClientConnectionInterruptedHandler onClientDisconnected;
-        
-        public ClientConnection(TcpClient client, MessageReceivedHandler onMessageReceived, ClientConnectionInterruptedHandler onClientRemoved)
+        private IDictionary<int, IClientConnection> clients;
+
+        public ClientConnection(TcpClient client, MessageReceivedHandler onMessageReceived, ClientConnectionInterruptedHandler onClientRemoved, IDictionary<int, IClientConnection> clients)
         {
             Id = id_counter++;
             onClientDisconnected = onClientRemoved;
+            this.clients = clients;
             base.client = client;
             base.onMessageReceived = onMessageReceived;
             base.ReadingWithBlocking = true;
@@ -48,7 +51,8 @@ namespace Server
                     Response = ActionType.NoResponse
                 }
             };
-            onClientDisconnected(clientData);
+            IClientConnection connection = this;
+            onClientDisconnected(clientData, new ClientRemovedExecutor(ref connection, ref clientData, ref clients));
         }
     }
 }

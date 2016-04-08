@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Common;
 using Common.Containers;
 using Common.EventArgs;
+using Patterns.Executors;
+using Server.Executors;
 
 namespace Server
 {
@@ -24,19 +26,19 @@ namespace Server
             PresentDataOfTheClient += serverPrivileges.OnClientDataPresented;
         }
 
-        public void OnClientAdded(DataEventArgs eventArgs)
+        public void OnClientAdded(DataEventArgs eventArgs, IClientAddedExecutor clientAddedExecutor)
         {
-            ClientAdded?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data });
+            ClientAdded?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data }, clientAddedExecutor);
         }
 
-        public void OnClientRemoved(DataEventArgs eventArgs)
+        public void OnClientRemoved(DataEventArgs eventArgs, IClientRemovedExecutor clientRemovedExecutor)
         {
-            ClientRemoved?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data });
+            ClientRemoved?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data }, clientRemovedExecutor);
         }
 
-        public void OnClientDataPresented(DataEventArgs eventArgs)
+        public void OnClientDataPresented(DataEventArgs eventArgs, IClientDataPresentedExecutor clientDataPresentedExecutor)
         {
-            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() { Id = eventArgs.Id, Data = eventArgs.Data });
+            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() { Id = eventArgs.Id, Data = eventArgs.Data }, clientDataPresentedExecutor);
         }
     }
 }

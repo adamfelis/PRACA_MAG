@@ -19,7 +19,7 @@ namespace Client
 
         public ServerConnection(MessageReceivedHandler onMessageReceivedHandler, ServerConnectionInterruptedHandler onConnectionInterruptedHandler)
         {
-            NetIP = getLocalIPAddress();
+            NetIP = getLocalIPAddress(); //"192.168.110.243";
             onServerDisconnected = onConnectionInterruptedHandler;
             base.onMessageReceived = onMessageReceivedHandler;
             base.ReadingWithBlocking = false;
