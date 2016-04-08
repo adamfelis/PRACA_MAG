@@ -59,6 +59,7 @@ namespace Main.ServerCommunication
                 this.clientsCollection.Add(addedClient);
                 this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
                 aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
+                //this.ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() {  });
             }));
         }
 
@@ -66,11 +67,12 @@ namespace Main.ServerCommunication
 
         void onClientDataPresented(object sender, DataEventArgs dataEventArgs)
         {
-            List<IData> solution =
-            this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id)
-                );
-            ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() { Data = solution[0], Id = dataEventArgs.Id});
+
+            //List<IData> solution =
+            //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+            //    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id)
+            //    );
+            //ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() { Data = solution[0], Id = dataEventArgs.Id});
             //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext()
         }
 
@@ -82,6 +84,7 @@ namespace Main.ServerCommunication
             {
                 this.clientsCollection.Remove(clientsDictionary[dataEventArgs.Id]);
                 this.clientsDictionary.Remove(dataEventArgs.Id);
+                //has to be removed from aircraftsManager
             }));
         }
     }

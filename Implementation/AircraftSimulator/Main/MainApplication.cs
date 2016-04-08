@@ -49,8 +49,8 @@ namespace Main
 
         protected override void Initialize()
         {
-            aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
             toolsManagerCommunication = new ToolsManagerCommunication.ToolsManagerCommunication();
+            aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
         }
 
         public void InformAboutDispatcher(Common.IDispatchable iDispatchable)

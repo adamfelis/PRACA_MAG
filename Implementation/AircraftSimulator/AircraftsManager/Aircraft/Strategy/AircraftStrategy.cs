@@ -23,7 +23,6 @@ namespace AircraftsManager.Aircraft.Strategy
         {
             lateralData = GetData(lateralDataFileName);
             longitudinalData = GetData(longitudinalDataFileName);
-
         }
 
         private IData GetData(string dataFileName)
