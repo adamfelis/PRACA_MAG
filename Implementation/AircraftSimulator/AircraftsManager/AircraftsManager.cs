@@ -73,6 +73,7 @@ namespace AircraftsManager
         
         public List<IData> GetShooterData(int sender)
         {
+            return new List<IData>();
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             List<IData> data = new List<IData>();

@@ -39,9 +39,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Executors\ClientRemovedExecutor.cs" />
+    <Compile Include="Executors\IClientRemovedExecutor.cs" />
+    <Compile Include="Executors\ClientDataPresentedExecutor.cs" />
+    <Compile Include="Executors\ClientAddedExecutor.cs" />
     <Compile Include="ClientConnection.cs" />
+    <Compile Include="Executors\IClientAddedExecutor.cs" />
+    <Compile Include="Executors\IClientDataPresentedExecutor.cs" />
     <Compile Include="IClientConnection.cs" />
     <Compile Include="Priveleges\ServerInputPrivileges.cs" />
     <Compile Include="Priveleges\IServerOutputPriveleges.cs" />
@@ -60,6 +67,10 @@
     <ProjectReference Include="..\DataStorage\DataStorage.csproj">
       <Project>{1a7dc041-bd60-4945-8185-9424183b6c99}</Project>
       <Name>DataStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Patterns\Patterns.csproj">
+      <Project>{4b2f41ba-76b7-4371-8e72-f66250be173b}</Project>
+      <Name>Patterns</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
