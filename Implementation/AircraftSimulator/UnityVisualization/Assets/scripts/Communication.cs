@@ -11,9 +11,11 @@ public class Communication : MonoBehaviour, IClientPrivileges
 {
     private IClient communicator;
     private Random random;
+    private InputController inputController;
 	// Use this for initialization
 	void Start () {
         communicator = new global::Client.Client(this);
+        inputController = Camera.main.GetComponent<InputController>();
         random = new Random();
         Debug.Log(communicator.ConnectToServer());
     }
@@ -25,6 +27,34 @@ public class Communication : MonoBehaviour, IClientPrivileges
 
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
+    }
+
+    private IData composeRequest(float Xi, float Psi, float Ni)
+    {
+        return new Data()
+        {
+            Array = new float[][]
+            {
+                new float[]
+                {
+                    Xi,
+                    Psi,
+                    Ni
+                }
+            },
+            MessageType = MessageType.ClientDataRequest,
+            InputType = DataType.Vector,
+            Response = ActionType.ResponseRequired
+        };
+    }
+
+    private void sendInputToServer()
+    {
+        Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeRequest(
+        inputController.Horizontal,
+        inputController.Vertical,
+        inputController.Horizontal
+        )));
     }
 
     private void sendDataToTheServer(int n)
@@ -60,7 +90,8 @@ public class Communication : MonoBehaviour, IClientPrivileges
               {
                   case MessageType.ClientJoinResponse:
                       Debug.Log("Connected to the server");
-                      sendDataToTheServer(4);
+                      //sendDataToTheServer(4);
+                      sendInputToServer();
                       break;
                   case MessageType.ServerDisconnected:
                       Debug.Log("Disconnected from the server");
@@ -76,6 +107,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                           }
                           Debug.Log(toPrint);
                       }
+                      sendInputToServer();
                       break;
                   default:
                       break;

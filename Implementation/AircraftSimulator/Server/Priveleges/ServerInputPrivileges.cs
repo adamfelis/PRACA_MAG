@@ -22,7 +22,14 @@ namespace Server
 
         public void RespondToClient(DataEventArgs dataEventArgs)
         {
-            interpretResponseMessages(clients[dataEventArgs.Id], dataEventArgs);
+            try
+            {
+                interpretResponseMessages(clients[dataEventArgs.Id], dataEventArgs);
+            }
+            //client already disconnected
+            catch (KeyNotFoundException e)
+            {
+            }
         }
 
         private void interpretResponseMessages(IClientConnection client, DataEventArgs eventHandler)
