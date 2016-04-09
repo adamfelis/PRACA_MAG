@@ -14,6 +14,7 @@ namespace AircraftsManager
         private static AircraftsManager instance;
         private Dictionary<int, Shooter.Shooter> activeShooters;
         private Shooter.ShooterFactory.ShooterCreator shooterCreator;
+        
 
         public static AircraftsManager Instance
         {

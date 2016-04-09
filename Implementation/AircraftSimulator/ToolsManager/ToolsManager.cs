@@ -8,7 +8,7 @@ using Common.Containers;
 
 namespace ToolsManager
 {
-    public sealed class ToolsManager
+    public sealed class ToolsManager : Common.Tool.IToolsManagerForCommonUsage
     {
         private static ToolsManager instance;
         private MathToolCommunicator mathToolCommunicator;
@@ -47,5 +47,11 @@ namespace ToolsManager
         {
             return mathToolCommunicator.Compute(parameters);
         }
+
+        public List<IData> Compute(Common.Scripts.SpecialScriptType specialScriptType, List<IData> parameters)
+        {
+            return mathToolCommunicator.Compute(specialScriptType, parameters);
+        }
+
     }
 }

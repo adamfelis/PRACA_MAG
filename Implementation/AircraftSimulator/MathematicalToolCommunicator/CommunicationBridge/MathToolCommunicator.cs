@@ -27,6 +27,11 @@ namespace MathematicalToolCommunicator.CommunicationBridge
             return methodImplementor.Compute(Parameters.PrepareParameters(parameters));
         }
 
+        public virtual List<IData> Compute(Common.Scripts.SpecialScriptType specialScriptType, List<IData> parameters)
+        {
+            return Methods.MethodImplementor.PrepareConcreteMethodImplementor(specialScriptType).Compute(Parameters.PrepareParameters(parameters));
+        }
+
         protected MathToolCommunicator()
         {
             MathToolCommunicator.mathToolFacade = new ExternalMathToolCommunicationFacade.MathToolFacade();

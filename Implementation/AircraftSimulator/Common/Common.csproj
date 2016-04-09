@@ -52,10 +52,12 @@
     <Compile Include="Exceptions\XMLFileNotFoundException.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Scripts\ScriptType.cs" />
+    <Compile Include="Scripts\SpecialScriptType.cs" />
     <Compile Include="Shooters\ShooterType.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tool\ITool.cs" />
+    <Compile Include="Tool\IToolsManagerForCommonUsage.cs" />
     <Compile Include="Tool\ToolType.cs" />
   </ItemGroup>
   <ItemGroup />

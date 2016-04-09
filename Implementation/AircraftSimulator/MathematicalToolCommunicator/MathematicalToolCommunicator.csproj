@@ -42,11 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationBridge\MathToolCommunicator.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorInverse.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorLaplaceTransform.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorRungeKutta.cs" />
     <Compile Include="CommunicationBridge\Methods\MethodImplementor.cs" />
     <Compile Include="CommunicationBridge\RefinedMathToolCommunicator.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\MathToolFacade.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptInverse.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptLaplaceTransform.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptRungeKutta.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\InvalidScriptTypeException.cs" />

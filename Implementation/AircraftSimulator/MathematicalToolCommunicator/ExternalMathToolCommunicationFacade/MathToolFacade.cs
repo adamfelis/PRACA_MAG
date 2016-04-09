@@ -11,6 +11,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
     sealed class MathToolFacade
     {
         private Dictionary<ScriptType, Scripts.Script> availableScripts;
+        private Dictionary<SpecialScriptType, Scripts.Script> availableSpecialScripts;
         private MLApp.MLApp mlApp;
 
         internal MathToolFacade()
@@ -18,12 +19,18 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
             InitializeScripts();
             this.mlApp = new MLApp.MLApp();
         }
-        
+
         internal List<IData> RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
         {
             if (!availableScripts.ContainsKey(scriptType))
                 throw new Scripts.InvalidScriptTypeException();
             return availableScripts[scriptType].RunScript(mlApp, parameters);
+        }
+        internal List<IData> RunScript(SpecialScriptType specialScriptType, Scripts.Parameters.Parameters parameters)
+        {
+            if (!availableSpecialScripts.ContainsKey(specialScriptType))
+                throw new Scripts.InvalidScriptTypeException();
+            return availableSpecialScripts[specialScriptType].RunScript(mlApp, parameters);
         }
 
         private void InitializeScripts()
@@ -40,6 +47,22 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
                         break;
                     case ScriptType.LaplaceTransform:
                         availableScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptLaplaceTransform());
+                        break;
+                    default:
+                        throw new Scripts.InvalidScriptTypeException();
+                }
+            }
+
+
+            this.availableSpecialScripts = new Dictionary<SpecialScriptType, Scripts.Script>();
+
+            var specialScriptTypeValues = Enum.GetValues(typeof(SpecialScriptType)).Cast<SpecialScriptType>();
+            foreach (var scriptTypeValue in specialScriptTypeValues)
+            {
+                switch (scriptTypeValue)
+                {
+                    case SpecialScriptType.Inverse:
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptInverse());
                         break;
                     default:
                         throw new Scripts.InvalidScriptTypeException();

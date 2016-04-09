@@ -22,13 +22,27 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
         public static MethodImplementor PrepareConcreteMethodImplementor(Common.Scripts.ScriptType scriptType)
         {
             MethodImplementor result = null;
-            switch(scriptType)
+            switch (scriptType)
             {
                 case Common.Scripts.ScriptType.LaplaceTransform:
                     result = new ConcreteMethods.ConcreteMethodImplementorLaplaceTransform();
                     break;
                 case Common.Scripts.ScriptType.RungeKutta:
                     result = new ConcreteMethods.ConcreteMethodImplementorRungeKutta();
+                    break;
+                default:
+                    throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
+            }
+            return result;
+        }
+
+        public static MethodImplementor PrepareConcreteMethodImplementor(Common.Scripts.SpecialScriptType specialScriptType)
+        {
+            MethodImplementor result = null;
+            switch (specialScriptType)
+            {
+                case Common.Scripts.SpecialScriptType.Inverse:
+                    result = new ConcreteMethods.ConcreteMethodImplementorInverse();
                     break;
                 default:
                     throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
