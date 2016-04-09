@@ -8,6 +8,8 @@ using Main.ToolsManagerCommunication;
 using Main.AircraftsManagerCommunication;
 using AircraftsManager.Shooter;
 using Common.Containers;
+using Patterns.Executors;
+using Server.Executors;
 
 namespace Main.ServerCommunication
 {
@@ -50,37 +52,36 @@ namespace Main.ServerCommunication
 
         public AddClientHandler OnClientAdded => onClientAdded;
 
-        void onClientAdded(object sender, DataEventArgs dataEventArgs)
+        void onClientAdded(object sender, DataEventArgs dataEventArgs, IClientAddedExecutor clientAddedExecutor)
         {
-            dispatcher.BeginInvoke((Action)(()=>
+            clientAddedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
                 Shooters.ShooterType shooterType = Shooters.ShooterType.F16;//dataEventArgs.Data.ShooterType;
                 Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
                 this.clientsCollection.Add(addedClient);
                 this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
                 aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
-                //this.ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() {  });
             }));
         }
 
         public PresentDataOfTheClientHandler OnClientDataPresented => onClientDataPresented;
 
-        void onClientDataPresented(object sender, DataEventArgs dataEventArgs)
+        void onClientDataPresented(object sender, DataEventArgs dataEventArgs, IClientDataPresentedExecutor clientDataPresentedExecutor)
         {
-
-            //List<IData> solution =
-            //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-            //    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id)
-            //    );
-            //ServerInstance.ServerInputPrivileges.RespondToClient(new DataEventArgs() { Data = solution[0], Id = dataEventArgs.Id});
+            clientDataPresentedExecutor.SetupAndRun(dispatcher, (() =>
+        {
+                return this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id)
+                    );
+            }));
             //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext()
         }
 
         public RemoveClientHandler OnClientRemoved => onClientRemoved;
 
-        void onClientRemoved(object sender, DataEventArgs dataEventArgs)
+        void onClientRemoved(object sender, DataEventArgs dataEventArgs, IClientRemovedExecutor clientRemovedExecutor)
         {
-            dispatcher.BeginInvoke((Action)(() =>
+            clientRemovedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
                 this.clientsCollection.Remove(clientsDictionary[dataEventArgs.Id]);
                 this.clientsDictionary.Remove(dataEventArgs.Id);

@@ -15,14 +15,14 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
             this.longitudinalDataFileName = "F17_longitudinal.xml";
             Initialize();
         }
-        internal override IData GetLateralData()
+        internal override IData GetLateralData(IData additionalInformation = null)
         {
-            throw new NotImplementedException();
+            return this.lateralData;
         }
 
-        internal override IData GetLongitudinalData()
+        internal override IData GetLongitudinalData(IData additionalInformation = null)
         {
-            throw new NotImplementedException();
+            return this.lateralData;
         }
     }
 }

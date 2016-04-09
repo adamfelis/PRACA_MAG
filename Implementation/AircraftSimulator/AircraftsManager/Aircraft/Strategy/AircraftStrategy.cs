@@ -16,32 +16,33 @@ namespace AircraftsManager.Aircraft.Strategy
         protected string lateralDataFileName;
         protected IData longitudinalData;
         protected IData lateralData;
-        internal abstract IData GetLongitudinalData();
-        internal abstract IData GetLateralData();
+        protected AircraftParameters aircraftParameters;
+        internal abstract IData GetLongitudinalData(IData additionalInformation = null);
+        internal abstract IData GetLateralData(IData additionalInformation = null);
 
         protected override void Initialize()
         {
-            lateralData = GetData(lateralDataFileName);
-            longitudinalData = GetData(longitudinalDataFileName);
+            //aircraftParameters = GetData()
+            //lateralData = GetData(lateralDataFileName);
+            //longitudinalData = GetData(longitudinalDataFileName);
         }
 
-        private IData GetData(string dataFileName)
+        private AircraftParameters GetData(string dataFileName)
         {
-            IData data = null;
+            AircraftParameters parameters = null;
             try
             {
                 using (TextReader reader = new StreamReader(@"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\" + dataFileName))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(AircraftParameters));
-                    var dat1 = (AircraftParameters)serializer.Deserialize(reader);
-                    bool a = false;
+                    parameters = (AircraftParameters)serializer.Deserialize(reader);
                 }
             }
             catch (Exception e)
             {
                 throw new global::Common.Exceptions.XMLFileNotFoundException();
             }
-            return data;
+            return parameters;
         }
     }
 }

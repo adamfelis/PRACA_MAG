@@ -28,12 +28,12 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
             //serializer.Serialize(File.Create(@"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\F16_2.xml"), data);
         }
 
-        internal override IData GetLateralData()
+        internal override IData GetLateralData(IData additionalInformation = null)
         {
             return this.lateralData;
         }
 
-        internal override IData GetLongitudinalData()
+        internal override IData GetLongitudinalData(IData additionalInformation = null)
         {
             return this.longitudinalData;
         }

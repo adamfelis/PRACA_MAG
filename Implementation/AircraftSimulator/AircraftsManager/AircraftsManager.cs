@@ -71,9 +71,9 @@ namespace AircraftsManager
             instance.activeShooters[sender].AddMissile(missileType);
         }
         
-        public List<IData> GetShooterData(int sender)
+        public List<IData> GetShooterData(int sender, IData additionalInformation = null)
         {
-            return new List<IData>();
+            //return new List<IData>();
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             List<IData> data = new List<IData>();
@@ -83,12 +83,9 @@ namespace AircraftsManager
                 switch (strategy.ShooterType)
                 {
                     case Shooters.ShooterType.F16:
-                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLateralData());
-                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF16).GetLongitudinalData());
-                        break;
                     case Shooters.ShooterType.F17:
-                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLateralData());
-                        data.Add((strategy as Aircraft.Strategy.ConcreteStrategies.ConcreteAircraftStrategyF17).GetLongitudinalData());
+                        data.Add((strategy as Aircraft.Strategy.AircraftStrategy).GetLateralData(additionalInformation));
+                        data.Add((strategy as Aircraft.Strategy.AircraftStrategy).GetLongitudinalData(additionalInformation));
                         break;
                     default:
                         throw new Common.InvalidShooterTypeException();
