@@ -13,8 +13,9 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
     {
         internal ConcreteAircraftStrategyF16()
         {
-            this.lateralDataFileName = "F16_lateral.xml";
-            this.longitudinalDataFileName = "F16_longitudinal.xml";
+            this.aircraftDataFileName = "F16.xml";
+            //this.lateralDataFileName = "F16_lateral.xml";
+            //this.longitudinalDataFileName = "F16_longitudinal.xml";
             Initialize();
             //data = new Data();
             //data.InputType = DataType.Matrix;
@@ -28,13 +29,16 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
             //serializer.Serialize(File.Create(@"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\F16_2.xml"), data);
         }
 
-        internal override IData GetLateralData(IData additionalInformation = null)
+        internal override List<IData> GetLateralData(IData additionalInformation = null)
         {
             return this.lateralData;
         }
 
-        internal override IData GetLongitudinalData(IData additionalInformation = null)
+        internal override List<IData> GetLongitudinalData(IData additionalInformation = null)
         {
+            if(additionalInformation == null)
+                return this.longitudinalData;
+            this.longitudinalData = PrepareLongitudinalData(additionalInformation);
             return this.longitudinalData;
         }
     }

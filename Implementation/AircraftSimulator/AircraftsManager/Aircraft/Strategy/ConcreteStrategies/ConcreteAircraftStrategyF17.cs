@@ -11,16 +11,17 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
     {
         internal ConcreteAircraftStrategyF17()
         {
-            this.lateralDataFileName = "F17_lateral.xml";
-            this.longitudinalDataFileName = "F17_longitudinal.xml";
+            this.aircraftDataFileName = "F17.xml";
+            //this.lateralDataFileName = "F17_lateral.xml";
+            //this.longitudinalDataFileName = "F17_longitudinal.xml";
             Initialize();
         }
-        internal override IData GetLateralData(IData additionalInformation = null)
+        internal override List<IData> GetLateralData(IData additionalInformation = null)
         {
             return this.lateralData;
         }
 
-        internal override IData GetLongitudinalData(IData additionalInformation = null)
+        internal override List<IData> GetLongitudinalData(IData additionalInformation = null)
         {
             return this.lateralData;
         }
