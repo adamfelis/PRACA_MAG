@@ -49,8 +49,8 @@ namespace AircraftsManager.Aircraft.Strategy
 
         protected List<IData> PrepareLongitudinalData(IData additionalInformation)
         {
-            float W_e = additionalInformation.Array[0][0];
-            float U_e = additionalInformation.Array[0][1];
+            float U_e = additionalInformation.Array[0][0];
+            float W_e = additionalInformation.Array[0][1];
             float theta_e = additionalInformation.Array[0][2];
 
             List<IData> preparedLongitudinalData = new List<IData>();

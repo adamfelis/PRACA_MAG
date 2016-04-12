@@ -9,10 +9,11 @@ public class ColliderHandler : MonoBehaviour
     public Vector3 RelativeAxis { get; set; }
     public Vector3 InitialRotation { get; set; }
     public OnInitializeHandler OnInitializeHandler { get; set; }
+
     // Use this for initialization
     void Start ()
 	{
-	    RelativeAxis = Vector3.right;
+	    RelativeAxis = Vector3.forward;
         InitialRotation = Vector3.zero;
     }
 	

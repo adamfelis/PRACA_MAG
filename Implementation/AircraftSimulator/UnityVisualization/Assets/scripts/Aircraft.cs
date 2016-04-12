@@ -14,12 +14,27 @@ public class Aircraft : IAircraft
     public GameObject AileronLeft { get; set; }
     public GameObject AileronRight { get; set; }
 
-    public Vector3 relativeAileronLeft { get; set; }
-    public Vector3 relativePoint { get; set; }
+    public Vector3 Velocity;
+
+    /// <summary>
+    /// Angle of attack
+    /// </summary>
+    public float Ni
+    {
+        get
+        {
+            var collider = ElevatorRight.GetComponent<ColliderHandler>();
+            var initial = collider.InitialRotation;
+            var current = collider.transform.rotation.eulerAngles;
+            return getDist(initial.x - current.x) * Mathf.Deg2Rad;
+        }
+    }
+
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
     private const float angle = 30;
+
 
     public void Initialize()
     {
@@ -112,8 +127,8 @@ public class Aircraft : IAircraft
 
     public void RotateElevator(float delta, bool checkRequired = true)
     {
-        rotateObject(ElevatorLeft, -delta, checkRequired);
-        rotateObject(ElevatorRight, -delta, checkRequired);
+        rotateObject(ElevatorLeft, delta, checkRequired);
+        rotateObject(ElevatorRight, delta, checkRequired);
     }
 
     public void RotateAircraft(float vertical, float horizontal)

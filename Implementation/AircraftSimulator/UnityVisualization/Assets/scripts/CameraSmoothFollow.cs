@@ -22,6 +22,8 @@ namespace Assets.scripts
         private Quaternion offsetRotation;
         private Quaternion inverseoffsetRotation;
         private float distanceTargetCamera;
+        private Vector3 cameraOffset = new Vector3(0, 0, 0);
+        private float positionFollowFactor = 10;
 
         void Start()
         {
@@ -33,13 +35,11 @@ namespace Assets.scripts
 
         void LateUpdate()
         {
-            Vector3 newPosition = target.position + target.forward * distanceTargetCamera;
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, Time.deltaTime);
-            Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, target.position.z + target.forward.z * distanceTargetCamera);
-            //Camera.main.transform.rotation = target.rotation * offsetRotation;
-            //Camera.main.transform.position = newPosition;
-            Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, target.rotation * offsetRotation,
-                Time.deltaTime);
+            //-90 rotation is due to axis change from z to x (now plane forward is X)
+            Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, target.rotation * offsetRotation * Quaternion.AngleAxis(-90, Vector3.up),
+    Time.deltaTime);
+            Vector3 newPosition = target.position + target.forward * distanceTargetCamera + cameraOffset;
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, Time.fixedDeltaTime * positionFollowFactor);
         }
     }
 }

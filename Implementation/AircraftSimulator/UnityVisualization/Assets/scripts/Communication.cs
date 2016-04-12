@@ -12,24 +12,28 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private IClient communicator;
     private Random random;
     private InputController inputController;
+    private AircraftsController aircraftsController;
+    private float deltaTime;
 	// Use this for initialization
 	void Start () {
         communicator = new global::Client.Client(this);
         inputController = Camera.main.GetComponent<InputController>();
+	    aircraftsController = GetComponent<AircraftsController>();
         random = new Random();
         Debug.Log(communicator.ConnectToServer());
     }
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+	{
+	    deltaTime += Time.deltaTime;
 	}
 
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
     }
 
-    private IData composeRequest(float Xi, float Psi, float Ni)
+    private IData composeLogitudinalData(Vector3 velocity, float ni)
     {
         return new Data()
         {
@@ -37,9 +41,12 @@ public class Communication : MonoBehaviour, IClientPrivileges
             {
                 new float[]
                 {
-                    Xi,
-                    Psi,
-                    Ni
+                    //velocity in X axis (U)
+                    velocity.x,
+                    //velocity in Z axis (W)
+                    velocity.z,
+                    //angle of attack
+                    ni
                 }
             },
             MessageType = MessageType.ClientDataRequest,
@@ -50,11 +57,26 @@ public class Communication : MonoBehaviour, IClientPrivileges
 
     private void sendInputToServer()
     {
-        Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeRequest(
-        inputController.Horizontal,
-        inputController.Vertical,
-        inputController.Horizontal
-        )));
+        var aircraft = aircraftsController.aircraft;
+        Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
+                aircraft.Velocity,
+                aircraft.Ni
+            )));
+    }
+
+    private void handleOutputFromServer(IData data)
+    {
+        var aircraft = aircraftsController.aircraft;
+        //velocity in x axis (u)
+        aircraft.Velocity.x = data.Array[0][0];
+        //velocity in z axis (w)
+        aircraft.Velocity.z = data.Array[0][1];
+        //rotary velocity in y axis (q)
+        var q = data.Array[0][2];
+        aircraft.Body.transform.Translate(aircraft.Velocity * deltaTime);
+        deltaTime = 0;
+        //theta is angle attack
+        aircraft.Body.transform.Rotate(Vector3.right, data.Array[0][3]);
     }
 
     private void sendDataToTheServer(int n)
@@ -107,6 +129,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                           }
                           Debug.Log(toPrint);
                       }
+                      handleOutputFromServer(eventArgs.Data);
                       sendInputToServer();
                       break;
                   default:
