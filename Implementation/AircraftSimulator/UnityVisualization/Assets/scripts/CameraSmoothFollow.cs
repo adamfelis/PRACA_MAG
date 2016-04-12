@@ -39,7 +39,7 @@ namespace Assets.scripts
             Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, target.rotation * offsetRotation * Quaternion.AngleAxis(-90, Vector3.up),
     Time.deltaTime);
             Vector3 newPosition = target.position + target.forward * distanceTargetCamera + cameraOffset;
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, Time.fixedDeltaTime * positionFollowFactor);
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, 1/*Time.fixedDeltaTime * positionFollowFactor*/);
         }
     }
 }
