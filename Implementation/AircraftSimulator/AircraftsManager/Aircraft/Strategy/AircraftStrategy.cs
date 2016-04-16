@@ -51,7 +51,11 @@ namespace AircraftsManager.Aircraft.Strategy
         {
             float U_e = additionalInformation.Array[0][0];
             float W_e = additionalInformation.Array[0][1];
-            float theta_e = additionalInformation.Array[0][2];
+            float Q_e = additionalInformation.Array[0][2];
+            float theta_e = additionalInformation.Array[0][3];
+            float ni = additionalInformation.Array[1][0];
+            float tau = additionalInformation.Array[1][1];
+
 
             List<IData> preparedLongitudinalData = new List<IData>();
 
@@ -126,8 +130,12 @@ namespace AircraftsManager.Aircraft.Strategy
             B_dataArray[3][0] = 0.0f;
             B_dataArray[3][1] = 0.0f;
 
+            float[][] x0_dataArray = new float[1][] { new float[4] { U_e, W_e, Q_e, theta_e } };
+            float[][] u_dataArray = new float[1][] { new float[2] { ni, tau } };
             preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray, Sender="A" });
-            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray, Sender="B" });
+            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray, Sender = "B" });
+            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = x0_dataArray, Sender = "x0" });
+            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = u_dataArray, Sender = "u" });
 
             return preparedLongitudinalData;
         }
