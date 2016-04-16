@@ -36,10 +36,10 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                         //TODO
                         break;
                     case DataType.Matrix:
-                        parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, d.Array));
+                        parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, d.Array, d.Sender));
                         break;
                     case DataType.Vector:
-                        parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, d.Array));
+                        parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, d.Array, d.Sender));
                         break;
                     case DataType.NotSet:
 

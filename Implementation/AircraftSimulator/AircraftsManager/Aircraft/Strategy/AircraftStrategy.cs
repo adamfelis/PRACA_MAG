@@ -126,8 +126,8 @@ namespace AircraftsManager.Aircraft.Strategy
             B_dataArray[3][0] = 0.0f;
             B_dataArray[3][1] = 0.0f;
 
-            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray });
-            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray });
+            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray, Sender="A" });
+            preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray, Sender="B" });
 
             return preparedLongitudinalData;
         }
