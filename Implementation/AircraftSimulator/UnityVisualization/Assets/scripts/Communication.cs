@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Client;
 using Client.Priveleges;
 using Common.EventArgs;
@@ -13,6 +14,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private Random random;
     private InputController inputController;
     private AircraftsController aircraftsController;
+    private Queue<DataEventArgs>communicatesFromServer; 
     private float deltaTime;
 	// Use this for initialization
 	void Start () {
@@ -20,6 +22,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         inputController = Camera.main.GetComponent<InputController>();
 	    aircraftsController = GetComponent<AircraftsController>();
         random = new Random();
+        communicatesFromServer = new Queue<DataEventArgs>();
         Debug.Log(communicator.ConnectToServer());
     }
 	
@@ -27,7 +30,46 @@ public class Communication : MonoBehaviour, IClientPrivileges
 	void Update ()
 	{
 	    deltaTime += Time.deltaTime;
+        readCommunicatesFromServer();
 	}
+
+    void readCommunicatesFromServer()
+    {
+        lock (communicatesFromServer)
+        {
+            while (communicatesFromServer.Count > 0)
+            {
+                var eventArgs = communicatesFromServer.Dequeue();
+                switch (eventArgs.Data.MessageType)
+                {
+                    case MessageType.ClientJoinResponse:
+                        Debug.Log("Connected to the server");
+                        //sendDataToTheServer(4);
+                        sendInputToServer();
+                        break;
+                    case MessageType.ServerDisconnected:
+                        Debug.Log("Disconnected from the server");
+                        break;
+                    case MessageType.ClientDataResponse:
+                        Debug.Log("Response received from the server:");
+                        foreach (var f in eventArgs.Data.Array)
+                        {
+                            string toPrint = String.Empty;
+                            foreach (var f1 in f)
+                            {
+                                toPrint += f1 + " ";
+                            }
+                            Debug.Log(toPrint);
+                        }
+                        handleOutputFromServer(eventArgs.Data);
+                        sendInputToServer();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
@@ -59,12 +101,12 @@ public class Communication : MonoBehaviour, IClientPrivileges
     {
         var aircraft = aircraftsController.aircraft;
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
-                aircraft.Velocity,
-                aircraft.Ni
+            aircraft.Velocity,
+            aircraft.Ni
             )));
     }
 
-    private void handleOutputFromServer(IData data)
+    IEnumerator handleOutputFromServer(IData data)
     {
         var aircraft = aircraftsController.aircraft;
         //velocity in x axis (u)
@@ -77,6 +119,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         deltaTime = 0;
         //theta is angle attack
         aircraft.Body.transform.Rotate(Vector3.right, data.Array[0][3]);
+        yield return new WaitForEndOfFrame();
     }
 
     private void sendDataToTheServer(int n)
@@ -106,34 +149,11 @@ public class Communication : MonoBehaviour, IClientPrivileges
     {
         get
         {
-          return delegate (object sender, DataEventArgs eventArgs)
+          return (object sender, DataEventArgs eventArgs) =>
           {
-              switch (eventArgs.Data.MessageType)
+              lock (communicatesFromServer)
               {
-                  case MessageType.ClientJoinResponse:
-                      Debug.Log("Connected to the server");
-                      //sendDataToTheServer(4);
-                      sendInputToServer();
-                      break;
-                  case MessageType.ServerDisconnected:
-                      Debug.Log("Disconnected from the server");
-                      break;
-                  case MessageType.ClientDataResponse:
-                      Debug.Log("Response received from the server:");
-                      foreach (var f in eventArgs.Data.Array)
-                      {
-                          string toPrint = String.Empty;
-                          foreach (var f1 in f)
-                          {
-                              toPrint += f1 + " ";
-                          }
-                          Debug.Log(toPrint);
-                      }
-                      handleOutputFromServer(eventArgs.Data);
-                      sendInputToServer();
-                      break;
-                  default:
-                      break;
+                  communicatesFromServer.Enqueue(eventArgs);
               }
           };
         }

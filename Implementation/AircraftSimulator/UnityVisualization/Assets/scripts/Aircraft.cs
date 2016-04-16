@@ -6,13 +6,13 @@ using Assets.scripts;
 public class Aircraft : IAircraft
 {
 
-    public GameObject Body { get; set; }
-    public GameObject RudderLeft { get; set; }
-    public GameObject RudderRight { get; set; }
-    public GameObject ElevatorLeft { get; set; }
-    public GameObject ElevatorRight { get; set; }
-    public GameObject AileronLeft { get; set; }
-    public GameObject AileronRight { get; set; }
+    public GameObject Body;
+    public GameObject RudderLeft;
+    public GameObject RudderRight;
+    public GameObject ElevatorLeft;
+    public GameObject ElevatorRight;
+    public GameObject AileronLeft;
+    public GameObject AileronRight;
 
     public Vector3 Velocity;
 

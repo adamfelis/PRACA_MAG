@@ -73,10 +73,10 @@ namespace Server
                     _serverOutputPriveleges.OnClientDataPresented(eventHandler, new ClientDataPresentedExecutor(_serverInputPriveleges, ref eventHandler));
 
                     //TOREMOVE
-                {
-                    eventHandler.Data.MessageType = MessageType.ClientDataResponse;
-                    _serverInputPriveleges.RespondToClient(eventHandler);
-                }
+                //{
+                //    eventHandler.Data.MessageType = MessageType.ClientDataResponse;
+                //    _serverInputPriveleges.RespondToClient(eventHandler);
+                //}
                     break;
                 default:
                     break;
