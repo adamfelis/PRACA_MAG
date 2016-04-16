@@ -42,7 +42,7 @@ namespace Server.Executors
 
         protected override void PostExecute()
         {
-            //serverInputPriveleges.RespondToClient(new DataEventArgs() { Data = solutions[0], Id = dataEventArgs.Id });
+            serverInputPriveleges.RespondToClient(new DataEventArgs() { Data = solutions[0], Id = dataEventArgs.Id  });
         }
     }
 }

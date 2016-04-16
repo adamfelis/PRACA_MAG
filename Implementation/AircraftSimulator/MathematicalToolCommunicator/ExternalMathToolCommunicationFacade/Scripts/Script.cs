@@ -34,7 +34,8 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             IData longitudinalResult = new Data()
             {
                 Array = new float[1][] { new float[] { res[0, 0], res[0, 1], res[0, 2], res[0, 3] } },
-                InputType = DataType.Vector
+                InputType = DataType.Vector,
+                MessageType = MessageType.ClientDataResponse
             };
             result.Add(longitudinalResult);
             return result;
