@@ -105,7 +105,8 @@ public class Communication : MonoBehaviour, IClientPrivileges
                 }
             },
             MessageType = MessageType.ClientDataRequest,
-            InputType = DataType.Vector,
+            InputType = DataType.Matrix,
+            OutputType = DataType.Vector,
             Response = ActionType.ResponseRequired
         };
     }
