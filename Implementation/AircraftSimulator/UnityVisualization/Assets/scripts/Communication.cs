@@ -30,8 +30,12 @@ public class Communication : MonoBehaviour, IClientPrivileges
 	void Update ()
 	{
 	    deltaTime += Time.deltaTime;
-        readCommunicatesFromServer();
 	}
+
+    void FixedUpdate()
+    {
+        readCommunicatesFromServer();
+    }
 
     void readCommunicatesFromServer()
     {
@@ -75,7 +79,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         communicator.DisconnectFromServer();
     }
 
-    private IData composeLogitudinalData(Vector3 velocity, float ni)
+    private IData composeLogitudinalData(Vector3 velocity, float theta, float ni, float tau)
     {
         return new Data()
         {
@@ -87,8 +91,17 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     velocity.x,
                     //velocity in Z axis (W)
                     velocity.z,
+                    //q
+                    0,
                     //angle of attack
-                    ni
+                    theta
+                },
+                new float[]
+                {
+                    //elevator rotation
+                    ni,
+                    //aircrafts throtle
+                    tau
                 }
             },
             MessageType = MessageType.ClientDataRequest,
@@ -102,11 +115,13 @@ public class Communication : MonoBehaviour, IClientPrivileges
         var aircraft = aircraftsController.aircraft;
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
             aircraft.Velocity,
-            aircraft.Ni
+            aircraft.Body.transform.rotation.eulerAngles.x * Mathf.Deg2Rad,
+            aircraft.Ni,
+            aircraft.Tau
             )));
     }
 
-    IEnumerator handleOutputFromServer(IData data)
+    private void handleOutputFromServer(IData data)
     {
         var aircraft = aircraftsController.aircraft;
         //velocity in x axis (u)
@@ -115,11 +130,13 @@ public class Communication : MonoBehaviour, IClientPrivileges
         aircraft.Velocity.z = data.Array[0][1];
         //rotary velocity in y axis (q)
         var q = data.Array[0][2];
-        aircraft.Body.transform.Translate(aircraft.Velocity * deltaTime);
+        aircraft.Body.transform.Translate(aircraft.Velocity * Time.fixedDeltaTime);
         deltaTime = 0;
         //theta is angle attack
-        aircraft.Body.transform.Rotate(Vector3.right, data.Array[0][3]);
-        yield return new WaitForEndOfFrame();
+        var rotation = aircraft.Body.transform.rotation;
+        rotation.x = data.Array[0][3];
+        aircraft.Body.transform.rotation = rotation;
+        //aircraft.Body.transform.Rotate(Vector3.right, data.Array[0][3]);
     }
 
     private void sendDataToTheServer(int n)

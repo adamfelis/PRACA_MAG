@@ -30,6 +30,11 @@ public class Aircraft : IAircraft
         }
     }
 
+    public float Tau
+    {
+        get { return 1; }
+    }
+
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
