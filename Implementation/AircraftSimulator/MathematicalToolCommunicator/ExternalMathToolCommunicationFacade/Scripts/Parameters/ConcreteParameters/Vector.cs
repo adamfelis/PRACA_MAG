@@ -13,7 +13,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             value = new float[4] {0,0,0,0};
         }
 
-        public Vector(ParameterType parameterType, object value) : base(parameterType, value)
+        public Vector(ParameterType parameterType, object value, string name) : base(parameterType, value, name)
         {
 
         }

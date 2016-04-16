@@ -16,9 +16,8 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                 { 0, 0, 0, 0 } };
         }
 
-        public Matrix(ParameterType parameterType, object value) : base(parameterType, value)
+        public Matrix(ParameterType parameterType, object value, string name) : base(parameterType, value, name)
         {
-
         }
     }
 }

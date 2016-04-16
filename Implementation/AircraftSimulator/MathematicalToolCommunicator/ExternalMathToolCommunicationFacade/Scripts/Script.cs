@@ -21,8 +21,22 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         // TODO: return type has to be changed
         internal List<IData> RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
         {
-            List<IData> result = null;
-            //mlApp.Execute()
+            List<IData> result = new List<IData>();
+            foreach(Parameters.Parameter param in parameters.ParametersList)
+            {
+                mlApp.PutWorkspaceData(param.Name.ToLower(), "base", param.Value);
+            }
+            
+            mlApp.Execute(ScriptName);
+            object objRes;
+            mlApp.GetWorkspaceData("result", "base", out objRes);
+            float[,] res = objRes as float[,];
+            IData longitudinalResult = new Data()
+            {
+                Array = new float[1][] { new float[] { res[0, 0], res[0, 1], res[0, 2], res[0, 3] } },
+                InputType = DataType.Vector
+            };
+            result.Add(longitudinalResult);
             return result;
         } 
     }
