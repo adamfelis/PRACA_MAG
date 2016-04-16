@@ -35,6 +35,12 @@ public class Aircraft : IAircraft
         get { return 1; }
     }
 
+    //rotary velocity in y axis (q)
+    public float q
+    {
+        get; set;
+    }
+
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;

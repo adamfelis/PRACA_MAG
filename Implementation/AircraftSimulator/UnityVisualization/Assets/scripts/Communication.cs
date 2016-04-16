@@ -15,7 +15,6 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private InputController inputController;
     private AircraftsController aircraftsController;
     private Queue<DataEventArgs>communicatesFromServer; 
-    private float deltaTime;
 	// Use this for initialization
 	void Start () {
         communicator = new global::Client.Client(this);
@@ -29,7 +28,6 @@ public class Communication : MonoBehaviour, IClientPrivileges
 	// Update is called once per frame
 	void Update ()
 	{
-	    deltaTime += Time.deltaTime;
 	}
 
     void FixedUpdate()
@@ -79,7 +77,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         communicator.DisconnectFromServer();
     }
 
-    private IData composeLogitudinalData(Vector3 velocity, float theta, float ni, float tau)
+    private IData composeLogitudinalData(Vector3 velocity, float q, float theta, float ni, float tau)
     {
         return new Data()
         {
@@ -92,7 +90,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     //velocity in Z axis (W)
                     velocity.z,
                     //q
-                    0,
+                    q,
                     //angle of attack
                     theta
                 },
@@ -116,6 +114,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         var aircraft = aircraftsController.aircraft;
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
             aircraft.Velocity,
+            aircraft.q,
             aircraft.Body.transform.rotation.eulerAngles.x * Mathf.Deg2Rad,
             aircraft.Ni,
             aircraft.Tau
@@ -131,8 +130,8 @@ public class Communication : MonoBehaviour, IClientPrivileges
         aircraft.Velocity.z = data.Array[0][1];
         //rotary velocity in y axis (q)
         var q = data.Array[0][2];
+        aircraft.q = q;
         aircraft.Body.transform.Translate(aircraft.Velocity * Time.fixedDeltaTime);
-        deltaTime = 0;
         //theta is angle attack
         var rotation = aircraft.Body.transform.rotation;
         rotation.x = data.Array[0][3];
