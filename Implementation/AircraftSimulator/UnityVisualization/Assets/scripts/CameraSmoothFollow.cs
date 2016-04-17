@@ -24,6 +24,7 @@ namespace Assets.scripts
         private float distanceTargetCamera;
         private Vector3 cameraOffset = new Vector3(0, 0, 0);
         private float positionFollowFactor = 10;
+        private float rotationFollowFactor = 10;
 
         void Start()
         {
@@ -37,7 +38,7 @@ namespace Assets.scripts
         {
             //-90 rotation is due to axis change from z to x (now plane forward is X)
             Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, target.rotation * offsetRotation * Quaternion.AngleAxis(-90, Vector3.up),
-    Time.deltaTime);
+    Time.fixedDeltaTime * rotationFollowFactor);
             Vector3 newPosition = target.position + target.forward * distanceTargetCamera + cameraOffset;
             Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, 1/*Time.fixedDeltaTime * positionFollowFactor*/);
         }

@@ -14,7 +14,8 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private Random random;
     private InputController inputController;
     private AircraftsController aircraftsController;
-    private Queue<DataEventArgs>communicatesFromServer; 
+    private Queue<DataEventArgs>communicatesFromServer;
+    private int ticks = 0;
 	// Use this for initialization
 	void Start () {
         communicator = new global::Client.Client(this);
@@ -32,6 +33,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
 
     void FixedUpdate()
     {
+        ticks++;
         readCommunicatesFromServer();
     }
 
@@ -85,10 +87,10 @@ public class Communication : MonoBehaviour, IClientPrivileges
             {
                 new float[]
                 {
-                    //velocity in X axis (U)
-                    velocity.x,
-                    //velocity in Z axis (W)
+                    //velocity in X (from book) here -Z axis (U)
                     velocity.z,
+                    //velocity in Z (from book) here Y axis (W)
+                    velocity.y,
                     //q
                     q,
                     //angle of attack
@@ -112,31 +114,43 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private void sendInputToServer()
     {
         var aircraft = aircraftsController.aircraft;
+        //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
             aircraft.Velocity,
             aircraft.q,
-            aircraft.Body.transform.rotation.eulerAngles.x * Mathf.Deg2Rad,
+            aircraft.Body.transform.localEulerAngles.x * Mathf.Deg2Rad,
             aircraft.Ni,
             aircraft.Tau
             )));
+        ticks = 0;
     }
 
+    private float prev = 0;
     private void handleOutputFromServer(IData data)
     {
+        //Debug.Log("ile minęło ticków: " + ticks);
         var aircraft = aircraftsController.aircraft;
         //velocity in x axis (u)
-        aircraft.Velocity.x = data.Array[0][0];
-        //velocity in z axis (w)
-        aircraft.Velocity.z = data.Array[0][1];
+        aircraft.Velocity.z = data.Array[0][0];
+        //velocity in Z axis (w)
+        aircraft.Velocity.y = data.Array[0][1];
         //rotary velocity in y axis (q)
         var q = data.Array[0][2];
         aircraft.q = q;
-        aircraft.Body.transform.Translate(aircraft.Velocity * Time.fixedDeltaTime);
+        aircraft.Body.transform.Translate(-aircraft.Velocity * Time.fixedDeltaTime);
         //theta is angle attack
-        var rotation = aircraft.Body.transform.rotation;
-        rotation.x = data.Array[0][3];
-        aircraft.Body.transform.rotation = rotation;
-        //aircraft.Body.transform.Rotate(Vector3.right, data.Array[0][3]);
+        var theta = data.Array[0][3] * Mathf.Rad2Deg;
+        if (theta >= 180)
+            theta = -(360 - theta);
+        var rotation = aircraft.Body.transform.localEulerAngles;
+        rotation.x = theta;
+        //Debug.Log("ustawiona rotacja " + rotation.x);
+        aircraft.Body.transform.localEulerAngles = rotation;
+
+        //var deltaTheta = theta - aircraft.Body.transform.eulerAngles.x;
+        //Debug.Log("delta Theta " + deltaTheta);
+        //var rotation = Quaternion.AngleAxis(deltaTheta, Vector3.right);
+        //aircraft.Body.transform.rotation *= rotation;
     }
 
     private void sendDataToTheServer(int n)

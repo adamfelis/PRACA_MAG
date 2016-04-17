@@ -16,6 +16,8 @@ public class Aircraft : IAircraft
 
     public Vector3 Velocity;
 
+    private Quaternion InitialBody;
+
     /// <summary>
     /// Angle of attack
     /// </summary>
@@ -23,10 +25,12 @@ public class Aircraft : IAircraft
     {
         get
         {
-            var collider = ElevatorRight.GetComponent<ColliderHandler>();
-            var initial = collider.InitialRotation;
-            var current = collider.transform.rotation.eulerAngles;
-            return getDist(initial.x - current.x) * Mathf.Deg2Rad;
+            Quaternion rotation = ElevatorRight.GetComponent<ColliderHandler>().transform.localRotation * ElevatorRight.GetComponent<ColliderHandler>().InverseInitialRotation;
+            var angle = rotation.eulerAngles.x;
+            if (angle >= 180)
+                angle = -(360 - angle);
+            Debug.Log("angle of attack: " + angle);
+            return angle * Mathf.Deg2Rad;
         }
     }
 
@@ -50,7 +54,7 @@ public class Aircraft : IAircraft
     public void Initialize()
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
-        Velocity = new Vector3(1000, 0, 0);
+        Velocity = new Vector3(0, 0, 1);
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));
@@ -68,6 +72,7 @@ public class Aircraft : IAircraft
         }
     }
 
+
     private  void onInitializeHandler(GameObject gameObject)
     {
         partsInitialized[gameObject] = true;
@@ -78,14 +83,16 @@ public class Aircraft : IAircraft
         }
         //all initialized
         //It is necessary to adjust provided model to initial position
-        RotateAileron(-30, false);
-        RotateElevator(-30, false);
-        foreach (var part in partsInitialized.Keys)
-        {
-            part.GetComponent<ColliderHandler>().InitialRotation = part.transform.rotation.eulerAngles;
-        }
-        ElevatorLeft.GetComponent<ColliderHandler>().InitialRotation = ElevatorLeft.transform.rotation.eulerAngles;
-        ElevatorRight.GetComponent<ColliderHandler>().InitialRotation = ElevatorRight.transform.rotation.eulerAngles;
+        float angle = -30;
+        RotateAileron(angle, false);
+        RotateElevator(angle, false);
+
+        AileronLeft.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
+        AileronRight.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
+        ElevatorLeft.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
+        ElevatorRight.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
+        RudderLeft.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.identity;
+        RudderRight.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.identity;
     }
 
     private void rotateObject(GameObject gameObject, float delta, bool checkRequired = true)
@@ -96,10 +103,10 @@ public class Aircraft : IAircraft
         GameObject g = new GameObject();
         g.transform.position = gameObject.transform.position;
         g.transform.rotation = gameObject.transform.rotation;
-        g.transform.RotateAround(bounds.center, relativeAxis, delta);
-        if (!checkRequired || diffAngles(g.transform.rotation.eulerAngles, colliderHandler.InitialRotation))
+        g.transform.RotateAround(colliderHandler.CenterOfRotation, relativeAxis, delta);
+        if (!checkRequired || Quaternion.Angle(g.transform.rotation * colliderHandler.InverseInitialRotation, Body.transform.rotation ) < rotationMaxOffset.x)
         {
-            gameObject.transform.RotateAround(bounds.center, relativeAxis, delta);
+            gameObject.transform.RotateAround(colliderHandler.CenterOfRotation, relativeAxis, delta);
         }
         Object.Destroy(g);
     }
@@ -125,7 +132,7 @@ public class Aircraft : IAircraft
 
     public void RotateAileron(float delta, bool checkRequired = true)
     {
-        rotateObject(AileronLeft, delta, checkRequired);
+        rotateObject(AileronLeft, -delta, checkRequired);
         rotateObject(AileronRight, delta, checkRequired);
         //var r = AileronLeft.transform.rotation;
         //var t = relativePoint - v.center;
