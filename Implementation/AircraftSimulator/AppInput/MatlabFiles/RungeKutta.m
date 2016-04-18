@@ -11,8 +11,17 @@ B = [b(1,1:2); b(1,3:4); b(1,5:6); b(1,7:8)];
 %A = real(A);
 %u = [0.5;0.5];
 u = u';
-[T,Y] = ode45(@(t,x)StateSpace(t,x,A,B,u), 0:0.02:1, x0);
-result = Y(2,:);
+% if(simulation_index > 1)
+%     result = Y(simulation_index + 1,:);
+%     return;
+% end
+
+[T,Y] = ode45(@(t,x)StateSpace(t,x,A,B,u), 0:0.02:2.5, x0);
+%result = Y(2,:);
+% figure(1);
+% hold on;
+% plot(T, Y(:,1));
+result = Y(simulation_index + 1,:);
 
 % ==============================================
 % A = [-0.0352010727, 0.106997319, 0, -9.81;...

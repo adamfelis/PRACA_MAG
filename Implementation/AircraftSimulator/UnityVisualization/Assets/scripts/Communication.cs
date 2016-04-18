@@ -78,9 +78,13 @@ public class Communication : MonoBehaviour, IClientPrivileges
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
     }
-
+    private const int simulation_time = 101;
+    private static int simulation_index = 0;
     private IData composeLogitudinalData(Vector3 velocity, float q, float theta, float ni, float tau)
     {
+        simulation_index = (simulation_index + 1) % simulation_time;
+        if (simulation_index == 0)
+            simulation_index++;
         return new Data()
         {
             Array = new float[][]
@@ -102,6 +106,11 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     ni,
                     //aircrafts throtle
                     tau
+                },
+                new float[]
+                {
+                    //index of simulation
+                    simulation_index,
                 }
             },
             MessageType = MessageType.ClientDataRequest,
@@ -137,7 +146,14 @@ public class Communication : MonoBehaviour, IClientPrivileges
         //rotary velocity in y axis (q)
         var q = data.Array[0][2];
         aircraft.q = q;
-        aircraft.Body.transform.Translate(-aircraft.Velocity * Time.fixedDeltaTime);
+        Vector3 asd = -aircraft.Velocity * Time.fixedDeltaTime;
+        //aircraft.Body.transform.Translate(-aircraft.Velocity * Time.fixedDeltaTime);
+
+        var position = aircraft.Body.transform.localPosition;
+        position.x += aircraft.Velocity.z * Time.fixedDeltaTime;
+        position.y += -aircraft.Velocity.y * Time.fixedDeltaTime;
+        position.z += -aircraft.Velocity.x * Time.fixedDeltaTime;
+        aircraft.Body.transform.localPosition = position;
         //theta is angle attack
         var theta = data.Array[0][3] * Mathf.Rad2Deg;
         if (theta >= 180)

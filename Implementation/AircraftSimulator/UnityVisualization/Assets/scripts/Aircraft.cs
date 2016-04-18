@@ -48,13 +48,13 @@ public class Aircraft : IAircraft
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private const float angle = 30;
+    private const float angle = 20;
 
 
     public void Initialize()
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
-        Velocity = new Vector3(0, 0, 1);
+        Velocity = new Vector3(0, 0, 178);
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));

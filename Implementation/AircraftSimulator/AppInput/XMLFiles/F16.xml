@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <AircraftParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <p>0.00238</p>
+  <p>0.3809</p>
   <U_e>0</U_e>
-  <m>746</m>
-  <I_y>65000</I_y>
-  <g>32.2</g>
-  <X_dot_u>-26.26</X_dot_u>
-  <Z_dot_u>-159.64</Z_dot_u>
-  <M_dot_u>0</M_dot_u>
-  <X_dot_w>79.82</X_dot_w>
-  <Z_dot_w>-328.24</Z_dot_w>
-  <M_dot_w>-1014.0</M_dot_w>
+  <m>17642</m>
+  <I_y>165669</I_y>
+  <g>9.81</g>
+  <X_dot_u>0.0076</X_dot_u>
+  <Z_dot_u>-0.7273</Z_dot_u>
+  <M_dot_u>0.0340</M_dot_u>
+  <X_dot_w>0.0483</X_dot_w>
+  <Z_dot_w>-3.1245</Z_dot_w>
+  <M_dot_w>-0.2169</M_dot_w>
   <X_dot_w_dot>0</X_dot_w_dot>
-  <Z_dot_w_dot>0</Z_dot_w_dot>
-  <M_dot_w_dot>-36.4</M_dot_w_dot>
+  <Z_dot_w_dot>-0.3997</Z_dot_w_dot>
+  <M_dot_w_dot>-0.5910</M_dot_w_dot>
   <X_dot_q>0</X_dot_q>
-  <Z_dot_q>0</Z_dot_q>
-  <M_dot_q>-18.135</M_dot_q>
-  <X_dot_ni>0</X_dot_ni>
-  <Z_dot_ni>-16.502</Z_dot_ni>
-  <M_dot_ni>-303.575</M_dot_ni>
+  <Z_dot_q>-1.2109</Z_dot_q>
+  <M_dot_q>-1.2732</M_dot_q>
+  <X_dot_ni>0.0618</X_dot_ni>
+  <Z_dot_ni>-0.3741</Z_dot_ni>
+  <M_dot_ni>-0.5581</M_dot_ni>
   <X_dot_tau>0</X_dot_tau>
   <Z_dot_tau>0</Z_dot_tau>
   <M_dot_tau>0</M_dot_tau>
