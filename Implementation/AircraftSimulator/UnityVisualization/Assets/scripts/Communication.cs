@@ -123,16 +123,23 @@ public class Communication : MonoBehaviour, IClientPrivileges
     private void sendInputToServer()
     {
         var aircraft = aircraftsController.aircraft;
+        var angle = aircraft.Body.transform.localEulerAngles.x;
+        if (angle >= 180)
+        {
+            angle = -(360 - angle);
+        }
         //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
-            aircraft.Velocity,
+            aircraft.Velocity, //u, w
             aircraft.q,
-            aircraft.Body.transform.localEulerAngles.x * Mathf.Deg2Rad,
+            angle * Mathf.Deg2Rad, //theta
             aircraft.Ni,
             aircraft.Tau
             )));
         ticks = 0;
     }
+
+
 
     private float prev = 0;
     private void handleOutputFromServer(IData data)
