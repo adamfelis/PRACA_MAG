@@ -74,7 +74,7 @@ end
 
 V_x = U;
 A_x = zeros(1, length(V_x) - 1);
-% S_x=[V_x(1) * simulation_step];
+S_x=[V_x(1) * simulation_step];
 for i = 2:1:length(V_x)-1
     A_x(i) = (V_x(i+1) - V_x(i)) / simulation_step;
     S_x = [S_x; S_x(i-1) + (V_x(i) * simulation_step)];
@@ -85,7 +85,7 @@ S_x = V0t(2:length(time)) +  A_x' .* time(2:length(time)) .* time(2:length(time)
 
 V_y = W;
 A_y = zeros(1, length(V_y) - 1);
-% S_y=[V_y(1) * simulation_step];
+S_y=[V_y(1) * simulation_step];
 for i = 2:1:length(V_y)-1
     A_y(i) = (V_y(i+1) - V_y(i)) / simulation_step;
     S_y = [S_y; S_y(i-1) + (V_y(i) * simulation_step)];
