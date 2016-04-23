@@ -5,16 +5,47 @@ syms m I_y g ...
     X_dot_q Z_dot_q M_dot_q ...
     X_dot_ni Z_dot_ni M_dot_ni ...
     X_dot_tau Z_dot_tau M_dot_tau ...
-    W_e U_e theta_e...
     V0 rho c S... 
     X_u Z_u M_u ...
     X_w Z_w M_w ...
     X_w_dot Z_w_dot M_w_dot ...
     X_q Z_q M_q ...
     X_ni Z_ni M_ni ...
-    X_tau Z_tau M_tau ...
-;
+    X_tau Z_tau M_tau;
+syms W_e U_e theta_e;
 
+
+%%
+syms W_e U_e theta_e;
+rho = 0.3809;
+m = 17642;
+I_y = 165669;
+g = 9.81;
+X_u = 0.0076;
+Z_u = -0.7273;
+M_u = 0.0340;
+X_w = 0.0483;
+Z_w = -3.1245;
+M_w = -0.2169;
+X_w_dot = 0;
+Z_w_dot = -0.3997;
+M_w_dot = -0.5910;
+X_q = 0;
+Z_q = -1.2109;
+M_q = -1.2732;
+X_ni = -0.0618;
+Z_ni = -0.3741;
+M_ni = -0.5581;
+X_tau = 0;
+Z_tau = 0;
+M_tau = 0;
+V0 = sqrt(U_e * U_e + W_e * W_e);
+
+S = 49.239;
+c = 4.889;
+m_prim = m / (0.5 * rho * V0 * S);
+I_y_prim = I_y / (0.5 * rho * V0 * S * c);
+%%
 M = [m, -X_dot_w_dot, 0, 0;...
     0, m-Z_dot_w_dot, 0, 0;...
     0, -M_dot_w_dot, I_y, 0;...
@@ -26,10 +57,11 @@ A_prim = ...
     M_dot_u, M_dot_w, M_dot_q, 0;...
     0,0,1,0];
 A = M^(-1) * A_prim
+%%
 
 %m_prim = m / (0.5 * rho * V0 * S);
 %I_y_prim = I_y / (0.5 * rho * V0 * S * c);
-syms m_prim I_y_prim;
+%syms m_prim I_y_prim;
 
 M2 = [m_prim, -X_w_dot * c / V0, 0, 0;...
     0, m_prim-Z_w_dot * c / V0, 0, 0;...

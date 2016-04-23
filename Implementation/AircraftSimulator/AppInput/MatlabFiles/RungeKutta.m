@@ -16,7 +16,7 @@ u = u';
 %     return;
 % end
 
-[T,Y] = ode45(@(t,x)StateSpace(t,x,A,B,u), 0:0.02:2.5, x0);
+[T,Y] = ode45(@(t,x)StateSpace(t,x,A,B,u), 0:0.02:180, x0);
 %result = Y(2,:);
 % figure(1);
 % hold on;
