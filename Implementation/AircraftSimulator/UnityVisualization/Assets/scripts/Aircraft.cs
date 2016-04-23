@@ -48,7 +48,7 @@ public class Aircraft : IAircraft
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private const float angle = 20;
+    private const float angle = 6;
 
 
     public void Initialize()

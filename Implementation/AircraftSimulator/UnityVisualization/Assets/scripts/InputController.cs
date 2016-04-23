@@ -4,8 +4,8 @@ using Assets.scripts;
 
 public class InputController : MonoBehaviour {
 
-    public float horizontalSpeed = 1.0F;
-    public float verticalSpeed = 1.0F;
+    public float horizontalSpeed = 0.01F;
+    public float verticalSpeed = 0.01F;
     public Aircraft aircraft;
     public float Horizontal;
     public float Vertical;
