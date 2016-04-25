@@ -130,14 +130,16 @@ public class Communication : MonoBehaviour, IClientPrivileges
         }
         //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
         Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
-            aircraft.Velocity,
+            aircraft.Velocity, //u, w
             aircraft.q,
-            angle * Mathf.Deg2Rad,
+            angle * Mathf.Deg2Rad, //theta
             aircraft.Ni,
             aircraft.Tau
             )));
         ticks = 0;
     }
+
+
 
     private float prev = 0;
     private void handleOutputFromServer(IData data)

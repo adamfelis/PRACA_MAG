@@ -56,7 +56,7 @@ A_prim = ...
     Z_dot_u, Z_dot_w, Z_dot_q + m * U_e, -m * g * sin(theta_e);...
     M_dot_u, M_dot_w, M_dot_q, 0;...
     0,0,1,0];
-A = M^(-1) * A_prim
+A = M^(-1) * A_prim;
 %%
 
 %m_prim = m / (0.5 * rho * V0 * S);
@@ -78,5 +78,5 @@ B2_prim = ...
     V0 * M_ni, V0 * M_tau;...
     0,0];
 
-A2 = M2^(-1) * A2_prim
-B2 = M2^(-1) * B2_prim
+A2 = M2^(-1) * A2_prim;
+B2 = M2^(-1) * B2_prim;
