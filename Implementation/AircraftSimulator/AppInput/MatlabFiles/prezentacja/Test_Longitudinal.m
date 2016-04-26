@@ -1,5 +1,5 @@
 clear;clc;
-global_simulation_time = 20;
+global_simulation_time = 200;
 
 V0 = 178;% ZMIANA sqrt(U_e * U_e + W_e * W_e);
 theta_e = 9.4 * (2*pi)/360;%Dodano
@@ -12,7 +12,7 @@ u = [0; 0];
 
 simulation_step = 0.02;
 global_simulation_step_amount = (1 / simulation_step) * global_simulation_time;
-simulation_time = 3;
+simulation_time = 2;
 interval = 0 : simulation_step : simulation_time;
 
 U =[];
@@ -23,7 +23,7 @@ time =[];
 
 counter = 0;
 %[A, B] = CreateAB(U_e, W_e, theta_e);
-[A, B] = CreateAB2();
+[A, B] = CreateAB2(V0, theta_e);
 
 ni_changed = false;
 solution_index = 2;
@@ -32,12 +32,7 @@ while(global_simulation_step_amount > 0)
     global_simulation_step_amount = global_simulation_step_amount - 1;
     x0 = [U_e; W_e; Q_e; theta_e];
     if(ni_changed || solution_index > length(interval) || counter == 0)
-        if(ni_changed)
-            interval = interval + 2;
-        end
-        if(~ni_changed)
-            interval = interval + simulation_time; 
-        end
+        %[A, B] = CreateAB2(sqrt(U_e * U_e + W_e * W_e), theta_e);
         [T,Y] = ode45(@(t,x)StateSpace(t,x,A,B,u), interval, x0);
         solution_index = 2;
         ni_changed = false;
@@ -97,28 +92,28 @@ end
 % end
 % S_y = A_y' .* time(2:length(time)) .* time(2:length(time)) / 2;
 
-figure(1);
+figure(3);
 
 
-subplot(4,1,1);
+subplot(5,1,1);
 plot(time , U, 'g');
 hold on;
 plot(time(1) , U(1), 'or');
 legend('U');
 
-subplot(4,1,2);
+subplot(5,1,2);
 plot(time , W, 'g');
 hold on;
 plot(time(1) , W(1), 'or');
 legend('W');
 
-subplot(4,1,3);
+subplot(5,1,3);
 plot(time , theta, 'b');
 hold on;
 plot(time(1) , theta(1), 'or');
 legend('theta');
 
-subplot(4,1,4);
+subplot(5,1,4);
 plot(S_x , S_y, 'g');
 hold on;
 plot(S_x(1) , S_y(1), 'or');
