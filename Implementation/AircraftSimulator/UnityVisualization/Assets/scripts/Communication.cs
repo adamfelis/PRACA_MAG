@@ -78,39 +78,31 @@ public class Communication : MonoBehaviour, IClientPrivileges
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
     }
-    private const int simulation_time = 101;
-    private static int simulation_index = 0;
-    private IData composeLogitudinalData(Vector3 velocity, float q, float theta, float ni, float tau)
+    private IData composeLogitudinalData(Vector3 velocity, float p, float q, float r, float theta, float ni, float tau, float xi, float zeta, float phi, float psi)
     {
-        simulation_index = (simulation_index + 1) % simulation_time;
-        if (simulation_index == 0)
-            simulation_index++;
         return new Data()
         {
             Array = new float[][]
             {
                 new float[]
                 {
-                    //velocity in X (from book) here -Z axis (U)
-                    velocity.z,
-                    //velocity in Z (from book) here Y axis (W)
-                    velocity.y,
-                    //q
+                    (float)Math.Sqrt(velocity.z * velocity.z + velocity.y * velocity.y),
                     q,
-                    //angle of attack
-                    theta
+                    theta,
+                    p,
+                    r,
+                    phi,
+                    psi,
+                    velocity.x
                 },
                 new float[]
                 {
                     //elevator rotation
                     ni,
                     //aircrafts throtle
-                    tau
-                },
-                new float[]
-                {
-                    //index of simulation
-                    simulation_index,
+                    tau,
+                    xi,
+                    zeta
                 }
             },
             MessageType = MessageType.ClientDataRequest,
@@ -129,13 +121,21 @@ public class Communication : MonoBehaviour, IClientPrivileges
             angle = -(360 - angle);
         }
         //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
-        Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
-            aircraft.Velocity, //u, w
-            aircraft.q,
-            angle * Mathf.Deg2Rad, //theta
-            aircraft.Ni,
-            aircraft.Tau
-            )));
+        //Debug.Log(
+        communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
+        aircraft.Velocity, //u, w
+        aircraft.p,
+        aircraft.q,
+        aircraft.r,
+        angle * Mathf.Deg2Rad, //theta
+        aircraft.Ni,
+        aircraft.Tau,
+        aircraft.Xi,
+        aircraft.Zeta,
+        aircraft.Phi,
+        aircraft.Psi
+        ));
+            //);
         ticks = 0;
     }
 
@@ -184,7 +184,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
             MessageType = MessageType.ClientDataRequest,
             Response = ActionType.ResponseRequired
         };
-        Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(data));
+        //Debug.Log(communicator.ClientInputPriveleges.SendDataRequest(data));
     }
 
     private float[][] matrixArrayCreator(int n)

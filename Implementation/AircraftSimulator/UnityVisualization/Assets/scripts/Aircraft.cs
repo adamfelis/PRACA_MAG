@@ -29,12 +29,28 @@ public class Aircraft : IAircraft
             var angle = rotation.eulerAngles.x;
             if (angle >= 180)
                 angle = -(360 - angle);
-            Debug.Log("angle of attack: " + angle);
+            //Debug.Log("angle of attack: " + angle);
             return angle * Mathf.Deg2Rad;
         }
     }
 
     public float Tau
+    {
+        get { return 1; }
+    }
+    public float Xi
+    {
+        get { return 1; }
+    }
+    public float Psi
+    {
+        get { return 1; }
+    }
+    public float Phi
+    {
+        get { return 1; }
+    }
+    public float Zeta
     {
         get { return 1; }
     }
@@ -44,11 +60,19 @@ public class Aircraft : IAircraft
     {
         get; set;
     }
+    public float p
+    {
+        get; set;
+    }
+    public float r
+    {
+        get; set;
+    }
 
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private const float angle = 6;
+    private const float angle = 20;
 
 
     public void Initialize()

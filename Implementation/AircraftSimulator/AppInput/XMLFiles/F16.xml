@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <AircraftParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <S>49.239</S>
+  <c>4.889</c>
   <p>0.3809</p>
   <U_e>0</U_e>
   <m>17642</m>

@@ -8,6 +8,11 @@ namespace Common.Containers
     [Serializable]
     public class AircraftParameters : IAircraftParameters
     {
+
+        public float S { get; set; }
+
+        public float c { get; set; }
+
         /// <summary>
         /// AirDensity
         /// </summary>
