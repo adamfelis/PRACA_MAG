@@ -8,6 +8,6 @@ namespace Client.Priveleges
 {
     public interface IClientInputPriveleges
     {
-        string SendDataRequest(IData data);
+        string SendDataRequest(IDataList data);
     }
 }

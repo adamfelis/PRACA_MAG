@@ -8,7 +8,7 @@ namespace Common.DataParser
 {
     public interface IDataParser
     {
-        string Serialize(IData data);
-        IData Deserialize(string data);
+        string Serialize(IDataList data);
+        IDataList Deserialize(string data);
     }
 }

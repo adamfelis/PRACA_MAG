@@ -16,24 +16,27 @@ namespace DataStorageNamespace
     {
         private IDataParser _dataParser;
         public IDictionary<int, Queue<IData>> ClientRequests { get; }
-        public IData PrepareDataReceivedFromClient(int id, string data)
+        public IDataList PrepareDataReceivedFromClient(int id, string data)
         {
-            IData readableData = _dataParser.Deserialize(data);
+            IDataList readableData = _dataParser.Deserialize(data);
             if (ClientRequests.ContainsKey(id))
-                ClientRequests[id].Enqueue(readableData);
+                ClientRequests[id].Enqueue(readableData.DataArray.First());
             return readableData;
         }
 
-        public string PrepareDataForClient(int id, IData data)
+        public string PrepareDataForClient(int id, IDataList dataList)
         {
             if (ClientRequests[id].Count > 0)
             {
                 IData request = ClientRequests[id].Dequeue();
                 if (request.Response == ActionType.NoResponse)
                     throw new MessageIgnoreException();
-                data.InputType = request.OutputType;
+                foreach (IData data in dataList.DataArray)
+                {
+                    data.InputType = request.OutputType;
+                }
             }
-            string toSend = _dataParser.Serialize(data);
+            string toSend = _dataParser.Serialize(dataList);
             return toSend;
         }
 
@@ -45,7 +48,7 @@ namespace DataStorageNamespace
         public void ClientAdded(object sender, DataEventArgs args)
         {
             ClientRequests.Add(new KeyValuePair<int, Queue<IData>>(args.Id, new Queue<IData>()));
-            ClientRequests[args.Id].Enqueue(args.Data);
+            ClientRequests[args.Id].Enqueue(args.DataList.DataArray.First());
         }
 
         public void ClientRemoved(object sender, DataEventArgs args)
@@ -55,23 +58,30 @@ namespace DataStorageNamespace
 
         protected override void Initialize()
         {
-            _dataParser = new DataParser<Data>();
+            _dataParser = new DataParser<DataList>();
             //TOREMOVE
-            var a = _dataParser.Serialize(new Data()
+            var a = _dataParser.Serialize(new DataList()
             {
-                Array = new float[][]
+                DataArray = new []
                 {
-                    new float[3]
+                    new Data()
                     {
-                        1, 2, 3
-                    },
-                    new float[3]
-                    {
-                        4, 5, 6
+                        Array = new float[][]
+                        {
+                            new float[3]
+                            {
+                                1, 2, 3
+                            },
+                            new float[3]
+                            {
+                                4, 5, 6
+                            }
+                        }
                     }
                 }
             });
-            var b = _dataParser.Deserialize(a);
+            var k = _dataParser.Deserialize(a);
+            var b = _dataParser.Deserialize(a).DataArray.First();
             var n = b.N;
             var m = b.M;
             var d = b.Get2DimArray();

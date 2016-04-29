@@ -16,7 +16,7 @@ namespace Client.Priveleges
             this.dataParser = dataParser;
             this.serverConnection = serverConnection;
         }
-        public string SendDataRequest(IData data)
+        public string SendDataRequest(IDataList data)
         {
             try
             {

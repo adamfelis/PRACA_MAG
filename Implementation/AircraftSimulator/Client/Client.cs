@@ -39,7 +39,7 @@ namespace Client
 
         protected override void Initialize()
         {
-            dataParser = new DataParser<Data>();
+            dataParser = new DataParser<DataList>();
             serverConnection = new ServerConnection(onMessageReceived, clientOutputPrivileges.OnServerDisconnected);
             clientInputPriveleges = new ClientInputPriveleges(ref dataParser, ref serverConnection);
         }
@@ -49,13 +49,19 @@ namespace Client
             try
             {
                 serverConnection.ConnectToServer();
-                IData join = new Data()
+                Data join = new Data()
                 {
                     MessageType = MessageType.ClientJoinRequest,
                     Response = ActionType.ResponseRequired,
                     Sender = Environment.MachineName
                 };
-                string toSend = dataParser.Serialize(join);
+                string toSend = dataParser.Serialize(new DataList()
+                {
+                    DataArray = new []
+                    {
+                        join
+                    }
+                });
                 serverConnection.SendMessage(toSend);
             }
             catch (SocketException e)
@@ -77,8 +83,8 @@ namespace Client
         private void onMessageReceived(IConnector sender, string data)
         {
             var client = sender as IServerConnection;
-            IData readableData = dataParser.Deserialize(data);
-            clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() {Data = readableData});
+            IDataList readableData = dataParser.Deserialize(data);
+            clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() {DataList = readableData});
         }
     }
 }

@@ -34,12 +34,13 @@ namespace Server
 
         private void interpretResponseMessages(IClientConnection client, DataEventArgs eventHandler)
         {
-            switch (eventHandler.Data.MessageType)
+            //decision based on first Data message type
+            switch (eventHandler.DataList.DataArray.First().MessageType)
             {
                 case MessageType.ClientDataResponse:
                     try
                     {
-                        string data = dataStorage.PrepareDataForClient(eventHandler.Id, eventHandler.Data);
+                        string data = dataStorage.PrepareDataForClient(eventHandler.Id, eventHandler.DataList);
                         client.SendMessage(data);
                     }
                     catch(MessageIgnoreException e) { }

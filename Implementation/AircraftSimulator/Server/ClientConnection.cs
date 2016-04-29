@@ -28,10 +28,17 @@ namespace Server
             base.client = client;
             base.onMessageReceived = onMessageReceived;
             base.ReadingWithBlocking = true;
-            base.Disconnected = new DataParser<Data>().Serialize(new Data
+            base.Disconnected = new DataParser<DataList>().Serialize(
+            new DataList()
             {
-                MessageType = MessageType.ServerDisconnected,
-                Response = ActionType.NoResponse
+                DataArray = new[]
+                {
+                    new Data()
+                    {
+                        MessageType = MessageType.ServerDisconnected,
+                        Response = ActionType.NoResponse
+                    }
+                }
             });
             base.Initialize();
         }
@@ -45,10 +52,16 @@ namespace Server
             var clientData = new DataEventArgs()
             {
                 Id = this.Id,
-                Data = new Data()
+                DataList = new DataList()
                 {
-                    MessageType = MessageType.ClientDisconnected,
-                    Response = ActionType.NoResponse
+                    DataArray = new[]
+                    {
+                        new Data()
+                        {
+                            MessageType = MessageType.ClientDisconnected,
+                            Response = ActionType.NoResponse
+                        }
+                    }
                 }
             };
             IClientConnection connection = this;

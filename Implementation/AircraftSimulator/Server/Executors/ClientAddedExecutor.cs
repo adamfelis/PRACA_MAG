@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Threading;
 using Patterns.Executors;
 using Common.Containers;
@@ -36,7 +37,7 @@ namespace Server.Executors
         protected override void PreExecute()
         {
             dataStorage.ClientAdded(this, dataEventArgs);
-            client.ClientName = dataEventArgs.Data.Sender;
+            client.ClientName = dataEventArgs.DataList.DataArray.First().Sender;
             clients.Add(new KeyValuePair<int, IClientConnection>(client.Id, client));
             base.PreExecute();
         }
@@ -54,9 +55,15 @@ namespace Server.Executors
 
         protected override void PostExecute()
         {
-            IData response = new Data()
+            DataList response = new DataList()
             {
-                MessageType = MessageType.ClientJoinResponse
+                DataArray = new []
+                {
+                    new Data()
+                    {
+                        MessageType = MessageType.ClientJoinResponse
+                    }
+                }
             };
             client.SendMessage(dataStorage.PrepareDataForClient(client.Id, response));
         }

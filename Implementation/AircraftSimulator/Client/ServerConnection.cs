@@ -23,10 +23,17 @@ namespace Client
             onServerDisconnected = onConnectionInterruptedHandler;
             base.onMessageReceived = onMessageReceivedHandler;
             base.ReadingWithBlocking = false;
-            base.Disconnected = new DataParser<Data>().Serialize(new Data
+            base.Disconnected = new DataParser<DataList>().Serialize(
+            new DataList()
             {
-                MessageType = MessageType.ClientDisconnected,
-                Response = ActionType.NoResponse
+                DataArray = new[]
+                {
+                    new Data
+                    {
+                        MessageType = MessageType.ClientDisconnected,
+                        Response = ActionType.NoResponse
+                    }
+                }
             });
         }
 

@@ -4,6 +4,7 @@ using Server;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using System.Collections.Generic;
+using System.Linq;
 using Main.ToolsManagerCommunication;
 using Main.AircraftsManagerCommunication;
 using AircraftsManager.Shooter;
@@ -71,7 +72,7 @@ namespace Main.ServerCommunication
             clientDataPresentedExecutor.SetupAndRun(dispatcher, (() =>
         {
                 return this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.Data)
+                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())
                     );
             }));
             //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext()

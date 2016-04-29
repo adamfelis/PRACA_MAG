@@ -24,7 +24,7 @@ namespace Common.DataParser
             serializer = new XmlSerializer(typeof(T));
         }
 
-        public string Serialize(IData data)
+        public string Serialize(IDataList data)
         {
             string toRet = String.Empty;
             using (StringWriter stringWriter = new StringWriter())
@@ -38,12 +38,12 @@ namespace Common.DataParser
             return toRet;
         }
 
-        public IData Deserialize(string data)
+        public IDataList Deserialize(string data)
         {
-            IData toRet;
+            IDataList toRet;
             using (StringReader dataReader = new StringReader(data))
             {
-                toRet = serializer.Deserialize(dataReader) as IData;
+                toRet = serializer.Deserialize(dataReader) as IDataList;
             }
             return toRet;
         }

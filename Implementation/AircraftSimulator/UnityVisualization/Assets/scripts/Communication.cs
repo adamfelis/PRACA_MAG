@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Client;
 using Client.Priveleges;
 using Common.EventArgs;
@@ -44,7 +45,8 @@ public class Communication : MonoBehaviour, IClientPrivileges
             while (communicatesFromServer.Count > 0)
             {
                 var eventArgs = communicatesFromServer.Dequeue();
-                switch (eventArgs.Data.MessageType)
+                IData data = eventArgs.DataList.DataArray.First();
+                switch (data.MessageType)
                 {
                     case MessageType.ClientJoinResponse:
                         Debug.Log("Connected to the server");
@@ -56,7 +58,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                         break;
                     case MessageType.ClientDataResponse:
                         Debug.Log("Response received from the server:");
-                        foreach (var f in eventArgs.Data.Array)
+                        foreach (var f in data.Array)
                         {
                             string toPrint = String.Empty;
                             foreach (var f1 in f)
@@ -65,7 +67,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                             }
                             Debug.Log(toPrint);
                         }
-                        handleOutputFromServer(eventArgs.Data);
+                        handleOutputFromServer(data);
                         sendInputToServer();
                         break;
                     default:
@@ -78,7 +80,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
     }
-    private IData composeLogitudinalData(Vector3 velocity, float p, float q, float r, float theta, float ni, float tau, float xi, float zeta, float phi, float psi)
+    private Data composeLogitudinalData(Vector3 velocity, float p, float q, float r, float theta, float ni, float tau, float xi, float zeta, float phi, float psi)
     {
         return new Data()
         {
@@ -122,20 +124,26 @@ public class Communication : MonoBehaviour, IClientPrivileges
         }
         //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
         //Debug.Log(
-        communicator.ClientInputPriveleges.SendDataRequest(composeLogitudinalData(
-        aircraft.Velocity, //u, w
-        aircraft.p,
-        aircraft.q,
-        aircraft.r,
-        angle * Mathf.Deg2Rad, //theta
-        aircraft.Ni,
-        aircraft.Tau,
-        aircraft.Xi,
-        aircraft.Zeta,
-        aircraft.Phi,
-        aircraft.Psi
-        ));
-            //);
+        communicator.ClientInputPriveleges.SendDataRequest(
+        new DataList()
+        {
+            DataArray = new []
+            {
+                composeLogitudinalData(
+                aircraft.Velocity, //u, w
+                aircraft.p,
+                aircraft.q,
+                aircraft.r,
+                angle * Mathf.Deg2Rad, //theta
+                aircraft.Ni,
+                aircraft.Tau,
+                aircraft.Xi,
+                aircraft.Zeta,
+                aircraft.Phi,
+                aircraft.Psi
+                )
+            }
+        });
         ticks = 0;
     }
 

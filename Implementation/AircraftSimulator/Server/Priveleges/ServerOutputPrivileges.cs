@@ -28,17 +28,17 @@ namespace Server
 
         public void OnClientAdded(DataEventArgs eventArgs, IClientAddedExecutor clientAddedExecutor)
         {
-            ClientAdded?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data }, clientAddedExecutor);
+            ClientAdded?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, DataList = eventArgs.DataList }, clientAddedExecutor);
         }
 
         public void OnClientRemoved(DataEventArgs eventArgs, IClientRemovedExecutor clientRemovedExecutor)
         {
-            ClientRemoved?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, Data = eventArgs.Data }, clientRemovedExecutor);
+            ClientRemoved?.Invoke(this, new DataEventArgs { Id = eventArgs.Id, DataList = eventArgs.DataList }, clientRemovedExecutor);
         }
 
         public void OnClientDataPresented(DataEventArgs eventArgs, IClientDataPresentedExecutor clientDataPresentedExecutor)
         {
-            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() { Id = eventArgs.Id, Data = eventArgs.Data }, clientDataPresentedExecutor);
+            PresentDataOfTheClient?.Invoke(this, new DataEventArgs() { Id = eventArgs.Id, DataList = eventArgs.DataList }, clientDataPresentedExecutor);
         }
     }
 }

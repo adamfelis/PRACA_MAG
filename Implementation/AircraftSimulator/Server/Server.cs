@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -55,13 +56,13 @@ namespace Server
         private void onMessageReceived(IConnector sender, string data)
         {
             var client = sender as IClientConnection;
-            IData readableData = dataStorage.PrepareDataReceivedFromClient(client.Id, data);
-            interpretClientMessages(client, new DataEventArgs() {Data = readableData, Id = client.Id});
+            IDataList readableData = dataStorage.PrepareDataReceivedFromClient(client.Id, data);
+            interpretClientMessages(client, new DataEventArgs() {DataList = readableData, Id = client.Id});
         }
 
         private void interpretClientMessages(IClientConnection client, DataEventArgs eventHandler)
         { 
-            switch (eventHandler.Data.MessageType)
+            switch (eventHandler.DataList.DataArray.First().MessageType)
             {
                 case MessageType.ClientJoinRequest:
                     _serverOutputPriveleges.OnClientAdded(eventHandler, new ClientAddedExecutor(ref client, ref eventHandler, ref clients, ref dataStorage));
