@@ -70,13 +70,37 @@ namespace AircraftsManager
                 throw new Shooter.InvalidShooterIdException();
             instance.activeShooters[sender].AddMissile(missileType);
         }
-        
+
+        public List<IData> GetShooterInitalData(int sender, IData additionalInformation = null)
+        {
+            //return new List<IData>();
+            if (!instance.activeShooters.ContainsKey(sender))
+                throw new Shooter.InvalidShooterIdException();
+            List<IData> data = new List<IData>();
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { sender } }, Sender = "client_id" });
+            List <Common.Strategy> strategies = instance.activeShooters[sender].Context.Strategies;
+            foreach (Common.Strategy strategy in strategies)
+            {
+                switch (strategy.ShooterType)
+                {
+                    case Shooters.ShooterType.F16:
+                    case Shooters.ShooterType.F17:
+                        data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLateralInitialData(additionalInformation));
+                        data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLongitudinalInitialData(additionalInformation));
+                        break;
+                    default:
+                        throw new Common.InvalidShooterTypeException();
+                }
+            }
+            return data;
+        }
         public List<IData> GetShooterData(int sender, IData additionalInformation = null)
         {
             //return new List<IData>();
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             List<IData> data = new List<IData>();
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { sender } }, Sender = "client_id" });
             List<Common.Strategy> strategies = instance.activeShooters[sender].Context.Strategies;
             foreach (Common.Strategy strategy in strategies)
             {

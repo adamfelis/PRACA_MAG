@@ -25,5 +25,15 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
         {
             return this.lateralData;
         }
+
+        internal override List<IData> GetLateralInitialData(IData additionalInformation)
+        {
+            return PrepareLateralMatrixes(additionalInformation);
+        }
+
+        internal override List<IData> GetLongitudinalInitialData(IData additionalInformation)
+        {
+            return PrepareLongitudinalMatrixes(additionalInformation);
+        }
     }
 }

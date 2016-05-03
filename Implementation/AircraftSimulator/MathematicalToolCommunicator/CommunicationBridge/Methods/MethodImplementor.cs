@@ -44,6 +44,9 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
                 case Common.Scripts.SpecialScriptType.Inverse:
                     result = new ConcreteMethods.ConcreteMethodImplementorInverse();
                     break;
+                case Common.Scripts.SpecialScriptType.WorkspaceInitializator:
+                    result = new ConcreteMethods.ConcreteMethodImplementorWorkspaceInitializator();
+                    break;
                 default:
                     throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
             }

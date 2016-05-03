@@ -7,6 +7,7 @@ namespace Common.Scripts
 {
     public enum SpecialScriptType
     {
-        Inverse
+        Inverse,
+        WorkspaceInitializator
     }
 }

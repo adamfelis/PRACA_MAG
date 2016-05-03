@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AircraftData\AircraftData.cs" />
     <Compile Include="Connection\Connector.cs" />
     <Compile Include="Connection\IConnector.cs" />
     <Compile Include="Containers\Data.cs" />

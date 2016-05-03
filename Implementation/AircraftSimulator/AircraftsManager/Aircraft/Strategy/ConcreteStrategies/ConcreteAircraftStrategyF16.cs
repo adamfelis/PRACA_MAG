@@ -34,15 +34,25 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
             if (additionalInformation == null)
                 return this.lateralData;
             this.lateralData = PrepareLateralData(additionalInformation);
-            return this.lateralData ;
+            return this.lateralData;
         }
 
         internal override List<IData> GetLongitudinalData(IData additionalInformation = null)
         {
-            if(additionalInformation == null)
+            if (additionalInformation == null)
                 return this.longitudinalData;
             this.longitudinalData = PrepareLongitudinalData(additionalInformation);
             return this.longitudinalData;
+        }
+
+        internal override List<IData> GetLateralInitialData(IData additionalInformation)
+        {
+            return PrepareLateralMatrixes(additionalInformation);
+        }
+
+        internal override List<IData> GetLongitudinalInitialData(IData additionalInformation)
+        {
+            return PrepareLongitudinalMatrixes(additionalInformation);
         }
     }
 }

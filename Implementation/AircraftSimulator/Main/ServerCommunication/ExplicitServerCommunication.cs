@@ -61,7 +61,10 @@ namespace Main.ServerCommunication
                 Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
                 this.clientsCollection.Add(addedClient);
                 this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
-                aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
+                this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
+                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                    global::Common.Scripts.SpecialScriptType.WorkspaceInitializator,
+                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First()));
             }));
         }
 

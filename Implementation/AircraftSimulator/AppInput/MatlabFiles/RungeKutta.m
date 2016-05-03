@@ -1,22 +1,7 @@
-%% Variable initialization
-simulation_time_from_AircraftStrategy_cs = 101;
-
-simulation_step_from_fixed_update = 0.02;
-total_simulation_time = simulation_step_from_fixed_update * (simulation_time_from_AircraftStrategy_cs - 1);
-
-%% Data Interpreter
-A_longitudinal = [a_longitudinal(1,1),a_longitudinal(1,2),a_longitudinal(1,3),a_longitudinal(1,4);...
-        a_longitudinal(1,5),a_longitudinal(1,6),a_longitudinal(1,7),a_longitudinal(1,8);...
-        a_longitudinal(1,9),a_longitudinal(1,10),a_longitudinal(1,11),a_longitudinal(1,12);...
-        a_longitudinal(1,13),a_longitudinal(1,14),a_longitudinal(1,15),a_longitudinal(1,16)];
-B_longitudinal = [b_longitudinal(1,1:2); b_longitudinal(1,3:4); b_longitudinal(1,5:6); b_longitudinal(1,7:8)];
-
+%% Workspace loader
+load(strcat('../../AppOutput/', num2str(client_id)));
 
 %% Calculations
-% [A_longitudinal, B_longitudinal] = CreateAB2(); 
-% u_longitudinal = [0;1];
-% x0_longitudinal = [178;0;0;0];
-
 
 if(simulation_index > 1)
     result = Y_longitudinal(simulation_index + 1,:);
@@ -34,3 +19,8 @@ result = Y_longitudinal(simulation_index + 1,:);
 % figure(1);
 % hold on;
 % plot(T, Y(:,1));
+
+%% Workspace saver
+
+save(strcat('../../AppOutput/', num2str(client_id)));
+clear;
