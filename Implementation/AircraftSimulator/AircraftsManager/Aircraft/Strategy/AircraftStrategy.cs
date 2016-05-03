@@ -74,21 +74,22 @@ namespace AircraftsManager.Aircraft.Strategy
 
         protected List<IData> PrepareLongitudinalData(IData additionalInformation)
         {
+            global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
 
             longitudinal_simulation_index = (longitudinal_simulation_index + 1) % longitudinal_simulation_time;
             if (longitudinal_simulation_index == 0)
                 longitudinal_simulation_index++;
 
-            if (longitudinal_simulation_index == 1 || additionalInformation.Array[1][0] != ni || additionalInformation.Array[1][1] != tau)
+            if (longitudinal_simulation_index == 1 || aircraftData.Ni != ni || aircraftData.Tau != tau)
             {
                 longitudinal_simulation_index = 1; //needed when steering 'u' has changed - simulation is interruped and recalculated
-                V0 = additionalInformation.Array[0][0];
-                Q_e = additionalInformation.Array[0][1];
-                theta_e = additionalInformation.Array[0][2];
-                U_e = V0 * (float)Math.Cos(theta_e);
-                W_e = V0 * (float)Math.Sin(theta_e);
-                ni = additionalInformation.Array[1][0];
-                tau = additionalInformation.Array[1][1];
+                V0 = aircraftData.V_0;
+                Q_e = aircraftData.Q_e;
+                theta_e = aircraftData.theta_e;
+                U_e = aircraftData.U_e;
+                W_e = aircraftData.W_e;
+                ni = aircraftData.Ni;
+                tau = aircraftData.Tau;
 
                 #region Old A, B calculations
                 //const int A_size = 4;
