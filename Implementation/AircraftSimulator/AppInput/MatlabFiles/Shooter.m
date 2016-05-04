@@ -1,4 +1,4 @@
-classdef Shooter
+classdef Shooter < handle
     
     properties
         Strategies

@@ -67,7 +67,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
                         availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptInverse());
                         break;
                     case SpecialScriptType.WorkspaceInitializator:
-                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptInverse());
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptWorkspaceInitializator());
                         break;
                     default:
                         throw new Scripts.InvalidScriptTypeException();

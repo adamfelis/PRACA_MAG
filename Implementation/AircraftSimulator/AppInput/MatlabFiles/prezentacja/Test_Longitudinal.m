@@ -1,5 +1,5 @@
 clear;clc;
-global_simulation_time = 200;
+global_simulation_time = 20;
 
 V0 = 178;% ZMIANA sqrt(U_e * U_e + W_e * W_e);
 theta_e = 9.4 * (2*pi)/360;%Dodano

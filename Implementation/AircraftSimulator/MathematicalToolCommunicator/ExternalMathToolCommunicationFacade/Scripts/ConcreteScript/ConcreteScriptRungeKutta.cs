@@ -25,17 +25,29 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             List<IData> result = new List<IData>();
             mlApp.Execute(ScriptName);
             object objRes;
-            mlApp.GetWorkspaceData("result", "base", out objRes);
+            mlApp.GetWorkspaceData("result_from_matlab", "base", out objRes);
             float[,] res = objRes as float[,];
 
 
-            IData longitudinalResult = new Data()
+            int strategiesAmount = res.GetLength(0);
+            for (int i = 0; i < strategiesAmount; i++)
             {
-                Array = new float[1][] { new float[] { res[0, 0], res[0, 1], res[0, 2], res[0, 3] } },
-                InputType = DataType.Vector,
-                MessageType = MessageType.ClientDataResponse
-            };
-            result.Add(longitudinalResult);
+                IData lateralResult = new Data()
+                {
+                    Array = new float[1][] { new float[] { res[0, 0], res[0, 1], res[0, 2], res[0, 3], res[0, 4] } },
+                    InputType = DataType.Vector,
+                    MessageType = MessageType.ClientDataResponse
+                };
+                IData longitudinalResult = new Data()
+                {
+                    Array = new float[1][] { new float[] { res[0, 5], res[0, 6], res[0, 7], res[0, 8] } },
+                    InputType = DataType.Vector,
+                    MessageType = MessageType.ClientDataResponse
+                };
+
+                result.Add(longitudinalResult);
+                result.Add(lateralResult);
+            }
             return result;
         }
     }

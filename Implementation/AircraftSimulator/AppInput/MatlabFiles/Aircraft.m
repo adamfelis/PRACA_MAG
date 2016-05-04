@@ -2,9 +2,14 @@ classdef Aircraft < handle & Shooter
     % Describes aircraft and its properties
     
     properties
+        % tbale of all available types of missiles
         Missiles
         simulation_step_from_fixed_update
         simulation_time_from_AircraftStrategy_cs
+        % table of the complete solutions (for the specified
+        % total_simulation_time in GetTotalSimulationTime()) - one for each
+        % strategy
+        current_simulation_solutions
     end
     
     methods
@@ -44,23 +49,51 @@ classdef Aircraft < handle & Shooter
             obj.Missiles(missile_index).AddStrategy();
         end
         % Simulates flight
-        function resultsArray = Simulate(obj, x0_longitudinal, x0_lateral, u_longitudinal, u_lateral)
+        function resultsArray = Simulate(obj, x0_longitudinal, x0_lateral, u_longitudinal, u_lateral, simulation_index)
             results = Results();
-            for i = 1 : 1 : length(obj.Strategies)
-                [~,Y_longitudinal] = ode45(...
+            if simulation_index > 1
+                for i = 1 : 1 : length(obj.current_simulation_solutions)
+                    newPosition = Position(0,0,0);
+                    results.AddStrategyResult(...
+                        obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:),...
+                        obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:),...
+                        newPosition.value)
+                end
+            else
+                obj.current_simulation_solutions = [];
+                for i = 1 : 1 : length(obj.Strategies)
+                    [~,Y_longitudinal] = ode45(...
                             @(t,x)StateSpace(t, x, obj.Strategies(i).A_longitudinal, obj.Strategies(i).B_longitudinal, u_longitudinal'),...
                             0 : obj.simulation_step_from_fixed_update : obj.GetTotalSimulationTime(),...
                             x0_longitudinal'...
                             );
                         
-                [~,Y_lateral] = ode45(...
+                    [~,Y_lateral] = ode45(...
                             @(t,x)StateSpace(t, x, obj.Strategies(i).A_lateral, obj.Strategies(i).B_lateral, u_lateral'),...
                             0 : obj.simulation_step_from_fixed_update : obj.GetTotalSimulationTime(),...
                             x0_lateral'...
                             );
-                results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:))
+                    obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
+                    newPosition = Position(0,0,0);
+
+                    results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), newPosition.value)
+                end
             end
             resultsArray = results.PresentFinalResults();
+        end
+        % Calculates the velocity value of time t along all directions for
+        % strategy specified by the strategy_index
+        function velocity = VelocityInTime(obj, t, strategy_index)
+            strategy_index = max(strategy_index, length(obj.current_simulation_solutions));
+            U = obj.current_simulation_solutions(strategy_index).Y_longitudinal(:,1);
+            V = obj.current_simulation_solutions(strategy_index).Y_lateral(:,1);
+            W = obj.current_simulation_solutions(strategy_index).Y_longitudinal(:,2);
+            U = [U; U(length(U))];
+            V = [V; V(length(V))];
+            W = [W; W(length(W))];
+            velocity = [U(round(t/obj.simulation_step_from_fixed_update) + 1),...
+                V(round(t/obj.simulation_step_from_fixed_update) + 1),...
+                W(round(t/obj.simulation_step_from_fixed_update) + 1)];
         end
     end
     
