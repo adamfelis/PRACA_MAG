@@ -57,14 +57,14 @@ namespace Main.ServerCommunication
         {
             clientAddedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
-                Shooters.ShooterType shooterType = Shooters.ShooterType.F16;//dataEventArgs.Data.ShooterType;
+                Shooters.ShooterType shooterType = dataEventArgs.DataList.DataArray.First().ShooterType;
                 Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
                 this.clientsCollection.Add(addedClient);
                 this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
                 this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
                 this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
                     global::Common.Scripts.SpecialScriptType.WorkspaceInitializator,
-                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First()));
+                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterInitalData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First()));
             }));
         }
 

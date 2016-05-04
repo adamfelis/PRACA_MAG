@@ -26,7 +26,7 @@ namespace AircraftsManager.Aircraft.Strategy
         //longitudinal
         private float ni;
         private float tau;
-        private const int longitudinal_simulation_time = 101;
+        private const int longitudinal_simulation_time = 51;
         private static int longitudinal_simulation_index = 0;
         //lateral
         private float V_e;
@@ -36,7 +36,7 @@ namespace AircraftsManager.Aircraft.Strategy
         private float psi;
         private float P_e;
         private float R_e;
-        private const int lateral_simulation_time = 101;
+        private const int lateral_simulation_time = 51;
         private static int lateral_simulation_index = 0;
 
         protected AircraftParameters aircraftParameters;
@@ -280,34 +280,31 @@ namespace AircraftsManager.Aircraft.Strategy
 
         protected List<IData> PrepareLateralData(IData additionalInformation)
         {
-            lateral_simulation_index = (lateral_simulation_index + 1) % lateral_simulation_time;
-            if (lateral_simulation_index == 0)
-                lateral_simulation_index++;
+            global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
 
-            if (lateral_simulation_index == 1 || additionalInformation.Array[1][2] != xi || additionalInformation.Array[1][3] != zeta)
+            if (longitudinal_simulation_index == 1 || aircraftData.Xi != xi || aircraftData.Zeta != zeta)
             {
-                lateral_simulation_index = 1; //needed when steering 'u' has changed - simulation is interruped and recalculated
-                V0 = additionalInformation.Array[0][0];
-                P_e = additionalInformation.Array[0][3];
-                R_e = additionalInformation.Array[0][4];
-                theta_e = additionalInformation.Array[0][2];
-                U_e = V0 * (float)Math.Cos(theta_e);
-                W_e = V0 * (float)Math.Sin(theta_e);
-                V_e = additionalInformation.Array[0][7];
-                xi = additionalInformation.Array[1][2];
-                zeta = additionalInformation.Array[1][3];
-                phi = additionalInformation.Array[0][5];
-                psi = additionalInformation.Array[0][6];
+                longitudinal_simulation_index = 1; //needed when steering 'u' has changed - simulation is interruped and recalculated
+                V0 = aircraftData.V_0;
+                P_e = aircraftData.P_e;
+                R_e = aircraftData.R_e;
+                theta_e = aircraftData.theta_e;
+                U_e = aircraftData.U_e;
+                W_e = aircraftData.W_e;
+                V_e = aircraftData.V_e;
+                xi = aircraftData.Xi;
+                zeta = aircraftData.Zeta;
+                phi = aircraftData.phi_e;
+                psi = aircraftData.psi_e;
             }
 
             List<IData> preparedLateralData = new List<IData>();
 
             float[][] x0_dataArray = new float[1][] { new float[5] { V_e, P_e, R_e, phi, psi } };
             float[][] u_dataArray = new float[1][] { new float[2] { xi, zeta } };
-            float[][] simulation_Index_dataArray = new float[1][] { new float[1] { lateral_simulation_index } };
+            //float[][] simulation_Index_dataArray = new float[1][] { new float[1] { lateral_simulation_index } };
             preparedLateralData.Add(new Data() { InputType = DataType.Matrix, Array = x0_dataArray, Sender = "x0_lateral" });
             preparedLateralData.Add(new Data() { InputType = DataType.Matrix, Array = u_dataArray, Sender = "u_lateral" });
-            preparedLateralData.Add(new Data() { InputType = DataType.Matrix, Array = simulation_Index_dataArray, Sender = "simulation_index" });
 
             return preparedLateralData;
         }

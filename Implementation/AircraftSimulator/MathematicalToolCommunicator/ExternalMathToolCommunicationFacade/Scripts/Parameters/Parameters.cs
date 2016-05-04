@@ -34,6 +34,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                 {
                     case DataType.Float:
                         //TODO
+                        parameters.Add(new ConcreteParameters.Vector(ParameterType.Vector, d.Array, d.Sender));
                         break;
                     case DataType.Matrix:
                         parameters.Add(new ConcreteParameters.Matrix(ParameterType.Matrix, d.Array, d.Sender));

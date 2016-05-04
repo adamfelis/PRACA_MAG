@@ -108,7 +108,7 @@ namespace AircraftsManager
                 {
                     case Shooters.ShooterType.F16:
                     case Shooters.ShooterType.F17:
-                        //data.Add((strategy as Aircraft.Strategy.AircraftStrategy).GetLateralData(additionalInformation));
+                        data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLateralData(additionalInformation));
                         data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLongitudinalData(additionalInformation));
                         break;
                     default:
