@@ -10,7 +10,12 @@ public class ColliderHandler : MonoBehaviour
     public GameObject Second;
     private bool collided = false;
     public Quaternion InverseInitialRotation { get; set; }
+    public float AnimationTime;
+    public float CalculatedAnimationTime;
+    public float TargetAnimationTime = 2.0f;
     public OnInitializeHandler OnInitializeHandler { get; set; }
+
+    public Quaternion targetRotation;
 
     public Vector3 RelativeAxis
     {
@@ -40,7 +45,8 @@ public class ColliderHandler : MonoBehaviour
         Second.transform.parent = transform;
         First.transform.position = Vector3.zero;
         Second.transform.position = Vector3.forward;
-    }
+        //TargetRotation = Quaternion.identity;
+	}
 	
 	// Update is called once per frame
 	void Update () {

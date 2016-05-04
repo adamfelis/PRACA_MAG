@@ -21,6 +21,11 @@ public static class Tags
     public static string ElevatorRight = "ElevatorRight";
     public static string AileronLeft = "AileronLeft";
     public static string AileronRight = "AileronRight";
-
+    public static string Roll = "Roll";
+    public static string Pitch = "Pitch";
+    public static string Yaw = "Yaw";
+    public static string Aileron = "Aileron";
+    public static string Elevator = "Elevator";
+    public static string Rudder = "Rudder";
 
 }

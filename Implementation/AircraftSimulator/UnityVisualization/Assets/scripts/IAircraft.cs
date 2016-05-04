@@ -16,6 +16,6 @@ namespace Assets.scripts
     //}
     public interface IAircraft
     {
-        void RotateAircraft(float vertical, float horizontal);
+        void RotateAircraft(float deltaAileron, float deltaRudder, float deltaElevator);
     }
 }

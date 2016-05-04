@@ -87,37 +87,6 @@ public class Communication : MonoBehaviour, IClientPrivileges
     void OnApplicationQuit(){
         communicator.DisconnectFromServer();
     }
-    private Data composeLogitudinalData(Vector3 velocity, float p, float q, float r, float theta, float ni, float tau, float xi, float zeta, float phi, float psi)
-    {
-        return new Data()
-        {
-            Array = new float[][]
-            { 
-                new float[]
-                {
-                    (float)Math.Sqrt(velocity.z * velocity.z + velocity.y * velocity.y),
-                    q,
-                    theta,
-                    p,
-                    r,
-                    phi,
-                    psi,
-
-                    velocity.x
-                },
-                new float[]
-                {
-                    //elevator rotation
-                    ni,
-                    //aircrafts throtle
-                    tau,
-                    xi,
-                    zeta
-                }
-            },
-
-        };
-    }
 
     private void sendInputToServer()
     {
