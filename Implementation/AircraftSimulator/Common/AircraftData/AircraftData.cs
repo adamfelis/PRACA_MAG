@@ -9,6 +9,8 @@ namespace Common.AircraftData
     {
         private float[][] aircraftData;
 
+        //velocities
+        #region
         public float V_0
         {
             get
@@ -16,7 +18,7 @@ namespace Common.AircraftData
                 return aircraftData[0][0];
             }
         }
-        //velocities
+
         public float U_e
         {
             get
@@ -38,29 +40,55 @@ namespace Common.AircraftData
                 return V_0 * (float)Math.Sin(theta_e);
             }
         }
-        //rotation angles
-        public float theta_e
+        #endregion
+
+        //steering
+        #region
+        /// <summary>
+        /// Elevator rotation
+        /// </summary>
+        public float Ni
         {
             get
             {
                 return aircraftData[1][0];
             }
         }
-        public float xi_e
+        /// <summary>
+        /// Aileron rotation
+        /// </summary>
+        public float Xi
         {
             get
             {
                 return aircraftData[1][1];
             }
         }
-        public float dzeta_e
+        /// <summary>
+        /// Rudder rotatation
+        /// </summary>
+        public float Zeta
         {
             get
             {
                 return aircraftData[1][2];
             }
         }
+
+        /// <summary>
+        /// Throttle
+        /// </summary>
+        public float Tau
+        {
+            get
+            {
+                return aircraftData[1][3];
+            }
+        }
+        #endregion
+
         //angular velocities
+        #region
         public float P_e
         {
             get
@@ -82,49 +110,85 @@ namespace Common.AircraftData
                 return aircraftData[2][2];
             }
         }
-        public float Ni
+        #endregion
+
+        //aircraft rotations
+        #region
+        /// <summary>
+        /// Pitch
+        /// </summary>
+        public float theta_e
         {
             get
             {
                 return aircraftData[3][0];
             }
         }
-        public float Tau
+        /// <summary>
+        /// Roll
+        /// </summary>
+        public float phi_e
         {
             get
             {
                 return aircraftData[3][1];
             }
         }
-        public float Phi
+        /// <summary>
+        /// Yaw
+        /// </summary>
+        public float psi_e
         {
             get
             {
                 return aircraftData[3][2];
             }
         }
-        public float Psi
+        #endregion
+
+        //calculation constants
+        #region
+        public float FixedUpdateRate
         {
-            get
-            {
-                return aircraftData[3][3];
-            }
+            get { return aircraftData[4][0]; }
         }
+        public float SimulationTime
+        {
+            get { return aircraftData[4][1]; }
+        }
+        #endregion
 
         public AircraftData(float[][] aircraftData)
         {
             this.aircraftData = aircraftData;
         }
 
-        public AircraftData(float V_0, float V_e, float theta_e, float xi_e, float dzeta_e, float P_e, float Q_e, float R_e)
+        public AircraftData(float V_0, float V_e, float Ni, float Xi, float Zeta, float Tau, float theta_e, float phi_e, float psi_e, float P_e, float Q_e, float R_e)
         {
-            this.aircraftData = new float[3][]
+            float empty = 0.0f;
+            this.aircraftData = new float[][]
             {
-                new float[2] { V_0, V_e },
-                new float[3] { theta_e, xi_e, dzeta_e },
-                new float[3] { P_e, Q_e, R_e }
+                new float[] { V_0, V_e },
+                new float[] { Ni, Xi, Zeta, Tau },
+                new float[] { P_e, Q_e, R_e },
+                new float[] { theta_e, phi_e, psi_e },
+                new float[] {empty, empty}
             };
         }
+
+        public AircraftData(float V_0, float theta_e, float FixedUpdateRate, float SimulationTime)
+        {
+            float empty = 0.0f;
+            this.aircraftData = new float[][]
+            {
+                new float[] { V_0, empty },
+                new float[] { empty, empty, empty, empty },
+                new float[] { empty, empty, empty },
+                new float[] { theta_e, empty, empty},
+                new float[] { FixedUpdateRate, SimulationTime}
+            };
+        }
+
         public float[][] GetData()
         {
             return this.aircraftData;

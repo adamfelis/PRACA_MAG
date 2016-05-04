@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Client;
 using Client.Priveleges;
+using Common.AircraftData;
 using Common.EventArgs;
 using Common.Containers;
 using Random = System.Random;
@@ -22,9 +23,15 @@ public class Communication : MonoBehaviour, IClientPrivileges
         communicator = new global::Client.Client(this);
         inputController = Camera.main.GetComponent<InputController>();
 	    aircraftsController = GetComponent<AircraftsController>();
+        var aircraft = aircraftsController.aircraft;
         random = new Random();
         communicatesFromServer = new Queue<DataEventArgs>();
-        Debug.Log(communicator.ConnectToServer());
+        Debug.Log(communicator.ConnectToServer(new AircraftData(
+            aircraft.V_0,
+            aircraft.Theta,
+            Time.fixedDeltaTime,
+            1.0f//????????????????????????????????
+            )));
     }
 	
 	// Update is called once per frame
@@ -85,7 +92,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
         return new Data()
         {
             Array = new float[][]
-            {
+            { 
                 new float[]
                 {
                     (float)Math.Sqrt(velocity.z * velocity.z + velocity.y * velocity.y),
@@ -95,6 +102,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     r,
                     phi,
                     psi,
+
                     velocity.x
                 },
                 new float[]
@@ -107,41 +115,39 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     zeta
                 }
             },
-            MessageType = MessageType.ClientDataRequest,
-            InputType = DataType.Matrix,
-            OutputType = DataType.Vector,
-            Response = ActionType.ResponseRequired
+
         };
     }
 
     private void sendInputToServer()
     {
         var aircraft = aircraftsController.aircraft;
-        var angle = aircraft.Body.transform.localEulerAngles.x;
-        if (angle >= 180)
-        {
-            angle = -(360 - angle);
-        }
         //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
-        //Debug.Log(
         communicator.ClientInputPriveleges.SendDataRequest(
         new DataList()
         {
-            DataArray = new []
+            DataArray = new[]
             {
-                composeLogitudinalData(
-                aircraft.Velocity, //u, w
-                aircraft.p,
-                aircraft.q,
-                aircraft.r,
-                angle * Mathf.Deg2Rad, //theta
-                aircraft.Ni,
-                aircraft.Tau,
-                aircraft.Xi,
-                aircraft.Zeta,
-                aircraft.Phi,
-                aircraft.Psi
-                )
+                new Data()
+                {
+                    Array = new AircraftData(
+                        aircraft.V_0,
+                        aircraft.V,
+                        aircraft.Eta,
+                        aircraft.Xi,
+                        aircraft.Zeta,
+                        aircraft.Tau,
+                        aircraft.Theta,
+                        aircraft.Phi,
+                        aircraft.Psi,
+                        aircraft.p,
+                        aircraft.q,
+                        aircraft.r).GetData(),
+                    MessageType = MessageType.ClientDataRequest,
+                    InputType = DataType.Matrix,
+                    OutputType = DataType.Vector,//???????????????????????????
+                    Response = ActionType.ResponseRequired
+                }
             }
         });
         ticks = 0;

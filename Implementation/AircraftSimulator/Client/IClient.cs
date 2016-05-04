@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Client.Priveleges;
+using Common.AircraftData;
 using Common.Containers;
 
 namespace Client
@@ -10,7 +11,7 @@ namespace Client
     public interface IClient
     {
         IClientInputPriveleges ClientInputPriveleges { get; }
-        string ConnectToServer();
+        string ConnectToServer(AircraftData aircraftData);
         void DisconnectFromServer();
     }
 }

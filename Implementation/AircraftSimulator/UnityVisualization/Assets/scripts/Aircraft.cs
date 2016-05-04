@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.scripts;
+using UnityEngine.UI;
 
 public class Aircraft : IAircraft
 {
@@ -14,23 +15,61 @@ public class Aircraft : IAircraft
     public GameObject AileronLeft;
     public GameObject AileronRight;
 
+    public IDictionary<GameObject, bool> partsInitialized;
+
+    private GameObject roll, pitch, yaw;
+    private Vector3 rotationMaxOffset;
+    private const float angle = 20;
+
+    #region Velocities
     public Vector3 Velocity;
+    public Vector3 Velocity_0;
+    public float V_0
+    {
+        get { return Velocity_0.z; }
+    }
 
-    private Quaternion InitialBody;
+    public float V
+    {
+        get { return Velocity.z; }
+    }
+    #endregion
 
+    #region Steering
     /// <summary>
-    /// Angle of attack
+    /// Elevator rotation
     /// </summary>
-    public float Ni
+    public float Eta
     {
         get
         {
-            Quaternion rotation = ElevatorRight.GetComponent<ColliderHandler>().transform.localRotation * ElevatorRight.GetComponent<ColliderHandler>().InverseInitialRotation;
-            var angle = rotation.eulerAngles.x;
-            if (angle >= 180)
-                angle = -(360 - angle);
-            //Debug.Log("angle of attack: " + angle);
-            return angle * Mathf.Deg2Rad;
+            var collider = ElevatorRight.GetComponent<ColliderHandler>();
+            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
+            return clampAngle(rotation.eulerAngles.x);
+        }
+    }
+    /// <summary>
+    /// Aileron rotation
+    /// </summary>
+    public float Xi
+    {
+        get
+        {
+            var collider = AileronRight.GetComponent<ColliderHandler>();
+            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
+            return clampAngle(rotation.eulerAngles.x);
+        }
+    }
+    /// <summary>
+    /// Rudder rotatation
+    /// </summary>
+    public float Zeta
+    {
+        get
+        {
+            var collider = RudderRight.GetComponent<ColliderHandler>();
+            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
+            return clampAngle(rotation.eulerAngles.y);
         }
     }
 
@@ -38,24 +77,44 @@ public class Aircraft : IAircraft
     {
         get { return 1; }
     }
-    public float Xi
+    #endregion
+
+    #region aircraft rotations
+
+    /// <summary>
+    /// Pitch
+    /// </summary>
+    public float Theta
     {
-        get { return 1; }
+        get
+        {
+            return clampAngle(Body.transform.localEulerAngles.x);
+        }
     }
+    /// <summary>
+    /// Yaw
+    /// </summary>
     public float Psi
     {
-        get { return 1; }
+        get
+        {
+            return clampAngle(Body.transform.localEulerAngles.y);
+        }
     }
+    /// <summary>
+    /// Roll
+    /// </summary>
     public float Phi
     {
-        get { return 1; }
-    }
-    public float Zeta
-    {
-        get { return 1; }
+        get
+        {
+            return clampAngle(Body.transform.localEulerAngles.z);
+        }
     }
 
-    //rotary velocity in y axis (q)
+    #endregion
+
+    #region rotary velocities
     public float q
     {
         get; set;
@@ -68,17 +127,12 @@ public class Aircraft : IAircraft
     {
         get; set;
     }
-
-    public IDictionary<GameObject, bool> partsInitialized;
-
-    private Vector3 rotationMaxOffset;
-    private const float angle = 20;
-
+    #endregion
 
     public void Initialize()
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
-        Velocity = new Vector3(0, 0, 178);
+        Velocity_0 = new Vector3(0, 0, 178);
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));
@@ -94,6 +148,10 @@ public class Aircraft : IAircraft
             if (meshCollider != null)
                 meshCollider.enabled = true;
         }
+
+        roll = GameObject.FindGameObjectWithTag(Tags.Roll);
+        pitch = GameObject.FindGameObjectWithTag(Tags.Pitch);
+        yaw = GameObject.FindGameObjectWithTag(Tags.Yaw);
     }
 
 
@@ -179,5 +237,17 @@ public class Aircraft : IAircraft
         RotateAileron(vertical);
         RotateRudder(horizontal);
         RotateElevator(vertical);
+
+        string format = "n2";
+        roll.GetComponent<Text>().text = (Xi * Mathf.Rad2Deg).ToString(format);
+        pitch.GetComponent<Text>().text = (Eta * Mathf.Rad2Deg).ToString(format);
+        yaw.GetComponent<Text>().text = (Zeta * Mathf.Rad2Deg).ToString(format);
+    }
+
+    private float clampAngle(float angle)
+    {
+        if (angle >= 180)
+            angle = -(360 - angle);
+        return angle * Mathf.Deg2Rad;
     }
 }

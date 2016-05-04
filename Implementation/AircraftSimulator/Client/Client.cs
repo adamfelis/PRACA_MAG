@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using Client.Priveleges;
 using Common;
+using Common.AircraftData;
 using Common.Containers;
 using Common.EventArgs;
 using Common.Connection;
@@ -44,7 +45,7 @@ namespace Client
             clientInputPriveleges = new ClientInputPriveleges(ref dataParser, ref serverConnection);
         }
 
-        public string ConnectToServer()
+        public string ConnectToServer(AircraftData aircraftData)
         {
             try
             {
@@ -53,7 +54,8 @@ namespace Client
                 {
                     MessageType = MessageType.ClientJoinRequest,
                     Response = ActionType.ResponseRequired,
-                    Sender = Environment.MachineName
+                    Sender = Environment.MachineName,
+                    Array = aircraftData.GetData()
                 };
                 string toSend = dataParser.Serialize(new DataList()
                 {

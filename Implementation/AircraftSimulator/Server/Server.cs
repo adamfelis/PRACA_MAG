@@ -60,23 +60,23 @@ namespace Server
             interpretClientMessages(client, new DataEventArgs() {DataList = readableData, Id = client.Id});
         }
 
-        private void interpretClientMessages(IClientConnection client, DataEventArgs eventHandler)
+        private void interpretClientMessages(IClientConnection client, DataEventArgs dataEventArgs)
         { 
-            switch (eventHandler.DataList.DataArray.First().MessageType)
+            switch (dataEventArgs.DataList.DataArray.First().MessageType)
             {
                 case MessageType.ClientJoinRequest:
-                    _serverOutputPriveleges.OnClientAdded(eventHandler, new ClientAddedExecutor(ref client, ref eventHandler, ref clients, ref dataStorage));
+                    _serverOutputPriveleges.OnClientAdded(dataEventArgs, new ClientAddedExecutor(ref client, ref dataEventArgs, ref clients, ref dataStorage));
                     break;
                 case MessageType.ClientDisconnected:
-                    _serverOutputPriveleges.OnClientRemoved(eventHandler, new ClientRemovedExecutor(ref client, ref eventHandler, ref clients));
+                    _serverOutputPriveleges.OnClientRemoved(dataEventArgs, new ClientRemovedExecutor(ref client, ref dataEventArgs, ref clients));
                     break;
                 case MessageType.ClientDataRequest:
-                    _serverOutputPriveleges.OnClientDataPresented(eventHandler, new ClientDataPresentedExecutor(_serverInputPriveleges, ref eventHandler));
+                    _serverOutputPriveleges.OnClientDataPresented(dataEventArgs, new ClientDataPresentedExecutor(_serverInputPriveleges, ref dataEventArgs));
 
                     //TOREMOVE
                 //{
-                //    eventHandler.Data.MessageType = MessageType.ClientDataResponse;
-                //    _serverInputPriveleges.RespondToClient(eventHandler);
+                //    dataEventArgs.Data.MessageType = MessageType.ClientDataResponse;
+                //    _serverInputPriveleges.RespondToClient(dataEventArgs);
                 //}
                     break;
                 default:
