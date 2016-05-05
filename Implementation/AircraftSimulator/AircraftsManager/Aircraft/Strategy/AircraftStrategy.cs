@@ -83,6 +83,9 @@ namespace AircraftsManager.Aircraft.Strategy
             float initial_U_e = aircraftData.U_e;
             float initial_W_e = aircraftData.W_e;
 
+            m_prim /= initial_V0;
+            I_y_prim /= initial_V0;
+
             float[][] A_dataArray_longitudinal;
             float[][] B_dataArray_longitudinal;
 
@@ -168,13 +171,20 @@ namespace AircraftsManager.Aircraft.Strategy
             #region A, B calculations
             const int A_size = 5;
             float m_prim = aircraftParameters.m / (0.5f * aircraftParameters.p * aircraftParameters.S);
-            float I_y_prim = aircraftParameters.I_y / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.c);
+            float I_x_prim = aircraftParameters.I_x / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
+            float I_z_prim = aircraftParameters.I_z / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
+            float I_xz_prim = aircraftParameters.I_xz / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
 
             global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
             float initial_V0 = aircraftData.V_0;
             float initial_theta_e = aircraftData.theta_e;
             float initial_U_e = aircraftData.U_e;
             float initial_W_e = aircraftData.W_e;
+
+            m_prim /= initial_V0;
+            I_x_prim /= initial_V0;
+            I_z_prim /= initial_V0;
+            I_xz_prim /= initial_V0;
 
             float[][] A_dataArray_lateral;
             float[][] B_dataArray_lateral;
@@ -185,21 +195,21 @@ namespace AircraftsManager.Aircraft.Strategy
                 A_dataArray_lateral[i] = new float[A_size];
             }
 
-            A_dataArray_lateral[0][0] = 0;
-            A_dataArray_lateral[0][1] = 0;
-            A_dataArray_lateral[0][2] = 0;
-            A_dataArray_lateral[0][3] = 0;
-            A_dataArray_lateral[0][4] = 0;
+            A_dataArray_lateral[0][0] = aircraftParameters.Y_v / m_prim;
+            A_dataArray_lateral[0][1] = (aircraftParameters.Y_p * aircraftParameters.b + initial_W_e * m_prim)/m_prim;
+            A_dataArray_lateral[0][2] = (aircraftParameters.Y_r * aircraftParameters.b - initial_U_e * m_prim) / m_prim;
+            A_dataArray_lateral[0][3] = aircraftParameters.g * (float)Math.Cos(initial_theta_e);
+            A_dataArray_lateral[0][4] = aircraftParameters.g * (float)Math.Sin(initial_theta_e);
 
-            A_dataArray_lateral[1][0] = 0;
-            A_dataArray_lateral[1][1] = 0;
-            A_dataArray_lateral[1][2] = 0;
+            A_dataArray_lateral[1][0] = -(I_z_prim * aircraftParameters.L_v + I_xz_prim * aircraftParameters.N_v) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            A_dataArray_lateral[1][1] = -(aircraftParameters.b * (I_z_prim * aircraftParameters.L_p + I_xz_prim * aircraftParameters.N_p))/ (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            A_dataArray_lateral[1][2] = -(aircraftParameters.b * (I_z_prim * aircraftParameters.L_r + I_xz_prim * aircraftParameters.N_r)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
             A_dataArray_lateral[1][3] = 0;
             A_dataArray_lateral[1][4] = 0;
 
-            A_dataArray_lateral[2][0] = 0;
-            A_dataArray_lateral[2][1] = 0;
-            A_dataArray_lateral[2][2] = 0;
+            A_dataArray_lateral[2][0] = -(I_xz_prim * aircraftParameters.L_v + I_x_prim * aircraftParameters.N_v) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            A_dataArray_lateral[2][1] = -(aircraftParameters.b * (I_xz_prim * aircraftParameters.L_p + I_x_prim * aircraftParameters.N_p)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            A_dataArray_lateral[2][2] = -(aircraftParameters.b * (I_xz_prim * aircraftParameters.L_r + I_x_prim * aircraftParameters.N_r)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
             A_dataArray_lateral[2][3] = 0;
             A_dataArray_lateral[2][4] = 0;
 
@@ -223,14 +233,14 @@ namespace AircraftsManager.Aircraft.Strategy
             }
 
 
-            B_dataArray_lateral[0][0] = 0;
-            B_dataArray_lateral[0][1] = 0;
+            B_dataArray_lateral[0][0] = initial_V0 * aircraftParameters.Y_xi / m_prim;
+            B_dataArray_lateral[0][1] = initial_V0 * aircraftParameters.Y_zeta / m_prim;
 
-            B_dataArray_lateral[1][0] = 0;
-            B_dataArray_lateral[1][1] = 0;
+            B_dataArray_lateral[1][0] = -(initial_V0 * (I_z_prim * aircraftParameters.L_xi + I_xz_prim * aircraftParameters.N_xi)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            B_dataArray_lateral[1][1] = -(initial_V0 * (I_z_prim * aircraftParameters.L_zeta + I_xz_prim * aircraftParameters.N_zeta)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
 
-            B_dataArray_lateral[2][0] = 0;
-            B_dataArray_lateral[2][1] = 0;
+            B_dataArray_lateral[2][0] = -(initial_V0 * (I_xz_prim * aircraftParameters.L_xi + I_x_prim * aircraftParameters.N_xi)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
+            B_dataArray_lateral[2][1] = -(initial_V0 * (I_xz_prim * aircraftParameters.L_zeta + I_x_prim * aircraftParameters.N_zeta)) / (I_xz_prim * I_xz_prim - I_x_prim * I_z_prim);
 
             B_dataArray_lateral[3][0] = 0;
             B_dataArray_lateral[3][1] = 0;
