@@ -10,6 +10,8 @@ classdef Aircraft < handle & Shooter
         % total_simulation_time in GetTotalSimulationTime()) - one for each
         % strategy
         current_simulation_solutions
+
+        previous_result
     end
     
     methods
@@ -21,6 +23,7 @@ classdef Aircraft < handle & Shooter
                                         new_A_lateral, new_B_lateral);
             obj.simulation_step_from_fixed_update = simulation_step;
             obj.simulation_time_from_AircraftStrategy_cs = simulation_time;
+            obj.previous_result = -1;
         end
         % Add extra strategy
         function AddStrategy(obj, new_A_longitudinal, new_B_longitudinal,...
@@ -62,6 +65,11 @@ classdef Aircraft < handle & Shooter
             else
                 obj.current_simulation_solutions = [];
                 for i = 1 : 1 : length(obj.Strategies)
+
+                    if obj.previous_result ~= -1
+                        x0_longitudinal = obj.previous_result.StrategiesResults(i).longitudinal_result;
+                        x0_lateral = obj.previous_result.StrategiesResults(i).lateral_result;
+                    end
                     [~,Y_longitudinal] = ode45(...
                             @(t,x)StateSpace(t, x, obj.Strategies(i).A_longitudinal, obj.Strategies(i).B_longitudinal, u_longitudinal'),...
                             0 : obj.simulation_step_from_fixed_update : obj.GetTotalSimulationTime(),...
@@ -79,6 +87,7 @@ classdef Aircraft < handle & Shooter
                     results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), newPosition.value)
                 end
             end
+            obj.previous_result = results;
             resultsArray = results.PresentFinalResults();
         end
         % Calculates the velocity value of time t along all directions for

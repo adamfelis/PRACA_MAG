@@ -34,13 +34,13 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             {
                 IData lateralResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[0, 0], res[0, 1], res[0, 2], res[0, 3], res[0, 4] } },
+                    Array = new float[1][] { new float[] { res[i, 0], res[i, 1], res[i, 2], res[i, 3], res[i, 4] } },
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse
                 };
                 IData longitudinalResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[0, 5], res[0, 6], res[0, 7], res[0, 8] } },
+                    Array = new float[1][] { new float[] { res[i, 5], res[i, 6], res[i, 7], res[i, 8] } },
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse
                 };

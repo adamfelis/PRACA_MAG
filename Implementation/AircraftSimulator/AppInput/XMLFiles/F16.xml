@@ -1,12 +1,33 @@
 <?xml version="1.0"?>
 <AircraftParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!-- Common -->
   <S>49.239</S>
-  <c>4.889</c>
   <p>0.3809</p>
-  <U_e>0</U_e>
   <m>17642</m>
-  <I_y>165669</I_y>
   <g>9.81</g>
+  <!-- Lateral -->
+  <Y_v>-0.5974</Y_v>
+  <L_v>-0.1048</L_v>
+  <N_v>0.0987</N_v>
+  <Y_p>0</Y_p>
+  <L_p>-0.1164</L_p>
+  <N_p>-0.0045</N_p>
+  <Y_r>0</Y_r>
+  <L_r>0.0455</L_r>
+  <N_r>-0.1132</N_r>
+  <Y_xi>-0.0159</Y_xi>
+  <L_xi>0.0454</L_xi>
+  <N_xi>0.00084</N_xi>
+  <Y_zeta>0.1193</Y_zeta>
+  <L_zeta>0.0086</L_zeta>
+  <N_zeta>-0.0741</N_zeta>
+  <b>11.787</b>
+  <I_x>33898</I_x>
+  <I_z>189496</I_z>
+  <I_xz>2951</I_xz>
+  <!-- Longitudinal -->
+  <c>4.889</c>
+  <I_y>165669</I_y>
   <X_dot_u>0.0076</X_dot_u>
   <Z_dot_u>-0.7273</Z_dot_u>
   <M_dot_u>0.0340</M_dot_u>
