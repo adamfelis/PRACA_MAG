@@ -57,6 +57,8 @@ end
 
 
 V_x = [U; U(length(U))];
+% simulation_step = 0.04;
+% global_simulation_time = 0.04 * 784;
 V_x_fun = @(t) (V_x(round(t/simulation_step) + 1));
 S_x = [];
 for i = 0 : simulation_step : global_simulation_time

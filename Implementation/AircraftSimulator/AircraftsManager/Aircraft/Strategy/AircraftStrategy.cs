@@ -26,7 +26,7 @@ namespace AircraftsManager.Aircraft.Strategy
         //longitudinal
         private float ni;
         private float tau;
-        private const int longitudinal_simulation_time = 51;
+        private const int longitudinal_simulation_time = 26;
         private static int longitudinal_simulation_index = 0;
         //lateral
         private float V_e;
@@ -36,8 +36,6 @@ namespace AircraftsManager.Aircraft.Strategy
         private float psi;
         private float P_e;
         private float R_e;
-        private const int lateral_simulation_time = 51;
-        private static int lateral_simulation_index = 0;
 
         protected AircraftParameters aircraftParameters;
         internal abstract List<IData> GetLongitudinalData(IData additionalInformation = null);

@@ -18,7 +18,7 @@ classdef Results < handle
         function result = PresentFinalResults(obj)
             result = [];
             for i = 1:1:length(obj.StrategiesResults)
-               result = [result; obj.StrategiesResults(i).lateral_result, obj.StrategiesResults(i).longitudinal_result];%, obj.StrategiesResults(i).position];
+               result = [result; obj.StrategiesResults(i).lateral_result, obj.StrategiesResults(i).longitudinal_result, obj.StrategiesResults(i).position];
             end
         end
     end

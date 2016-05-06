@@ -10,8 +10,13 @@ classdef Aircraft < handle & Shooter
         % total_simulation_time in GetTotalSimulationTime()) - one for each
         % strategy
         current_simulation_solutions
-
+        % stores previous result of computations of lateral and
+        % longitudinal versions. Used when simulation is recalculated to
+        % obtain x0_lateral and x0_longitudinal
         previous_result
+
+        % 
+        DEBUG_MODE = true;
     end
     
     methods
@@ -23,7 +28,7 @@ classdef Aircraft < handle & Shooter
                                         new_A_lateral, new_B_lateral);
             obj.simulation_step_from_fixed_update = simulation_step;
             obj.simulation_time_from_AircraftStrategy_cs = simulation_time;
-            obj.previous_result = -1;
+            %obj.previous_result = -1;
         end
         % Add extra strategy
         function AddStrategy(obj, new_A_longitudinal, new_B_longitudinal,...
@@ -55,8 +60,10 @@ classdef Aircraft < handle & Shooter
         function resultsArray = Simulate(obj, x0_longitudinal, x0_lateral, u_longitudinal, u_lateral, simulation_index)
             results = Results();
             if simulation_index > 1
+                interval = [(simulation_index - 1) * obj.simulation_step_from_fixed_update, simulation_index * obj.simulation_step_from_fixed_update];
                 for i = 1 : 1 : length(obj.current_simulation_solutions)
-                    newPosition = Position(0,0,0);
+                    newPosition = obj.UpdatePosition(interval, i);                    
+
                     results.AddStrategyResult(...
                         obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:),...
                         obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:),...
@@ -82,27 +89,49 @@ classdef Aircraft < handle & Shooter
                             x0_lateral'...
                             );
                     obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
-                    newPosition = Position(0,0,0);
-
+                    newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
+                    
                     results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), newPosition.value)
                 end
             end
             obj.previous_result = results;
             resultsArray = results.PresentFinalResults();
         end
-        % Calculates the velocity value of time t along all directions for
+        % Calculates the velocity value of time t along direction U for
         % strategy specified by the strategy_index
-        function velocity = VelocityInTime(obj, t, strategy_index)
+        function velocityU = VelocityUInTime(obj, t, strategy_index)
             strategy_index = max(strategy_index, length(obj.current_simulation_solutions));
             U = obj.current_simulation_solutions(strategy_index).Y_longitudinal(:,1);
-            V = obj.current_simulation_solutions(strategy_index).Y_lateral(:,1);
-            W = obj.current_simulation_solutions(strategy_index).Y_longitudinal(:,2);
             U = [U; U(length(U))];
+            velocityU = U(round(t/obj.simulation_step_from_fixed_update) + 1);
+        end
+        % Calculates the velocity value of time t along direction V for
+        % strategy specified by the strategy_index
+        function velocityV = VelocityVInTime(obj, t, strategy_index)
+            strategy_index = max(strategy_index, length(obj.current_simulation_solutions));
+            V = obj.current_simulation_solutions(strategy_index).Y_lateral(:,1);
             V = [V; V(length(V))];
+            velocityV = V(round(t/obj.simulation_step_from_fixed_update) + 1);
+        end
+        % Calculates the velocity value of time t along direction W for
+        % strategy specified by the strategy_index
+        function velocityW = VelocityWInTime(obj, t, strategy_index)
+            strategy_index = max(strategy_index, length(obj.current_simulation_solutions));
+            W = obj.current_simulation_solutions(strategy_index).Y_longitudinal(:,2);
             W = [W; W(length(W))];
-            velocity = [U(round(t/obj.simulation_step_from_fixed_update) + 1),...
-                V(round(t/obj.simulation_step_from_fixed_update) + 1),...
-                W(round(t/obj.simulation_step_from_fixed_update) + 1)];
+            velocityW = W(round(t/obj.simulation_step_from_fixed_update) + 1);
+        end
+
+        function newPosition = UpdatePosition(obj, interval, strategy_index)
+            newPosition = Position(0,0,0);
+            newPosition.value(1) = newPosition.value(1) + ...
+                    integral(@(t) obj.VelocityUInTime(t,strategy_index), interval(1), interval(2), 'ArrayValued', true);
+
+            newPosition.value(2) = newPosition.value(2) + ...
+                    integral(@(t) obj.VelocityVInTime(t,strategy_index), interval(1), interval(2), 'ArrayValued', true);
+
+            newPosition.value(3) = newPosition.value(3) + ...
+                    integral(@(t) obj.VelocityWInTime(t,strategy_index), interval(1), interval(2), 'ArrayValued', true);
         end
     end
     

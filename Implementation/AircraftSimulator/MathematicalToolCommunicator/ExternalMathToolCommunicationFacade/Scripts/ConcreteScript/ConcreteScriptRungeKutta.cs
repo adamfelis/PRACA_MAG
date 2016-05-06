@@ -44,9 +44,16 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse
                 };
+                IData positionResult = new Data()
+                {
+                    Array = new float[1][] { new float[] { res[i, 9], res[i, 10], res[i, 11] } },
+                    InputType = DataType.Vector,
+                    MessageType = MessageType.ClientDataResponse
+                };
 
                 result.Add(longitudinalResult);
-                result.Add(lateralResult);
+                //result.Add(lateralResult);
+                //result.Add(positionResult);
             }
             return result;
         }
