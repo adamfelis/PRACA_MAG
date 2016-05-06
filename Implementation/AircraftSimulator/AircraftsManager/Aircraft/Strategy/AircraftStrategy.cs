@@ -26,7 +26,7 @@ namespace AircraftsManager.Aircraft.Strategy
         //longitudinal
         private float ni;
         private float tau;
-        private const int longitudinal_simulation_time = 26;
+        private const int longitudinal_simulation_time = 11;
         private static int longitudinal_simulation_index = 0;
         //lateral
         private float V_e;

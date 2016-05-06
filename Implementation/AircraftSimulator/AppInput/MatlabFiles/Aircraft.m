@@ -16,7 +16,7 @@ classdef Aircraft < handle & Shooter
         previous_result
 
         % 
-        DEBUG_MODE = true;
+        DEBUG_MODE = false;
     end
     
     methods
@@ -62,8 +62,10 @@ classdef Aircraft < handle & Shooter
             if simulation_index > 1
                 interval = [(simulation_index - 1) * obj.simulation_step_from_fixed_update, simulation_index * obj.simulation_step_from_fixed_update];
                 for i = 1 : 1 : length(obj.current_simulation_solutions)
-                    newPosition = obj.UpdatePosition(interval, i);                    
-
+                    newPosition = Position(0,0,0);
+                    if(obj.DEBUG_MODE)
+                        newPosition = obj.UpdatePosition(interval, i);                    
+                    end
                     results.AddStrategyResult(...
                         obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:),...
                         obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:),...
@@ -89,8 +91,11 @@ classdef Aircraft < handle & Shooter
                             x0_lateral'...
                             );
                     obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
-                    newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
-                    
+                   
+                    newPosition = Position(0,0,0);
+                    if(obj.DEBUG_MODE)
+                        newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
+                    end
                     results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), newPosition.value)
                 end
             end
