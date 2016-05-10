@@ -1,0 +1,13 @@
+1. Wykrycie b³êdów z pod³¹czaniem do serwera -KUBA
+2. B³¹d, ¿e nie mo¿na zmieniæ sterowania po pewnym czasie, BUG - KUBA KRYTYCZNE
+3. Wysy³anie wiêkszej iloœci danych zacina serwer - ConreteScriptRungeKutta -KUBA KRYTYCZNE
+4. Dlaczego aileron i rudder nie s¹ zerami na pocz¹tku - KUBA
+5. Dodanie sceny pocz¹tkowej - KUBA (wybranie strategii) (w AppInput bêd¹ zdjêcia do strategii + w Common), wybór pocisków:
+	- textbox do pod³¹czania serwer/klient
+6. Punkty odniesienia w scenie - proceduralne generowanie terenu - ADAM
+7. Podpiêcie UNet'a??? 
+8. Dodanie nowych kamer widoku - ADAM
+	- z przodu
+	- z ty³u
+	- z boków
+9. Interpolacja rozwi¹zañ - KUBA
