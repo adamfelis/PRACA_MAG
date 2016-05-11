@@ -9,6 +9,8 @@ using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
 using Common.DataParser;
+using Common.Exceptions;
+using DataStorageNamespace;
 using Server.Executors;
 
 namespace Server
@@ -19,12 +21,14 @@ namespace Server
         private static int id_counter = 0;
         private ClientConnectionInterruptedHandler onClientDisconnected;
         private IDictionary<int, IClientConnection> clients;
+        private IDataStorage dataStorage;
 
-        public ClientConnection(TcpClient client, MessageReceivedHandler onMessageReceived, ClientConnectionInterruptedHandler onClientRemoved, IDictionary<int, IClientConnection> clients)
+        public ClientConnection(TcpClient client, MessageReceivedHandler onMessageReceived, ClientConnectionInterruptedHandler onClientRemoved, ref IDictionary<int, IClientConnection> clients, ref IDataStorage dataStorage)
         {
             Id = id_counter++;
             onClientDisconnected = onClientRemoved;
             this.clients = clients;
+            this.dataStorage = dataStorage;
             base.client = client;
             base.onMessageReceived = onMessageReceived;
             base.ReadingWithBlocking = true;
@@ -47,25 +51,42 @@ namespace Server
 
         public string ClientName { get; set; }
 
-        protected override void onDisconnected()
+        public override void onDisconnected(ErrorCodeException e)
         {
-            var clientData = new DataEventArgs()
+            //if stream has been already closed it means client had been informed if possible 
+            if (!client.Connected)
+                return;
+
+            DataEventArgs dataEventArgs = new DataEventArgs()
             {
-                Id = this.Id,
-                DataList = new DataList()
-                {
-                    DataArray = new[]
+                Id = this.Id
+            };
+            IClientConnection connection = this;
+            //if there was law layer exception we can only remove client on server side
+            if (e.GetType() == typeof (LawLayerException))
+            {
+                onClientDisconnected(dataEventArgs, new ClientRemovedExecutor(ref connection, ref dataEventArgs, ref clients, ref dataStorage));
+                if (client.Connected)
+                    client.Close();
+                return;
+            }
+
+            //if there was any other exception inform client first
+            string toSend = new DataParser<DataList>().Serialize(
+            new DataList()
+            {
+                DataArray = new[]
                     {
                         new Data()
                         {
-                            MessageType = MessageType.ClientDisconnected,
-                            Response = ActionType.NoResponse
+                            MessageType = MessageType.ServerDisconnected,
+                            Response = ActionType.NoResponse,
+                            Error = e.Error
                         }
                     }
-                }
-            };
-            IClientConnection connection = this;
-            onClientDisconnected(clientData, new ClientRemovedExecutor(ref connection, ref clientData, ref clients));
+
+            });
+            SendMessage(toSend);
         }
     }
 }

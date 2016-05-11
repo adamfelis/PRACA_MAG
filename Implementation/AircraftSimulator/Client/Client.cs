@@ -11,6 +11,7 @@ using Common.Containers;
 using Common.EventArgs;
 using Common.Connection;
 using Common.DataParser;
+using Common.Exceptions;
 
 namespace Client
 {
@@ -47,6 +48,7 @@ namespace Client
 
         public string ConnectToServer(AircraftData aircraftData)
         {
+            string toSend;
             try
             {
                 serverConnection.ConnectToServer();
@@ -57,7 +59,7 @@ namespace Client
                     Sender = Environment.MachineName,
                     Array = aircraftData.GetData()
                 };
-                string toSend = dataParser.Serialize(new DataList()
+                toSend = dataParser.Serialize(new DataList()
                 {
                     DataArray = new []
                     {
@@ -74,6 +76,7 @@ namespace Client
             {
                 return e.Message;
             }
+            //return toSend;
             return "Join request sent to server";
         }
 
@@ -85,8 +88,19 @@ namespace Client
         private void onMessageReceived(IConnector sender, string data)
         {
             var client = sender as IServerConnection;
-            IDataList readableData = dataParser.Deserialize(data);
-            clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() {DataList = readableData});
+            IDataList readableData = null;
+            readableData = dataParser.Deserialize(data);
+            if (readableData.DataArray.First().Error != ErrorCode.None)
+                client.onDisconnected(
+                    new ErrorCodeException()
+                    {
+                        Error = readableData.DataArray.First().Error
+                    });
+            else
+            {
+                clientOutputPrivileges.OnServerDataPresented(new DataEventArgs() { DataList = readableData });
+            }
+                //client.AcceptDisconnection();
         }
     }
 }

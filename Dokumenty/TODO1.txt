@@ -11,3 +11,6 @@
 	- z ty³u
 	- z boków
 9. Interpolacja rozwi¹zañ - KUBA
+
+
+10. Czasem nie tworzy siê "result_from_matlab" Concrete Runge Kutta

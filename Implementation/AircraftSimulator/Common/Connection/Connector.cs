@@ -6,6 +6,7 @@ using System.Text;
 using System.Net.Sockets;
 using Common.Containers;
 using Common.EventArgs;
+using Common.Exceptions;
 
 namespace Common.Connection
 {
@@ -13,9 +14,11 @@ namespace Common.Connection
     public delegate void ConnectionInterruptedHandler();
     public abstract class Connector : Initializer, IConnector
     {
-        private const int readBufferSize = 2048;
-        private const int offset = 0;
-        private byte[] readBuffer = new byte[readBufferSize];
+        private const int maxReadBufferSize = 4096;
+        private const int bytesReadInSingleChunk = 512;
+        private int totalBytesRead = 0;
+        private StringBuilder stringBuilder = new StringBuilder(maxReadBufferSize);
+        private byte[] readBuffer = new byte[maxReadBufferSize];
         protected TcpClient client;
         protected MessageReceivedHandler onMessageReceived;
         protected bool ReadingWithBlocking { get; set; }
@@ -23,74 +26,96 @@ namespace Common.Connection
         private const char Carret = (char)13;
         private const char LineBreak = (char)10;
 
-        protected abstract void onDisconnected();
+        public abstract void onDisconnected(ErrorCodeException e);
+
+        public void CloseConnection()
+        {
+            if (client.Connected)
+                client.Close();
+        }
 
         protected override void Initialize()
         {
-            if (ReadingWithBlocking)
-                client.GetStream().BeginRead(readBuffer, offset, readBufferSize, new AsyncCallback(MessageReceivedBlocking), null);
-            else
-            {
-                client.GetStream().BeginRead(readBuffer, offset, readBufferSize, new AsyncCallback(MessageReceivedNonBlocking), null);
-            }
+            BeginReading();
         }
 
-        protected void MessageReceivedBlocking(IAsyncResult asyncResult)
+        public void BeginReading()
         {
-            int bytesRead;
-            string messageRead;
-            //try
-            {
-                lock (client.GetStream())
-                {
-                    bytesRead = client.GetStream().EndRead(asyncResult);
-                }
-                if (bytesRead < 2)
-                {
-                    //DISCONNECTED
-                    SendMessage(Disconnected);
-                    return;
-                }
-                messageRead = Encoding.ASCII.GetString(readBuffer, 0, bytesRead - 2);
-                onMessageReceived(this, messageRead);
-                lock (client.GetStream())
-                {
-                    client.GetStream()
-                        .BeginRead(readBuffer, offset, readBufferSize, new AsyncCallback(MessageReceivedBlocking), null);
-                }
-            }
-            //catch (Exception e)
-            //{
-            //    //DISCONNECTED FROM THE CLIENT
-            //    onDisconnected();
-            //}
-        }
-
-        protected void MessageReceivedNonBlocking(IAsyncResult asyncResult)
-        {
-            int bytesRead;
-            string messageRead;
             try
             {
-                bytesRead = client.GetStream().EndRead(asyncResult);
-                if (bytesRead < 2)
-                {
-                    //DISCONNECTED
-                    SendMessage(Disconnected);
-                    return;
-                }
-                messageRead = Encoding.ASCII.GetString(readBuffer, 0, bytesRead - 2);
-                onMessageReceived(this, messageRead);
-                client.GetStream()
-                    .BeginRead(readBuffer, offset, readBufferSize, new AsyncCallback(MessageReceivedNonBlocking), null);
+                client.GetStream().BeginRead(
+                readBuffer, totalBytesRead, bytesReadInSingleChunk,
+                new AsyncCallback(EndReading),
+                null);
             }
             catch (Exception e)
             {
-                //DISCONNECTED FROM THE SERVER
-                onDisconnected();
-                return;
+                onDisconnected(new LawLayerException()
+                {
+                    Error = ErrorCode.ReadOperation,
+                    Exception = e
+                });
             }
         }
+
+        public void EndReading(IAsyncResult ar)
+        {
+            NetworkStream stream = null;
+            int bytesRead = 0;
+            try
+            {
+                stream = client.GetStream();
+                bytesRead = stream.EndRead(ar);
+            }
+            catch (Exception e)
+            {
+                onDisconnected(new LawLayerException()
+                {
+                    Error = ErrorCode.ReadOperation,
+                    Exception = e
+                });
+            }
+
+            if (bytesRead == 0)
+            {
+                onDisconnected(new LawLayerException()
+                {
+                    Error = ErrorCode.ReadOperation,
+                    Exception = new Exception("0 bytes read")
+                });
+            }
+
+            try
+            { 
+                var messageRead = Encoding.ASCII.GetString(readBuffer, totalBytesRead, bytesRead);
+                totalBytesRead += bytesRead;
+                stringBuilder.Append(messageRead);
+                //if (stream.DataAvailable)
+                if(messageRead[messageRead.Length - 1] != LineBreak)
+                {
+                    BeginReading();
+                }
+                else
+                {
+                    messageRead = messageRead.Remove(messageRead.Length - 1);
+                    //Message fully completed
+                    onMessageReceived(this, stringBuilder.ToString());
+                    //clearing total bytes read and string builder cause we start new message
+                    totalBytesRead = 0;
+                    stringBuilder = new StringBuilder(maxReadBufferSize);
+                    BeginReading();
+                }
+            }
+            catch (Exception e)
+            {
+                onDisconnected(new LawLayerException()
+                {
+                    Error = ErrorCode.ReadOperation,
+                    Exception = e
+                });
+            }
+        }
+
 
         public void SendMessage(string data)
         {
@@ -101,13 +126,18 @@ namespace Common.Connection
                 lock (client.GetStream())
                 {
                     StreamWriter writer = new StreamWriter(client.GetStream());
-                    writer.Write(data + Carret + LineBreak);
+                    writer.Write(data + LineBreak);
                     writer.Flush();
                 }
             }
             catch (Exception e)
             {
-                
+                string a = e.Message;
+                onDisconnected(new LawLayerException()
+                {
+                    Error = ErrorCode.WriteOperation,
+                    Exception = e
+                });
             }
         }
     }

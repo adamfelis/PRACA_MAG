@@ -26,13 +26,14 @@ public class Communication : MonoBehaviour, IClientPrivileges
         var aircraft = aircraftsController.aircraft;
         random = new Random();
         communicatesFromServer = new Queue<DataEventArgs>();
-        Debug.Log(communicator.ConnectToServer(new AircraftData(
-            aircraft.V_0,
-            aircraft.Theta,
-            Time.fixedDeltaTime,
-            1.0f//????????????????????????????????
-            )));
-    }
+	    string output = communicator.ConnectToServer(new AircraftData(
+	        aircraft.V_0,
+	        aircraft.Theta,
+	        Time.fixedDeltaTime,
+	        1.0f //????????????????????????????????
+	        ));
+        Debug.Log(output);
+	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -52,7 +53,20 @@ public class Communication : MonoBehaviour, IClientPrivileges
             while (communicatesFromServer.Count > 0)
             {
                 var eventArgs = communicatesFromServer.Dequeue();
-                IData data = eventArgs.DataList.DataArray.First();
+                IData data = null;
+                try
+                {
+                    data = eventArgs.DataList.DataArray.First();
+                }
+                catch(Exception e)
+                {
+                    string a = e.Message;
+                }
+                if (data.Error != ErrorCode.None)
+                {
+                    ServerDisconnected(null, ErrorCode.MainApplicationException);
+                    return;
+                }
                 switch (data.MessageType)
                 {
                     case MessageType.ClientJoinResponse:
@@ -102,7 +116,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
                     Array = new AircraftData(
                         aircraft.V_0,
                         aircraft.V,
-                        aircraft.Eta,
+                        aircraft.Eta, //NI
                         aircraft.Xi,
                         aircraft.Zeta,
                         aircraft.Tau,
@@ -141,15 +155,18 @@ public class Communication : MonoBehaviour, IClientPrivileges
 
         var position = aircraft.Body.transform.localPosition;
         position.x += aircraft.Velocity.z * Time.fixedDeltaTime;
-        position.y += -aircraft.Velocity.y * Time.fixedDeltaTime;
+        position.y += aircraft.Velocity.y * Time.fixedDeltaTime;
         position.z += -aircraft.Velocity.x * Time.fixedDeltaTime;
         aircraft.Body.transform.localPosition = position;
+
+
         //theta is angle attack
         var theta = data.Array[0][3] * Mathf.Rad2Deg;
         if (theta >= 180)
             theta = -(360 - theta);
         var rotation = aircraft.Body.transform.localEulerAngles;
         rotation.x = theta;
+        //Debug.Log(data.Array[0][3] * Mathf.Rad2Deg+ " " + theta);
         //Debug.Log("ustawiona rotacja " + rotation.x);
         aircraft.Body.transform.localEulerAngles = rotation;
 
@@ -200,9 +217,16 @@ public class Communication : MonoBehaviour, IClientPrivileges
     {
         get
         {
-            return delegate(object sender) 
+            return delegate(object sender, ErrorCode e) 
             {
-                Debug.Log("Server connection interrupted.");
+                if(e == ErrorCode.WriteOperation || e==ErrorCode.ReadOperation
+                || e == ErrorCode.StreamClosed)
+                    Debug.Log("unity connection side closing");
+                else
+                {
+                    Debug.Log("server connection side closing");
+                }
+                Debug.Log(e);
             };
         }
     }

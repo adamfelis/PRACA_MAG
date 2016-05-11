@@ -8,6 +8,7 @@ using Common;
 using Common.Connection;
 using Common.Containers;
 using Common.EventArgs;
+using Common.Exceptions;
 using DataStorageNamespace;
 using Server.Executors;
 
@@ -47,7 +48,8 @@ namespace Server
                 _listener.Start();
                 do
                 {
-                    var clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived, _serverOutputPriveleges.OnClientRemoved, clients);
+                    IClientConnection clientConnection = new ClientConnection(_listener.AcceptTcpClient(), onMessageReceived,
+                            _serverOutputPriveleges.OnClientRemoved, ref clients, ref dataStorage);
                 } while (true);
             });
             _listenerThread.Start();
@@ -57,7 +59,18 @@ namespace Server
         {
             var client = sender as IClientConnection;
             IDataList readableData = dataStorage.PrepareDataReceivedFromClient(client.Id, data);
-            interpretClientMessages(client, new DataEventArgs() {DataList = readableData, Id = client.Id});
+            var dataEventArgs = new DataEventArgs() {DataList = readableData, Id = client.Id};
+            try
+            {
+                interpretClientMessages(client, dataEventArgs);
+            }
+            catch (Exception e)
+            {
+                client.onDisconnected(new MainApplicationException()
+                {
+                    Error = ErrorCode.MainApplicationException
+                });
+            }
         }
 
         private void interpretClientMessages(IClientConnection client, DataEventArgs dataEventArgs)
@@ -68,7 +81,7 @@ namespace Server
                     _serverOutputPriveleges.OnClientAdded(dataEventArgs, new ClientAddedExecutor(ref client, ref dataEventArgs, ref clients, ref dataStorage));
                     break;
                 case MessageType.ClientDisconnected:
-                    _serverOutputPriveleges.OnClientRemoved(dataEventArgs, new ClientRemovedExecutor(ref client, ref dataEventArgs, ref clients));
+                    _serverOutputPriveleges.OnClientRemoved(dataEventArgs, new ClientRemovedExecutor(ref client, ref dataEventArgs, ref clients, ref dataStorage));
                     break;
                 case MessageType.ClientDataRequest:
                     _serverOutputPriveleges.OnClientDataPresented(dataEventArgs, new ClientDataPresentedExecutor(_serverInputPriveleges, ref dataEventArgs));

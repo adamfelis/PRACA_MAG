@@ -22,6 +22,7 @@ public class InputController : MonoBehaviour {
         Horizontal = horizontalSpeed * Input.GetAxis("Mouse X");
         Vertical = verticalSpeed * Input.GetAxis("Mouse Y");
         //transform.Rotate(Vertical, Horizontal, 0);
+        //aircraft.RotateAircraft(Vertical, Horizontal);
         testKeyboard();
     }
 

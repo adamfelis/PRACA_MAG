@@ -263,6 +263,7 @@ public class Aircraft : IAircraft
         yaw.GetComponent<Text>().text = (Psi * Mathf.Rad2Deg).ToString(format);
     }
 
+
     private float clampAngle(float angle)
     {
         if (angle >= 180)

@@ -27,23 +27,38 @@ namespace Common.DataParser
         public string Serialize(IDataList data)
         {
             string toRet = String.Empty;
-            using (StringWriter stringWriter = new StringWriter())
+            try
             {
-                using (XmlWriter dataWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings() {Indent = false}))
+                using (StringWriter stringWriter = new StringWriter())
                 {
-                    serializer.Serialize(dataWriter, data);
-                    toRet = stringWriter.ToString();
+                    using (XmlWriter dataWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings() {Indent = false}))
+                    //using (XmlWriter dataWriter = XmlWriter.Create(stringWriter))
+                    {
+                        serializer.Serialize(dataWriter, data);
+                        toRet = stringWriter.ToString();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                string a = e.Message;
             }
             return toRet;
         }
 
         public IDataList Deserialize(string data)
         {
-            IDataList toRet;
-            using (StringReader dataReader = new StringReader(data))
+            IDataList toRet = null;
+            try
             {
-                toRet = serializer.Deserialize(dataReader) as IDataList;
+                using (StringReader dataReader = new StringReader(data))
+                {
+                    toRet = serializer.Deserialize(dataReader) as IDataList;
+                }
+            }
+            catch (Exception e)
+            {
+                string a = e.Message;
             }
             return toRet;
         }

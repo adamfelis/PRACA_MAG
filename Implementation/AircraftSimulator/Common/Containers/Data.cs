@@ -15,6 +15,11 @@ namespace Common.Containers
             get; set;
         }
 
+        public ErrorCode Error
+        {
+            get; set;
+        }
+
         public MessageType MessageType
         {
             get; set;
