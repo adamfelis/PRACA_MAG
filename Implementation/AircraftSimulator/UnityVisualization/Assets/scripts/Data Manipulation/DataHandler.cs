@@ -67,7 +67,7 @@ namespace Assets.scripts.Data_Manipulation
             var q = data.Array[0][2];
             aircraft.q = q;
 
-            //aircraft.TranslateInLongitudinal(velocityX, velocityY);
+            aircraft.TranslateInLongitudinal(velocityX, velocityY);
             var theta = data.Array[0][3];
             aircraft.RotateInLongitudinal(theta);
         }
