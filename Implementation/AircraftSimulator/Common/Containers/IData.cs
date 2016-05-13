@@ -22,6 +22,14 @@ namespace Common.Containers
         ServerDisconnected
     }
 
+    public enum MessageContent
+    {
+        NotSet,
+        LateralData,
+        LongitudinalData,
+        PositionData
+    }
+
     public enum ActionType
     {
         NotSet,

@@ -27,11 +27,13 @@ public class InputController : MonoBehaviour {
     }
 
 
-    private float steeringSensitivity = 0.3f;
+    private Vector3 steeringSensitivity = new Vector3(0.3f, 0.05f, 0.3f);
     void testKeyboard()
     {
         float deltaAileron, deltaRudder, deltaElevator;
         deltaAileron = deltaRudder = deltaElevator = 0.0f;
+
+        #region pitching
         if (Input.GetKey(KeyCode.W))
         {
             deltaElevator = 1.0f;
@@ -40,29 +42,36 @@ public class InputController : MonoBehaviour {
         {
             deltaElevator = -1.0f;
         }
+        #endregion
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            deltaRudder = 1.0f;
-        }
-        if (Input.GetKey(KeyCode.D))
+        #region yawing
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             deltaRudder = -1.0f;
         }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            deltaRudder = 1.0f;
+        }
+        #endregion
 
-        if (Input.GetKey(KeyCode.UpArrow))
+
+        #region rolling
+        if (Input.GetKey(KeyCode.A))
         {
             deltaAileron = 1.0f;
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             deltaAileron = -1.0f;
         }
+        #endregion
 
 
-        deltaAileron *= steeringSensitivity;
-        deltaRudder *= steeringSensitivity;
-        deltaElevator *= steeringSensitivity;
+
+        deltaAileron *= steeringSensitivity.x;
+        deltaRudder *= steeringSensitivity.y;
+        deltaElevator *= steeringSensitivity.z;
         aircraft.RotateAircraft(deltaAileron, deltaRudder, deltaElevator);
     }
 }

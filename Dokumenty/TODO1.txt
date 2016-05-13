@@ -1,6 +1,6 @@
-1. Wykrycie b³êdów z pod³¹czaniem do serwera -KUBA
+1. Wykrycie b³êdów z pod³¹czaniem do serwera -KUBA - DONE
 2. B³¹d, ¿e nie mo¿na zmieniæ sterowania po pewnym czasie, BUG - KUBA KRYTYCZNE
-3. Wysy³anie wiêkszej iloœci danych zacina serwer - ConreteScriptRungeKutta -KUBA KRYTYCZNE
+3. Wysy³anie wiêkszej iloœci danych zacina serwer - ConreteScriptRungeKutta -KUBA KRYTYCZNE - DONE
 4. Dlaczego aileron i rudder nie s¹ zerami na pocz¹tku - KUBA
 5. Dodanie sceny pocz¹tkowej - KUBA (wybranie strategii) (w AppInput bêd¹ zdjêcia do strategii + w Common), wybór pocisków:
 	- textbox do pod³¹czania serwer/klient
@@ -13,4 +13,6 @@
 9. Interpolacja rozwi¹zañ - KUBA
 
 
-10. Czasem nie tworzy siê "result_from_matlab" Concrete Runge Kutta
+10. Czasem nie tworzy siê "result_from_matlab" Concrete Runge Kutta - usuwanie plików po stronie matlaba - ADAM
+11. Pod³¹czenie wersji lateral do wizualizacji - KRYTYCZNE - KUBA
+12. Trzymanie sterowania przerywa poprawne liczenie pozycji - KRYTYCZNE - KUBA

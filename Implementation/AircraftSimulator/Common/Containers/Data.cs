@@ -25,6 +25,11 @@ namespace Common.Containers
             get; set;
         }
 
+        public MessageContent MessageContent
+        {
+            get; set;
+        }
+
         public ActionType Response
         {
             get; set;

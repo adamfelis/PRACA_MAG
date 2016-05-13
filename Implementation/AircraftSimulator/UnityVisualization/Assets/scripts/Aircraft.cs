@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Assets.scripts;
 using UnityEngine.UI;
 
@@ -22,6 +24,8 @@ public class Aircraft : IAircraft
     private Vector3 rotationMaxOffset;
     private const float angle = 20;
     private Quaternion initialInverseRotation;
+
+    private float theta_prev, psi_prev, phi_prev;
 
 
     #region Velocities
@@ -47,8 +51,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = ElevatorRight.GetComponent<ColliderHandler>();
-            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
-            return clampAngle(rotation.eulerAngles.x);
+            return collider.RotationOffset;
         }
     }
     /// <summary>
@@ -59,8 +62,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = AileronRight.GetComponent<ColliderHandler>();
-            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
-            return clampAngle(rotation.eulerAngles.x);
+            return collider.RotationOffset;
         }
     }
     /// <summary>
@@ -71,8 +73,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = RudderRight.GetComponent<ColliderHandler>();
-            Quaternion rotation = collider.transform.localRotation * collider.InverseInitialRotation;
-            return clampAngle(rotation.eulerAngles.y);
+            return collider.RotationOffset;
         }
     }
 
@@ -91,7 +92,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return clampAngle((Body.transform.rotation * initialInverseRotation).eulerAngles.x);
+            return theta_prev*Mathf.Deg2Rad;
         }
     }
     /// <summary>
@@ -101,7 +102,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return clampAngle((Body.transform.rotation * initialInverseRotation).eulerAngles.y);
+            return psi_prev * Mathf.Deg2Rad;
         }
     }
     /// <summary>
@@ -111,7 +112,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return clampAngle((Body.transform.rotation * initialInverseRotation).eulerAngles.z);
+            return phi_prev * Mathf.Deg2Rad;
         }
     }
 
@@ -160,6 +161,18 @@ public class Aircraft : IAircraft
         aileron = GameObject.FindGameObjectWithTag(Tags.Aileron);
         elevator = GameObject.FindGameObjectWithTag(Tags.Elevator);
         rudder = GameObject.FindGameObjectWithTag(Tags.Rudder);
+
+        initializeSteers();
+    }
+
+    private void initializeSteers()
+    {
+        AileronLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
+        AileronRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
+        RudderLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.y);
+        RudderRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.y);
+        ElevatorLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
+        ElevatorRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
     }
 
 
@@ -174,8 +187,9 @@ public class Aircraft : IAircraft
         //all initialized
         //It is necessary to adjust provided model to initial position
         float angle = -30;
-        RotateAileron(angle, false);
-        RotateElevator(angle, false);
+        rotateObject(AileronLeft, -angle, false);
+        rotateObject(AileronRight, angle, false);
+        RotateElevator(-angle, false);
         
         AileronLeft.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
         AileronRight.GetComponent<ColliderHandler>().InverseInitialRotation = Quaternion.Euler(-angle, 0, 0);
@@ -186,65 +200,64 @@ public class Aircraft : IAircraft
 
     }
 
-    private void rotateObject(GameObject gameObject, float delta, float maxOffset, bool checkRequired = true)
+    private void rotateObject(GameObject gameObject, float delta, bool checkRequired = true)
     {
-        var bounds = gameObject.GetComponent<MeshRenderer>().bounds;
         var colliderHandler = gameObject.GetComponent<ColliderHandler>();
-        var relativeAxis = colliderHandler.RelativeAxis;
-        GameObject g = new GameObject();
-        g.transform.position = gameObject.transform.position;
-        g.transform.rotation = gameObject.transform.rotation;
-        g.transform.RotateAround(colliderHandler.CenterOfRotation, relativeAxis, delta);
-        //float angle = Quaternion.Angle(g.transform.rotation * colliderHandler.InverseInitialRotation, Body.transform.rotation);
-        float angle = Mathf.Abs((g.transform.rotation*colliderHandler.InverseInitialRotation).eulerAngles.x - Body.transform.eulerAngles.x);
-        if (gameObject.tag == Tags.RudderLeft || gameObject.tag == Tags.RudderRight)
-        {
-            angle = Mathf.Abs((g.transform.rotation * colliderHandler.InverseInitialRotation).eulerAngles.y - Body.transform.eulerAngles.y);
-        }
-        angle = clampAngle(angle)*Mathf.Rad2Deg;
-        angle = Mathf.Abs(angle);
-        if (!checkRequired || angle < maxOffset)
-        {
-            gameObject.transform.RotateAround(colliderHandler.CenterOfRotation, relativeAxis, delta);
-        }
-        Object.Destroy(g);
-    }
-
-    private float getDist(float first)
-    {
-        var dist1 = Mathf.Abs(first);
-        var dist2 = Mathf.Abs(dist1 - 360);
-        return dist1 < dist2 ? dist1 : dist2;
-    }
-
-    private bool diffAngles(Vector3 first, Vector3 second)
-    {
-        var distX = getDist(first.x - second.x);
-        var distY = getDist(first.y - second.y);
-        var distZ = getDist(first.z - second.z);
-        if (distX < rotationMaxOffset.x &&
-            distY < rotationMaxOffset.y &&
-            distZ < rotationMaxOffset.z)
-            return true;
-        return false;
+        colliderHandler.Rotate(delta, checkRequired);
     }
 
     public void RotateAileron(float delta, bool checkRequired = true)
     {
-        rotateObject(AileronLeft, -delta, rotationMaxOffset.x, checkRequired);
-        rotateObject(AileronRight, delta, rotationMaxOffset.x, checkRequired);
+        rotateObject(AileronLeft, delta, checkRequired);
+        rotateObject(AileronRight, delta, checkRequired);
     }
 
     public void RotateRudder(float delta, bool checkRequired = true)
     {
-        rotateObject(RudderLeft, -delta, rotationMaxOffset.y, checkRequired);
-        rotateObject(RudderRight, delta, rotationMaxOffset.y, checkRequired);
+        rotateObject(RudderLeft, -delta, checkRequired);
+        rotateObject(RudderRight, delta, checkRequired);
     }
 
     public void RotateElevator(float delta, bool checkRequired = true)
     {
-        rotateObject(ElevatorLeft, delta, rotationMaxOffset.x, checkRequired);
-        rotateObject(ElevatorRight, delta, rotationMaxOffset.x, checkRequired);
+        rotateObject(ElevatorLeft, -delta, checkRequired);
+        rotateObject(ElevatorRight, -delta, checkRequired);
+    }
+
+    public void RotateInLongitudinal(float theta)
+    {
+        theta *= Mathf.Rad2Deg;
+        float delta = theta - theta_prev;
+        var rot = new Vector3(delta, 0, 0);
+        Body.transform.Rotate(rot);
+        theta_prev = theta;
+    }
+
+    public void RotateInLateral(float phi, float psi)
+    {
+        phi *= Mathf.Rad2Deg;
+        float delta = phi - phi_prev;
+        var rot = new Vector3(0, 0, -delta);
+        Body.transform.Rotate(rot);
+        phi_prev = phi;
+
+        psi *= Mathf.Rad2Deg;
+        delta = psi - psi_prev;
+        rot = new Vector3(0, delta, 0);
+        Body.transform.Rotate(rot);
+        psi_prev = psi;
+    }
+
+    public void TranslateInLongitudinal()
+    {
+        var velocity = new Vector3(Velocity.x, Velocity.y, 0);
+        Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
+    }
+
+    public void TranslateInLateral()
+    {
+        var velocity = new Vector3(0, 0, Velocity.z);
+        Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
     }
 
     public void RotateAircraft(float deltaAileron, float deltaRudder, float deltaElevator)
@@ -261,13 +274,5 @@ public class Aircraft : IAircraft
         roll.GetComponent<Text>().text = (Phi * Mathf.Rad2Deg).ToString(format);
         pitch.GetComponent<Text>().text = (Theta * Mathf.Rad2Deg).ToString(format);
         yaw.GetComponent<Text>().text = (Psi * Mathf.Rad2Deg).ToString(format);
-    }
-
-
-    private float clampAngle(float angle)
-    {
-        if (angle >= 180)
-            angle = -(360 - angle);
-        return angle * Mathf.Deg2Rad;
     }
 }
