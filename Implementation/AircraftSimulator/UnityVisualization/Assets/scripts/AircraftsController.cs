@@ -33,6 +33,6 @@ public class AircraftsController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+	    aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
+    }
 }

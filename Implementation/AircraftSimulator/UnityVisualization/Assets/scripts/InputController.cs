@@ -27,7 +27,7 @@ public class InputController : MonoBehaviour {
     }
 
 
-    private Vector3 steeringSensitivity = new Vector3(0.3f, 0.05f, 0.3f);
+    private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
     void testKeyboard()
     {
         float deltaAileron, deltaRudder, deltaElevator;

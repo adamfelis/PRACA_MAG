@@ -58,14 +58,16 @@ namespace Assets.scripts.Data_Manipulation
         {
             var aircraft = aircraftsController.aircraft;
             //velocity in X axis (u)
-            aircraft.Velocity.x = data.Array[0][0];
+            //aircraft.Velocity.x = data.Array[0][0];
+            var velocityX = data.Array[0][0];
             //velocity in Z axis (w)
-            aircraft.Velocity.y = data.Array[0][1];
+            //aircraft.Velocity.y = data.Array[0][1];
+            var velocityY = data.Array[0][1];
             //rotary velocity in y axis (q)
             var q = data.Array[0][2];
             aircraft.q = q;
 
-            aircraft.TranslateInLongitudinal();
+            //aircraft.TranslateInLongitudinal(velocityX, velocityY);
             var theta = data.Array[0][3];
             aircraft.RotateInLongitudinal(theta);
         }
@@ -74,7 +76,8 @@ namespace Assets.scripts.Data_Manipulation
         {
             var aircraft = aircraftsController.aircraft;
             //velocity in Y axis (v)
-            aircraft.Velocity.z = data.Array[0][0];
+            //aircraft.Velocity.z = data.Array[0][0];
+            var velocityZ = data.Array[0][0];
             //rotary velocity in X axis (p)
             aircraft.p = data.Array[0][1];
             //rotary velocity in Z axis (r)
@@ -84,7 +87,7 @@ namespace Assets.scripts.Data_Manipulation
             //psi
             var psi = data.Array[0][4];
 
-            aircraft.TranslateInLateral();
+            aircraft.TranslateInLateral(velocityZ);
             aircraft.RotateInLateral(phi, psi);
         }
     }

@@ -22,11 +22,12 @@ public class Aircraft : IAircraft
     private GameObject roll, pitch, yaw;
     private GameObject aileron, elevator, rudder;
     private Vector3 rotationMaxOffset;
-    private const float angle = 20;
+    private const float angle = 40;
     private Quaternion initialInverseRotation;
 
     private float theta_prev, psi_prev, phi_prev;
 
+    public IAircraftInterpolator aircraftInterpolator;
 
     #region Velocities
     public Vector3 Velocity;
@@ -92,7 +93,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return theta_prev*Mathf.Deg2Rad;
+            return aircraftInterpolator.TargetTheta * Mathf.Deg2Rad;
         }
     }
     /// <summary>
@@ -102,7 +103,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return psi_prev * Mathf.Deg2Rad;
+            return aircraftInterpolator.TargetPsi * Mathf.Deg2Rad;
         }
     }
     /// <summary>
@@ -112,7 +113,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return phi_prev * Mathf.Deg2Rad;
+            return aircraftInterpolator.TargetPhi * Mathf.Deg2Rad;
         }
     }
 
@@ -138,6 +139,7 @@ public class Aircraft : IAircraft
         rotationMaxOffset = new Vector3(angle, angle, angle);
         Velocity_0 = new Vector3(0, 0, 178);
         initialInverseRotation = Quaternion.Inverse(Body.transform.rotation);
+        aircraftInterpolator = new AircraftInterpolator(Body);
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));
@@ -227,35 +229,42 @@ public class Aircraft : IAircraft
     public void RotateInLongitudinal(float theta)
     {
         theta *= Mathf.Rad2Deg;
-        float delta = theta - theta_prev;
-        var rot = new Vector3(delta, 0, 0);
-        Body.transform.Rotate(rot);
-        theta_prev = theta;
+        aircraftInterpolator.TargetTheta = theta;
     }
 
     public void RotateInLateral(float phi, float psi)
     {
         phi *= Mathf.Rad2Deg;
+        psi *= Mathf.Rad2Deg;
+        aircraftInterpolator.TargetPhi = phi;
+        aircraftInterpolator.TargetPsi = psi;
+        return;
+
         float delta = phi - phi_prev;
         var rot = new Vector3(0, 0, -delta);
         Body.transform.Rotate(rot);
         phi_prev = phi;
 
-        psi *= Mathf.Rad2Deg;
+
         delta = psi - psi_prev;
         rot = new Vector3(0, delta, 0);
         Body.transform.Rotate(rot);
         psi_prev = psi;
     }
 
-    public void TranslateInLongitudinal()
+    public void TranslateInLongitudinal(float velocityX, float velocityY)
     {
+        aircraftInterpolator.TargetVelocityX = velocityX;
+        aircraftInterpolator.TargetVelocityY = velocityY;
+        return;
         var velocity = new Vector3(Velocity.x, Velocity.y, 0);
         Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
     }
 
-    public void TranslateInLateral()
+    public void TranslateInLateral(float velocityZ)
     {
+        aircraftInterpolator.TargetVelocityZ = velocityZ;
+        return;
         var velocity = new Vector3(0, 0, Velocity.z);
         Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
     }
