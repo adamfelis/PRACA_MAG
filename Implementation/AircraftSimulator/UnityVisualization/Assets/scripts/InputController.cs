@@ -14,11 +14,6 @@ public class InputController : MonoBehaviour {
 
     void Update()
     {
-
-    }
-
-    void LateUpdate()
-    {
         Horizontal = horizontalSpeed * Input.GetAxis("Mouse X");
         Vertical = verticalSpeed * Input.GetAxis("Mouse Y");
         //transform.Rotate(Vertical, Horizontal, 0);
@@ -54,8 +49,7 @@ public class InputController : MonoBehaviour {
             deltaRudder = 1.0f;
         }
         #endregion
-
-
+        
         #region rolling
         if (Input.GetKey(KeyCode.A))
         {

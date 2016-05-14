@@ -32,6 +32,9 @@ public class Aircraft : IAircraft
     #region Velocities
     public Vector3 Velocity;
     public Vector3 Velocity_0;
+    public float Theta_0;
+    public float Psi_0;
+    public float Phi_0;
     public float V_0
     {
         get { return Velocity_0.z; }
@@ -134,12 +137,22 @@ public class Aircraft : IAircraft
     }
     #endregion
 
-    public void Initialize()
+    private void initializeFlightConditions()
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
         Velocity_0 = new Vector3(0, 0, 178);
+        Theta_0 = 0.0f;//9.4f;
+        aircraftInterpolator.TargetTheta = Theta_0;
+        aircraftInterpolator.Interpolate(1.0f, 1.0f);
+    }
+
+    public void Initialize()
+    {
+        
         initialInverseRotation = Quaternion.Inverse(Body.transform.rotation);
         aircraftInterpolator = new AircraftInterpolator(Body);
+
+        
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));
@@ -164,6 +177,7 @@ public class Aircraft : IAircraft
         elevator = GameObject.FindGameObjectWithTag(Tags.Elevator);
         rudder = GameObject.FindGameObjectWithTag(Tags.Rudder);
 
+        initializeFlightConditions();
         initializeSteers();
     }
 
@@ -238,35 +252,17 @@ public class Aircraft : IAircraft
         psi *= Mathf.Rad2Deg;
         aircraftInterpolator.TargetPhi = phi;
         aircraftInterpolator.TargetPsi = psi;
-        return;
-
-        float delta = phi - phi_prev;
-        var rot = new Vector3(0, 0, -delta);
-        Body.transform.Rotate(rot);
-        phi_prev = phi;
-
-
-        delta = psi - psi_prev;
-        rot = new Vector3(0, delta, 0);
-        Body.transform.Rotate(rot);
-        psi_prev = psi;
     }
 
     public void TranslateInLongitudinal(float velocityX, float velocityY)
     {
         aircraftInterpolator.TargetVelocityX = velocityX;
         aircraftInterpolator.TargetVelocityY = velocityY;
-        return;
-        var velocity = new Vector3(Velocity.x, Velocity.y, 0);
-        Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
     }
 
     public void TranslateInLateral(float velocityZ)
     {
         aircraftInterpolator.TargetVelocityZ = velocityZ;
-        return;
-        var velocity = new Vector3(0, 0, Velocity.z);
-        Body.transform.Translate(velocity * Time.fixedDeltaTime, Space.World);
     }
 
     public void RotateAircraft(float deltaAileron, float deltaRudder, float deltaElevator)

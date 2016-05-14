@@ -11,6 +11,7 @@ using Common.AircraftData;
 using Common.EventArgs;
 using Common.Containers;
 using Random = System.Random;
+using UnityEngine.Networking;
 
 public class Communication : MonoBehaviour, ICommunication
 {
@@ -26,14 +27,28 @@ public class Communication : MonoBehaviour, ICommunication
 
     private void Initialize()
     {
-
-        aircraftsController = GetComponent<AircraftsController>();
-
+        var gameObjects = GameObject.FindGameObjectsWithTag(Tags.Player);
+        foreach (GameObject gameobject in gameObjects)
+        {
+            if (gameobject.GetComponent<Player_ID>().isLocalPlayer)
+            {
+                aircraftsController = gameobject.GetComponent<AircraftsController>();
+                break;
+            }
+        }
+      
         dataHandler = new DataHandler(this, aircraftsController);
         dataReader = new DataReader(dataHandler, this);
         dataWriter = new DataWriter(dataReader, this, aircraftsController);
 
         dataHandler.ClientResponseHandler += dataWriter.SendInputToServer;
+        subscribeForClientDisconnection();
+    }
+
+    private void subscribeForClientDisconnection()
+    {
+        var gameObject = GameObject.FindGameObjectWithTag(Tags.NetworkManager);
+        gameObject.GetComponent<CustomNetworkManager>().ClientDisconnected += dataWriter.DisconnectFromServer;
     }
 
     private void Start()

@@ -3,16 +3,17 @@ using System.Collections;
 
 public static class Tags
 {
-    public static GameObject FindGameObjectWithTagInParent(GameObject parent, string tag)
+    public static GameObject FindGameObjectWithTagInParent(string tag, string name)
     {
         GameObject[] arr = GameObject.FindGameObjectsWithTag(tag);
         foreach (var gameObject in arr)
         {
-            if (gameObject.transform.root.tag == parent.tag)
+            if (gameObject.transform.root.name == name)
                 return gameObject;
         }
         return null;
     }
+
     public static string F35 = "F35";
     public static string F15 = "F15";
     public static string RudderLeft = "RudderLeft";
@@ -27,5 +28,11 @@ public static class Tags
     public static string Aileron = "Aileron";
     public static string Elevator = "Elevator";
     public static string Rudder = "Rudder";
-
+    public static string Player = "Player";
+    public static string ServerLatency = "ServerLatency";
+    public static string NetworkManager = "NetworkManager";
+    public static string NetworkIPInput = "NetworkIPInput";
+    public static string ButtonJoinGame = "ButtonJoinGame";
+    public static string ButtonStartHost = "ButtonStartHost";
+    public static string ButtonDisconnect = "ButtonDisconnect";
 }

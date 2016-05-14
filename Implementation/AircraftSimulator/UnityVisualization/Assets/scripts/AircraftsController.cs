@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.scripts;
+using UnityEngine.Networking;
 
 public enum AircraftType
 {
@@ -8,31 +9,40 @@ public enum AircraftType
     F35
 }
 
-public class AircraftsController : MonoBehaviour
+public class AircraftsController : NetworkBehaviour
 {
     public Aircraft aircraft;
-	// Use this for initialization
-	void Start ()
+    public event NotifierHandler Initialized;
+    // Use this for initialization
+    void Start ()
 	{
-        GameObject body = GameObject.FindGameObjectWithTag(Tags.F15);
+        //var aircraftModel = GameObject.FindGameObjectWithTag(Tags.F15);
+	    GameObject body = this.gameObject;
         aircraft = new Aircraft()
 	    {
 	        Body = body,
-            RudderLeft = Tags.FindGameObjectWithTagInParent(body, Tags.RudderLeft),
-            RudderRight = Tags.FindGameObjectWithTagInParent(body, Tags.RudderRight),
-            ElevatorLeft = Tags.FindGameObjectWithTagInParent(body, Tags.ElevatorLeft),
-            ElevatorRight = Tags.FindGameObjectWithTagInParent(body, Tags.ElevatorRight),
-            AileronLeft = Tags.FindGameObjectWithTagInParent(body, Tags.AileronLeft),
-            AileronRight = Tags.FindGameObjectWithTagInParent(body, Tags.AileronRight)
+            RudderLeft = Tags.FindGameObjectWithTagInParent(Tags.RudderLeft, name),
+            RudderRight = Tags.FindGameObjectWithTagInParent(Tags.RudderRight, name),
+            ElevatorLeft = Tags.FindGameObjectWithTagInParent(Tags.ElevatorLeft, name),
+            ElevatorRight = Tags.FindGameObjectWithTagInParent(Tags.ElevatorRight, name),
+            AileronLeft = Tags.FindGameObjectWithTagInParent(Tags.AileronLeft, name),
+            AileronRight = Tags.FindGameObjectWithTagInParent(Tags.AileronRight, name)
         };
         aircraft.Initialize();
-	    Camera.main.GetComponent<CameraSmoothFollow>().target = aircraft.Body.transform;
-	    Camera.main.GetComponent<CameraSmoothFollow>().enabled = true;
-	    Camera.main.GetComponent<InputController>().aircraft = aircraft;
+	    if (isLocalPlayer)
+	    {
+	        Camera.main.GetComponent<CameraSmoothFollow>().target = aircraft.Body.transform;
+	        Camera.main.GetComponent<CameraSmoothFollow>().enabled = true;
+	        Camera.main.GetComponent<InputController>().aircraft = aircraft;
+	        Camera.main.GetComponent<InputController>().enabled = true;
+	        Camera.main.GetComponent<Communication>().enabled = true;
+	    }
+        Initialized.Invoke();
     }
 	
 	// Update is called once per frame
 	void Update () {
-	    aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
+        if (isLocalPlayer)
+	        aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
     }
 }
