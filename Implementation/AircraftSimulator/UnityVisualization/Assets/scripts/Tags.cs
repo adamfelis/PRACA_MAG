@@ -31,8 +31,17 @@ public static class Tags
     public static string Player = "Player";
     public static string ServerLatency = "ServerLatency";
     public static string NetworkManager = "NetworkManager";
-    public static string NetworkIPInput = "NetworkIPInput";
-    public static string ButtonJoinGame = "ButtonJoinGame";
-    public static string ButtonStartHost = "ButtonStartHost";
+
+
+    #region controls ui - menu scene
+    public static string InputLocalAddress = "InputLocalAddress";
+    public static string ButtonStartLocal = "ButtonStartLocal";
+    public static string ButtonStartRemote = "ButtonStartRemote";
+    public static string ButtonJoinLocal = "ButtonJoinLocal";
+    public static string ButtonJoinRemote = "ButtonJoinRemote";
+    public static string InputRoom = "InputRoom";
+    public static string DropdownRemoteAddress = "DropdownRemoteAddress";
     public static string ButtonDisconnect = "ButtonDisconnect";
+    #endregion
+
 }
