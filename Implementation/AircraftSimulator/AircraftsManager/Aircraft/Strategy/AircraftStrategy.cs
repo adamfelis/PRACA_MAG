@@ -12,9 +12,6 @@ namespace AircraftsManager.Aircraft.Strategy
 {
     abstract class AircraftStrategy : Common.Strategy
     {
-        //protected string longitudinalDataFileName;
-        //protected string lateralDataFileName;
-
         protected string aircraftDataFileName;
         protected List<IData> longitudinalData;
         protected List<IData> lateralData;
@@ -37,14 +34,35 @@ namespace AircraftsManager.Aircraft.Strategy
         private float P_e;
         private float R_e;
 
+        private IData additionalInformation;
+        public IData AdditionalInformation
+        {
+            get
+            {
+                longitudinal_simulation_index = 0;
+                return additionalInformation;
+            }
+        }
+
         protected AircraftParameters aircraftParameters;
         internal abstract List<IData> GetLongitudinalData(IData additionalInformation = null);
         internal abstract List<IData> GetLateralData(IData additionalInformation = null);
         internal abstract List<IData> GetLongitudinalInitialData(IData additionalInformation);
         internal abstract List<IData> GetLateralInitialData(IData additionalInformation);
 
+        private List<IData> matrixes;
+
+        public List<IData> Matrixes
+        {
+            get
+            {
+                return matrixes;
+            }
+        }
+
         protected override void Initialize()
         {
+            matrixes = new List<IData>();
             aircraftParameters = GetData(aircraftDataFileName);
             lateralData = null;
             longitudinalData = null;
@@ -61,7 +79,7 @@ namespace AircraftsManager.Aircraft.Strategy
                     parameters = (AircraftParameters)serializer.Deserialize(reader);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new global::Common.Exceptions.XMLFileNotFoundException();
             }
@@ -70,6 +88,7 @@ namespace AircraftsManager.Aircraft.Strategy
 
         protected List<IData> PrepareLongitudinalMatrixes(IData additionalInformation)
         {
+            this.additionalInformation = additionalInformation;
             #region A, B calculations
             const int A_size = 4;
             float m_prim = aircraftParameters.m / (0.5f * aircraftParameters.p * aircraftParameters.S);
@@ -161,6 +180,9 @@ namespace AircraftsManager.Aircraft.Strategy
             List<IData> preparedLongitudinalData = new List<IData>();
             preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray_longitudinal, Sender = "A_longitudinal" });
             preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray_longitudinal, Sender = "B_longitudinal" });
+
+            matrixes.AddRange(preparedLongitudinalData);
+
             return preparedLongitudinalData;
         }
 
@@ -251,6 +273,9 @@ namespace AircraftsManager.Aircraft.Strategy
             List<IData> preparedLateralData = new List<IData>();
             preparedLateralData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray_lateral, Sender = "A_lateral" });
             preparedLateralData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray_lateral, Sender = "B_lateral" });
+
+            matrixes.AddRange(preparedLateralData);
+
             return preparedLateralData;
         }
 

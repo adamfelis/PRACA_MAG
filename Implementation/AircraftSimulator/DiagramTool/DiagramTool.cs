@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.Tool;
+using System.Windows.Controls;
+using ToolAdapter.Tool;
+using System.Windows.Media;
+using Common.Containers;
 
 namespace DiagramTool
 {
-    public sealed class DiagramTool : ITool
+    public sealed class DiagramTool : Common.Initializer, ToolAdapter.Tool.ITool
     {
         private ToolType toolType;
         public ToolType ToolType
@@ -15,6 +18,23 @@ namespace DiagramTool
             get
             {
                 return toolType;
+            }
+        }
+        private TabItem tabItem;
+        public TabItem TabItem
+        {
+            get
+            {
+                return tabItem;
+            }
+        }
+
+        private ConcreteObserver.ConcreteToolManagerObserver observer;
+        public IObserver<IData> Observer
+        {
+            get
+            {
+                return observer;
             }
         }
 
@@ -26,6 +46,27 @@ namespace DiagramTool
         public DiagramTool(ToolType toolType)
         {
             this.toolType = toolType;
+            this.tabItem = new TabItem();
+            Initialize();
+            this.observer = new ConcreteObserver.ConcreteToolManagerObserver(this.viewModel);
+        }
+
+        private Content.ViewModel viewModel;
+
+        protected override void Initialize()
+        {
+            this.tabItem.Header = "Diagrams";
+
+            this.viewModel = new Content.ViewModel();
+            this.tabItem.DataContext = this.viewModel;
+            this.tabItem.Content = new Content.TabContent();
+            CompositionTarget.Rendering += CompositionTargetRendering;
+        }
+
+        private void CompositionTargetRendering(object sender, EventArgs e)
+        {
+            viewModel.UpdateModel();
+            (this.tabItem.Content as Content.TabContent).Plot1Property.RefreshPlot(true);
         }
     }
 }

@@ -47,6 +47,12 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
                 case Common.Scripts.SpecialScriptType.WorkspaceInitializator:
                     result = new ConcreteMethods.ConcreteMethodImplementorWorkspaceInitializator();
                     break;
+                case Common.Scripts.SpecialScriptType.StrategyCreator:
+                    result = new ConcreteMethods.ConcreteMethodImplementorStrategyCreator();
+                    break;
+                case Common.Scripts.SpecialScriptType.GetState:
+                    result = new ConcreteMethods.ConcreteMethodImplementorGetState();
+                    break;
                 default:
                     throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
             }

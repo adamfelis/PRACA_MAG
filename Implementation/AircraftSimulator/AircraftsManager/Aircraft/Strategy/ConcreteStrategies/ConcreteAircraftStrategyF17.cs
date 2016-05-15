@@ -18,12 +18,18 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
         }
         internal override List<IData> GetLateralData(IData additionalInformation = null)
         {
+            if (additionalInformation == null)
+                return this.lateralData;
+            this.lateralData = PrepareLateralData(additionalInformation);
             return this.lateralData;
         }
 
         internal override List<IData> GetLongitudinalData(IData additionalInformation = null)
         {
-            return this.lateralData;
+            if (additionalInformation == null)
+                return this.longitudinalData;
+            this.longitudinalData = PrepareLongitudinalData(additionalInformation);
+            return this.longitudinalData;
         }
 
         internal override List<IData> GetLateralInitialData(IData additionalInformation)

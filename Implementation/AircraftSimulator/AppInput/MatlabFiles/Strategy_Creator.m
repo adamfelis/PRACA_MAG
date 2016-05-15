@@ -18,7 +18,8 @@ new_B_lateral = [b_lateral(1,1:2); b_lateral(1,3:4); b_lateral(1,5:6); b_lateral
 if(exist(strcat('../../AppOutput/', num2str(client_id), '.mat'), 'file') == 2) % if workspace exists
     load(strcat('../../AppOutput/', num2str(client_id)));
     aircraft.AddStrategy(new_A_longitudinal, new_B_longitudinal,...
-                                    new_A_lateral, new_B_lateral)
+                                    new_A_lateral, new_B_lateral);
+    aircraft.previous_result.StrategiesResults = [ aircraft.previous_result.StrategiesResults, aircraft.previous_result.StrategiesResults(1)];
 else % if workspace does not exist - simulation_step_from_fixed_update, simulation_time_from_AircraftStrategy_cs from Workspace_Initializator
     aircraft = Aircraft(new_A_longitudinal, new_B_longitudinal,...
                     new_A_lateral, new_B_lateral,...

@@ -1,58 +1,204 @@
-﻿<Window x:Class="Main.MainWindow"
+﻿<Controls:MetroWindow x:Class="Main.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Main"
+        xmlns:customControls="clr-namespace:Main.CustomControls"
+        xmlns:properties="clr-namespace:Main.Properties"
         mc:Ignorable="d"
         Closing ="DataWindow_Closing"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="Aircraft Simulator" WindowState="Maximized"
+                      Width="1000" Height="1000">
     <Grid>
-        <TabControl x:Name="tabControl" Margin="169,0,0,0">
-            <TabItem Header="Aircrafts Manager">
-                <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="playerBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Player: " VerticalAlignment="Top"/>
-                    <TextBlock x:Name="concretePlayerBlock" HorizontalAlignment="Left" Margin="64,10,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedItem.Name}" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="aircraftBlock" HorizontalAlignment="Left" Margin="10,47,0,0" TextWrapping="Wrap" Text="Aircraft's Type: " VerticalAlignment="Top"/>
-                    <TextBlock x:Name="concreteAircraftBlock" HorizontalAlignment="Left" Margin="107,47,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedValue.Aircraft}" VerticalAlignment="Top"/>
-                    <TextBlock x:Name="aircraftStartegiesBlock" HorizontalAlignment="Left" Margin="10,88,0,0" TextWrapping="Wrap" Text="Strategies: " VerticalAlignment="Top"/>
+        <Grid Width="300" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+
+            <ListView FontSize="18" FontWeight="Bold" Grid.Row="0" x:Name="clientsListView" Margin="10,10,10,10" BorderBrush="LightBlue" BorderThickness="4"
+            SelectionChanged="clientsListView_SelectionChanged"
+                  ItemsSource="{Binding Path=ClientsCollection}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Player ID" Width="auto" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Player Name" Width="auto" DisplayMemberBinding="{Binding Aircraft}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <Grid Grid.Row="1"  Margin="10,10,10,10">
+                <Border BorderBrush="LightBlue" BorderThickness="4"/>
+                <TextBlock FontSize="18" FontWeight="Bold" x:Name="playerBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Player: " VerticalAlignment="Top"/>
+                <TextBlock FontSize="18" x:Name="concretePlayerBlock" HorizontalAlignment="Left" Margin="170,10,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedItem.Name}" VerticalAlignment="Top"/>
+                <TextBlock FontSize="18" FontWeight="Bold" x:Name="aircraftBlock" HorizontalAlignment="Left" Margin="10,50,0,0" TextWrapping="Wrap" Text="Aircraft's Type: " VerticalAlignment="Top"/>
+                <TextBlock FontSize="18" x:Name="concreteAircraftBlock" HorizontalAlignment="Left" Margin="170,50,0,0" TextWrapping="Wrap" Text="{Binding ElementName=clientsListView, Path=SelectedValue.Aircraft}" VerticalAlignment="Top"/>
+            </Grid>
+        </Grid>
+
+        <TabControl x:Name="tabControl" Margin="310,10,10,10" BorderBrush="LightBlue" BorderThickness="4">
+            <TabItem Name="aaaaa" Header="Shooter">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="0.25*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.18*"/>
+                        <RowDefinition Height="0.07*"/>
+                        <RowDefinition Height="0.05*"/>
+                        <RowDefinition Height="0.2*"/>
+                        <RowDefinition Height="0.05*"/>
+                        <RowDefinition Height="0.2*"/>
+                        <RowDefinition Height="0.2*"/>
+                        <RowDefinition Height="0.05*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Name="availableStrategies_textblock" Grid.Column="0" Grid.Row="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Available Strategies: " VerticalAlignment="Top" Visibility="Hidden"/>
+                    <ListBox Name="AvailableStrategies" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,40,10,10"
+                             ItemsSource="{Binding Path=StrategiesImages}"  HorizontalContentAlignment="Left" Padding="5" 
+                             AllowDrop="True" SelectionChanged="AvailableStrategies_SelectionChanged" Visibility="Hidden">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                    <Controls:Flyout Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="6" 
+                                     Header="Shooter Strategies Management" Position="Right" Name="shooter_strategies_flyout"
+                                     Background="LightSkyBlue" Foreground="Black" Margin="0">
+
+                        <Grid Width="{Binding ElementName=shooter_strategies_flyout, Path=Width}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.3*"/>
+                                <RowDefinition Height="0.56*"/>
+                                <RowDefinition Height="0.14*"/>
+                            </Grid.RowDefinitions>
+                            <ListBox Grid.Row="0" Margin="10,10,10,10" Background="LightBlue" Name="optional_strategies"
+                             ItemsSource="{Binding Path=OptionalStrategiesImages}"  HorizontalContentAlignment="Left" Padding="5" AllowDrop="True">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                            <Controls:FlipView  Grid.Row="1" Name="flip_view_strategies"
+                                         IsBannerEnabled="True" 
+                                          Margin="10,10,10,10"
+                                           />
+
+                            <Button Foreground="Black" Grid.Row="2" Name="addStrategiesButton" Grid.Column="0" Height="70" Width="70"
+                                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Padding="-5"
+                            Content="{StaticResource appbar_add}" Style="{DynamicResource MetroCircleButtonStyle}" Visibility="Visible"
+                                    Click="addStrategiesButton_Click"/>
+                            
+                        </Grid>
+                    </Controls:Flyout>
+                    <TextBlock Name="A_lateral_textblock" Grid.Column="0" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_A_lateral" Margin="10,10,10,10" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Path=A_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[1]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[2]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[3]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[4]}" MinWidth="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Name="B_lateral_textblock"  Grid.Column="1" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_B_lateral" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Path=B_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[1]}" MinWidth="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Name="A_longitudinal_textblock"  Grid.Column="0" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_A_longitudinal" Margin="10,10,10,10" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Path=A_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[1]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[2]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[3]}" MinWidth="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Name="B_longitudinal_textblock" Grid.Column="1" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_B_longitudinal" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
+                              ItemsSource="{Binding Path=B_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
+                            <DataGridTextColumn Binding="{Binding Path=[1]}" MinWidth="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6" Grid.RowSpan="2" Header="Strategy Properties" Position="Bottom" Name="shooter_properties_flyout"
+                                     Background="LightBlue">
+
+                    </Controls:Flyout>
+
+                    <Button Name="manageStrategiesButton" Grid.Column="0" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="10,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_app_plus}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesButton_Click"  Visibility="Hidden"/>
+                    <Button Name="manageStrategiesPropertiesButton" Grid.Column="0" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="90,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_settings}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesPropertiesButton_Click" Visibility="Hidden"/>
+                    <Button Name="manageStrategiesHelpButton" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="170,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_question}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesHelpButton_Click" Visibility="Hidden"/>
+
+
+                    <!--<Controls:FlipView Name="flip_view_strategies" Grid.Column="1"
+                                         ItemsSource="{Binding Path=StrategiesImages}" IsBannerEnabled="True" 
+                                         BannerText="{Binding ElementName=flip_view_strategies, Path=SelectedValue.BannerContent}"
+                                           >
+
+                        -->
+                    <!--BannerText="{Binding ElementName=flip_view_strategies, Path=SelectedValue.StrategyGrid.StrategyImage.Tag}"-->
+                    <!--<Controls:FlipView.Items>
+                                -->
+                    <!--<Image Source="Resources/F16.png" Opacity="0.5" Name="F16"/>
+                                <Image Source="Resources/F16.png" Opacity="0.5" Name="F17"/>-->
+                    <!--
+                                <customControls:ShooterStrategy></customControls:ShooterStrategy>
+                            </Controls:FlipView.Items>-->
+                    <!--
+                    </Controls:FlipView>
+                    
+
+                    <Button x:Name="button1" Content="Button" Height="100" Width="75" Click="button1_Click" Margin="48,10,285.5,453.527"/>
+
+
+
                     <ComboBox x:Name="aircraftStrategiesComboBox" HorizontalAlignment="Left" Margin="107,88,0,0" VerticalAlignment="Top" Width="120"
-                              ItemsSource="{Binding Path=StrategiesCollection}"/>
-                    <Button x:Name="manageStrategiesButton" Content="Add extra strategy" HorizontalAlignment="Left" Margin="262,88,0,0" VerticalAlignment="Top" Width="auto" Click="manageStrategiesButton_Click"
-                           />
-                    <TextBlock x:Name="longitudinalMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Longitudinal matrix: " VerticalAlignment="Top" Margin="262,143,0,0"/>
-                    <TextBlock x:Name="lateralMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lateral matrix: " VerticalAlignment="Top" Margin="76,143,0,0"/>
-                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="180" Margin="10,128,0,0" VerticalAlignment="Top" Width="452">
-                        
-                    </Border>
+                              ItemsSource="{Binding Path=StrategiesCollection}" SelectedIndex="0" SelectionChanged="aircraftStrategiesComboBox_SelectionChanged"/>
+                        <Button x:Name="manageStrategiesButton" Content="Add extra strategy" HorizontalAlignment="Left" Margin="262,88,0,0" VerticalAlignment="Top" Width="auto" Click="manageStrategiesButton_Click"/>
+                        <TextBlock x:Name="longitudinalMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Longitudinal matrix: " VerticalAlignment="Top" Margin="454,143,0,0"/>
+                        <TextBlock x:Name="lateralMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Lateral matrix: " VerticalAlignment="Top" Margin="76,143,0,0"/>
+
+                        <TextBlock x:Name="A_lateralMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="A matrix: " VerticalAlignment="Top" Margin="29,199,0,0"/>
+                        <TextBlock x:Name="B_lateralMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="B matrix: " VerticalAlignment="Top" Margin="29,392,0,0"/>
+                        <TextBlock x:Name="A_longitudinalMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="A matrix: " VerticalAlignment="Top" Margin="217,199,0,0"/>
+                        <TextBlock x:Name="B_longitudinalMatrixBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="B matrix: " VerticalAlignment="Top" Margin="403,349,0,0"/>
+                        -->
+
                 </Grid>
             </TabItem>
-            <TabItem Header="Math Tool">
-                <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="activeAlgorithm" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Active Algorithm: " VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-                    <ComboBox x:Name="algorithmsComboBox" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" Width="120"
+            <TabItem Header="Missiles">
+            </TabItem>
+            <TabItem Header="Matlab">
+                <Grid>
+                    <TextBlock x:Name="activeAlgorithm" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Active Algorithm: " VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                    <ComboBox x:Name="algorithmsComboBox" FontSize="18" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" Width="160"
                               ItemsSource="{Binding Path=AlgorithmsCollection}" SelectedIndex="0" SelectionChanged="algorithmsComboBox_SelectionChanged"/>
-                    <TextBlock x:Name="algorithmParameters" HorizontalAlignment="Left" Margin="10,53,0,0" TextWrapping="Wrap" Text="Algorithm parameters: " VerticalAlignment="Top"/>
+                    <TextBlock x:Name="algorithmParameters" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,53,0,0" TextWrapping="Wrap" Text="Algorithm parameters: " VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>
-        <ListView x:Name="clientsListView" HorizontalAlignment="Left" Width="169" 
-            SelectionChanged="clientsListView_SelectionChanged"
-                  ItemsSource="{Binding Path=ClientsCollection}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Player" Width="auto" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="Aircraft" Width="auto" DisplayMemberBinding="{Binding Aircraft}"/>
-                </GridView>
-            </ListView.View>
-            <!--<Style x:Key="clientListViewStyle" TargetType="{x:Type ListView}">
-                <Style.Triggers>
-                    <Trigger Property="SelectedValue" Value="{x:Null}">
-                        <Setter TargetName="addStrategyButton" Property="IsEnabled" Value="False"></Setter>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>-->
-        </ListView>
+
 
     </Grid>
-</Window>
+</Controls:MetroWindow>

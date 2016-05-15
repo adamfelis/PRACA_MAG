@@ -12,7 +12,7 @@ classdef Results < handle
         end
         % Add next concrete result
         function AddStrategyResult(obj, longitudinal_result, lateral_result, position)
-           obj.StrategiesResults = [obj.StrategiesResults, Result(longitudinal_result, lateral_result, position)];
+           obj.StrategiesResults = [obj.StrategiesResults; Result(longitudinal_result, lateral_result, position)];
         end
         % Present data in the float[][] form
         function result = PresentFinalResults(obj)

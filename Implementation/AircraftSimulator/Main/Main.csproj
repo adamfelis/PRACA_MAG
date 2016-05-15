@@ -37,11 +37,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Main.ApplicationStartup</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=1.2.4.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\MahApps.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OxyPlot">
+      <HintPath>..\DiagramTool\AdditionalDLLs\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf">
+      <HintPath>..\DiagramTool\AdditionalDLLs\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Xps">
+      <HintPath>..\DiagramTool\AdditionalDLLs\OxyPlot.Xps.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -57,19 +77,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationDataContext\ApplicationDataContext.cs" />
+    <Compile Include="App.cs" />
     <Compile Include="ApplicationStartup.cs" />
     <Compile Include="Common\Dispatchable.cs" />
     <Compile Include="Common\IDispatchable.cs" />
+    <Compile Include="CustomControls\ShooterStrategy.xaml.cs">
+      <DependentUpon>ShooterStrategy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ExtraWindows\AircraftsStrategiesManagement.xaml.cs">
       <DependentUpon>AircraftsStrategiesManagement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ServerCommunication\ExplicitServerCommunication.cs" />
     <Compile Include="ServerCommunication\IServerCommunication.cs" />
     <Compile Include="ServerCommunication\ServerCommunication.cs" />
+    <Compile Include="StrategyControl.xaml.cs">
+      <DependentUpon>StrategyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolsManagerCommunication\IToolsManagerCommunication.cs" />
     <Compile Include="AircraftsManagerCommunication\IAircraftsManagerCommunicationImplementor.cs" />
     <Compile Include="ToolsManagerCommunication\IToolsManagerCommunicationImplementor.cs" />
     <Compile Include="ToolsManagerCommunication\ToolsManagerCommunication.cs" />
+    <Page Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControls\ShooterStrategy.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExtraWindows\AircraftsStrategiesManagement.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -85,15 +125,22 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\IconsNonShared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StrategyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -101,9 +148,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -134,10 +182,35 @@
       <Project>{1b653224-b39a-4ffb-8222-9ffc76e20cef}</Project>
       <Name>Server</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ToolAdapter\ToolAdapter.csproj">
+      <Project>{df4a78b4-e515-4912-b3d3-f72a61ed1f4f}</Project>
+      <Name>ToolAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ToolsManager\ToolsManager.csproj">
       <Project>{3aafffa9-1772-4453-825c-6459a91a97b7}</Project>
       <Name>ToolsManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\F16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\F17.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\F16_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\F17_small.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

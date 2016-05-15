@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\BIN\DiagramTool\</OutputPath>
+    <OutputPath>..\AppInput\DLLFiles\</OutputPath>
     <IntermediateOutputPath>..\..\..\..\OBJ\DiagramTool\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -32,16 +32,38 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OxyPlot, Version=2013.1.38.1, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>AdditionalDLLs\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf, Version=2013.1.38.1, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>AdditionalDLLs\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Xps, Version=2013.1.38.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>AdditionalDLLs\OxyPlot.Xps.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Content\TabContent.xaml.cs">
+      <DependentUpon>TabContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Content\ViewModel.cs" />
     <Compile Include="DiagramTool.cs" />
     <Compile Include="ConcreteObserver\ConcreteToolManagerObserver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -55,6 +77,16 @@
       <Project>{4b2f41ba-76b7-4371-8e72-f66250be173b}</Project>
       <Name>Patterns</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ToolAdapter\ToolAdapter.csproj">
+      <Project>{df4a78b4-e515-4912-b3d3-f72a61ed1f4f}</Project>
+      <Name>ToolAdapter</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Content\TabContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

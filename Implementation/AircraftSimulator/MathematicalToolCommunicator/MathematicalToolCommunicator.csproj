@@ -46,13 +46,17 @@
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorInverse.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorLaplaceTransform.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorRungeKutta.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorGetState.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorStrategyCreator.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorWorkspaceInitializator.cs" />
     <Compile Include="CommunicationBridge\Methods\MethodImplementor.cs" />
     <Compile Include="CommunicationBridge\RefinedMathToolCommunicator.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\MathToolFacade.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptInverse.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptLaplaceTransform.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptGetState.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptRungeKutta.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptStrategyCreator.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptWorkspaceInitializator.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\InvalidScriptTypeException.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\Parameters\ConcreteParameters\Matrix.cs" />

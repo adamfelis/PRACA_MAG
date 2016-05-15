@@ -141,7 +141,7 @@ public class Communication : MonoBehaviour, IClientPrivileges
 
         var position = aircraft.Body.transform.localPosition;
         position.x += aircraft.Velocity.z * Time.fixedDeltaTime;
-        position.y += -aircraft.Velocity.y * Time.fixedDeltaTime;
+        position.y += aircraft.Velocity.y * Time.fixedDeltaTime;
         position.z += -aircraft.Velocity.x * Time.fixedDeltaTime;
         aircraft.Body.transform.localPosition = position;
         //theta is angle attack

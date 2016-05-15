@@ -2,6 +2,7 @@
 using Main.AircraftsManagerCommunication;
 using Main.ServerCommunication;
 using Main.ToolsManagerCommunication;
+using System;
 
 namespace Main
 {
@@ -51,6 +52,11 @@ namespace Main
         {
             toolsManagerCommunication = new ToolsManagerCommunication.ToolsManagerCommunication();
             aircraftsManagerCommunication = new AircraftsManagerCommunication.AircraftsManagerCommunication();
+        }
+
+        public void SetActionForToolsAdding(Action<ToolAdapter.Tool.ITool> toolAddedAction)
+        {
+            toolsManagerCommunication.ManagerInstance.SetActionForToolsAdding(toolAddedAction);
         }
 
         public void InformAboutDispatcher(Common.IDispatchable iDispatchable)

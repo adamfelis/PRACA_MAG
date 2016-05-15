@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Main.CustomControls.ShooterStrategy"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Main.CustomControls"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             mc:Ignorable="d">
+
+    <Grid Name="StrategyGrid">
+        <Image Name="StrategyImage"/> <!--Width="auto" Height="auto" Source="../Resources/F16.png" Tag="F16"/>-->
+
+        <Button Name="button" Height="100" Width="100"
+                            Content="{StaticResource appbar_add}" Style="{DynamicResource MetroCircleButtonStyle}"/>
+    </Grid>
+</UserControl>

@@ -12,17 +12,17 @@ namespace BackupTool.ConcreteObserver
     {
         public override void OnCompleted()
         {
-            throw new NotImplementedException();
+
         }
 
         public override void OnError(Exception error)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void OnNext(IData value)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

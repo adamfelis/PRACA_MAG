@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\BIN\BackupTool\</OutputPath>
+    <OutputPath>..\AppInput\DLLFiles\</OutputPath>
     <IntermediateOutputPath>..\..\..\..\OBJ\BackupTool\</IntermediateOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +55,10 @@
     <ProjectReference Include="..\Patterns\Patterns.csproj">
       <Project>{4b2f41ba-76b7-4371-8e72-f66250be173b}</Project>
       <Name>Patterns</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ToolAdapter\ToolAdapter.csproj">
+      <Project>{df4a78b4-e515-4912-b3d3-f72a61ed1f4f}</Project>
+      <Name>ToolAdapter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

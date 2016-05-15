@@ -8,6 +8,8 @@ namespace Common.Scripts
     public enum SpecialScriptType
     {
         Inverse,
-        WorkspaceInitializator
+        WorkspaceInitializator,
+        StrategyCreator,
+        GetState
     }
 }

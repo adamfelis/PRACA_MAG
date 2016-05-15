@@ -38,6 +38,11 @@ namespace AircraftsManager
             this.activeShooters = new Dictionary<int, Shooter.Shooter>();
             this.activeStrategies = new ObservableCollection<Shooters.ShooterType>();
             this.optionalStrategies = new ObservableCollection<Shooters.ShooterType>();
+
+            this.a_lateralMatrix = new ObservableCollection<float[]>();
+            this.b_lateralMatrix = new ObservableCollection<float[]>();
+            this.a_longitudinalMatrix = new ObservableCollection<float[]>();
+            this.b_longitudinalMatrix = new ObservableCollection<float[]>();
         }
 
         public void AddShooter(Shooters.ShooterType shooterType, int sender)
@@ -143,6 +148,20 @@ namespace AircraftsManager
             return data;
         }
 
+        public IData GetInitialAdditionalInformation(int sender)
+        {
+            Common.Strategy shooterStrategy = this.activeShooters[sender].Context.Strategies[0];
+            switch(shooterStrategy.ShooterType)
+            {
+                case Shooters.ShooterType.F16:
+                case Shooters.ShooterType.F17:
+                    return (shooterStrategy as Aircraft.Strategy.AircraftStrategy).AdditionalInformation;
+                default:
+                    throw new Common.InvalidShooterTypeException();
+            }
+
+        }
+
 
         private ObservableCollection<Shooters.ShooterType> optionalStrategies;
         public ObservableCollection<Shooters.ShooterType> OptionalStrategies
@@ -150,6 +169,16 @@ namespace AircraftsManager
             get
             {
                 return optionalStrategies;
+            }
+        }
+
+        private int activeShooter = -1;
+
+        public int ActiveShooter
+        {
+            get
+            {
+                return activeShooter;
             }
         }
 
@@ -162,9 +191,14 @@ namespace AircraftsManager
             }
         }
 
-        public void SetActiveStrategies(int sender)
+        public void SetActiveShooter(int sender)
         {
-            //ObservableCollection<Shooter.ShooterType> result = new ObservableCollection<Shooter.ShooterType>();
+            activeShooter = sender;
+            SetActiveStrategies(sender);
+        }
+
+        private void SetActiveStrategies(int sender)
+        {
             this.activeStrategies.Clear();
             this.optionalStrategies.Clear();
             foreach (Shooters.ShooterType shooterType in Enum.GetValues(typeof(Shooters.ShooterType)))
@@ -174,7 +208,6 @@ namespace AircraftsManager
             
             if (instance.activeShooters.ContainsKey(sender))
             {
-                //this.activeStrategies = instance.activeShooters[sender].Context.TypesOfStrategies;
                 foreach (Common.Strategy strategy in instance.activeShooters[sender].Context.Strategies)
                 {
                     this.activeStrategies.Add(strategy.ShooterType);
@@ -182,5 +215,90 @@ namespace AircraftsManager
                 }
             }
         }
+
+        private ObservableCollection<float[]> a_lateralMatrix;
+
+        public ObservableCollection<float[]> A_lateralMatrix
+        {
+            get
+            {
+                return a_lateralMatrix;
+            }
+        }
+
+
+        private ObservableCollection<float[]> b_lateralMatrix;
+
+        public ObservableCollection<float[]> B_lateralMatrix
+        {
+            get
+            {
+                return b_lateralMatrix;
+            }
+        }
+
+
+
+        private ObservableCollection<float[]> a_longitudinalMatrix;
+
+        public ObservableCollection<float[]> A_longitudinalMatrix
+        {
+            get
+            {
+                return a_longitudinalMatrix;
+            }
+        }
+
+
+        private ObservableCollection<float[]> b_longitudinalMatrix;
+
+        public ObservableCollection<float[]> B_longitudinalMatrix
+        {
+            get
+            {
+                return b_longitudinalMatrix;
+            }
+        }
+
+        public void SetActiveStrategy(Shooters.ShooterType? activeShooterType)
+        {
+            foreach (Common.Strategy strategy in instance.activeShooters[activeShooter].Context.Strategies)
+            {
+                if(strategy.ShooterType == activeShooterType)
+                {
+                    if(activeShooterType == Shooters.ShooterType.F16 || activeShooterType == Shooters.ShooterType.F17)
+                    {
+                        SetActiveMatrixes((strategy as Aircraft.Strategy.AircraftStrategy).Matrixes);
+                    }
+                    return;
+                }
+            }
+        }
+
+        private void SetActiveMatrixes(List<IData> matrixes)
+        {
+            a_lateralMatrix.Clear();
+            b_lateralMatrix.Clear();
+            a_longitudinalMatrix.Clear();
+            b_longitudinalMatrix.Clear();
+
+            for (int i = 0; i < matrixes[0].Array.GetLength(0); i++)
+            {
+                a_lateralMatrix.Add(matrixes[0].Array[i]);
+            }
+            for (int i = 0; i < matrixes[1].Array.GetLength(0); i++)
+            {
+                b_lateralMatrix.Add(matrixes[1].Array[i]);
+            }
+            for (int i = 0; i < matrixes[2].Array.GetLength(0); i++)
+            {
+                a_longitudinalMatrix.Add(matrixes[2].Array[i]);
+            }
+            for (int i = 0; i < matrixes[3].Array.GetLength(0); i++)
+            {
+                b_longitudinalMatrix.Add(matrixes[3].Array[i]);
+            }
+        }
+
     }
 }

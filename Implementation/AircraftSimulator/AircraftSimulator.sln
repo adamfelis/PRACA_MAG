@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patterns", "Patterns\Patterns.csproj", "{4B2F41BA-76B7-4371-8E72-F66250BE173B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolAdapter", "ToolAdapter\ToolAdapter.csproj", "{DF4A78B4-E515-4912-B3D3-F72A61ED1F4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{4B2F41BA-76B7-4371-8E72-F66250BE173B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B2F41BA-76B7-4371-8E72-F66250BE173B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B2F41BA-76B7-4371-8E72-F66250BE173B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF4A78B4-E515-4912-B3D3-F72A61ED1F4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF4A78B4-E515-4912-B3D3-F72A61ED1F4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF4A78B4-E515-4912-B3D3-F72A61ED1F4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF4A78B4-E515-4912-B3D3-F72A61ED1F4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

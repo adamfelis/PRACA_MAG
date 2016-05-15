@@ -7,10 +7,11 @@ using ToolsManager.Observator.Observing.ConcreteObserving;
 
 namespace ToolsManager.ToolsManagement
 {
+    using System.IO;
     using System.Reflection;
     class ToolsManagement : IToolsManagement
     {
-        private const string toolsPath = "ToolsDll";
+        private const string toolsPath = "DLLFiles";
 
         private ConcreteObservableSubject concreteObservableSubject;
         public ConcreteObservableSubject ConcreteObservableSubject
@@ -21,27 +22,30 @@ namespace ToolsManager.ToolsManagement
             }
         }
 
-        internal ToolsManagement()
+        internal ToolsManagement(Action<ToolAdapter.Tool.ITool> toolAddedAction)
         {
             concreteObservableSubject = new ConcreteObservableSubject();
-            InitializeTools();
+            InitializeTools(toolAddedAction);
         }
 
-        private void InitializeTools()
+        private void InitializeTools(Action<ToolAdapter.Tool.ITool> toolAddedAction)
         {
-            //strange tests
-            //string s = AppDomain.CurrentDomain.BaseDirectory;
-            //string s2 = s + @"..\..\..\AppInput\DLLFiles\DiagramTool.dll";
-            //var DLL = Assembly.LoadFile(s2);
-            //var toolDLL = DLL.GetType("DiagramTool.DiagramTool");
-            
-            //dynamic c = Activator.CreateInstance(toolDLL);
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string dllsDirectory = baseDirectory + @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\" + toolsPath;
 
+            string[] toolPaths = Directory.GetFiles(dllsDirectory, "*Tool.dll", SearchOption.TopDirectoryOnly);
 
-            //int a = 0;
-            //a++;
-            //c.
+            foreach (string toolPath in toolPaths)
+            {
+                var DLL = Assembly.LoadFile(toolPath);
+                string toolFile = toolPath.Substring((dllsDirectory + "\\").Length);
+                string toolName = toolFile.Substring(0, toolFile.LastIndexOf('.'));
+
+                var toolDLL = DLL.GetType(toolName + "." + toolName);
+                dynamic tool = Activator.CreateInstance(toolDLL, ToolAdapter.Tool.ToolType.Diagrams);
+                this.concreteObservableSubject.Subscribe((tool as ToolAdapter.Tool.ITool).Observer);
+                toolAddedAction(tool);
+            }
         }
-
     }
 }

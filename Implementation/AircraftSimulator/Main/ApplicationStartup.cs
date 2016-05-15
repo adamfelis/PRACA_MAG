@@ -6,20 +6,14 @@ using System.Threading.Tasks;
 
 namespace Main
 {
-    public class ApplicationStartup : System.Windows.Application
+    class ApplicationStartup
     {
         [STAThread]
-
         public static void Main()
-
         {
-
-            ApplicationStartup app = new ApplicationStartup();
-
-            app.StartupUri = new System.Uri("MainWindow.xaml", System.UriKind.Relative);
-
+            var app = new App();
+            app.InitializeComponent();
             app.Run();
-
         }
     }
 }

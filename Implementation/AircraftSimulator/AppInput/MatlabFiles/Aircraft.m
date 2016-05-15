@@ -58,6 +58,7 @@ classdef Aircraft < handle & Shooter
         end
         % Simulates flight
         function resultsArray = Simulate(obj, x0_longitudinal, x0_lateral, u_longitudinal, u_lateral, simulation_index)
+            
             results = Results();
             if simulation_index > 1
                 interval = [(simulation_index - 1) * obj.simulation_step_from_fixed_update, simulation_index * obj.simulation_step_from_fixed_update];
@@ -76,8 +77,8 @@ classdef Aircraft < handle & Shooter
                 for i = 1 : 1 : length(obj.Strategies)
 
                     if obj.previous_result ~= -1
-                        x0_longitudinal = obj.previous_result.StrategiesResults(i).longitudinal_result;
-                        x0_lateral = obj.previous_result.StrategiesResults(i).lateral_result;
+                         x0_longitudinal = obj.previous_result.StrategiesResults(i).longitudinal_result;
+                         x0_lateral = obj.previous_result.StrategiesResults(i).lateral_result;
                     end
                     [~,Y_longitudinal] = ode45(...
                             @(t,x)StateSpace(t, x, obj.Strategies(i).A_longitudinal, obj.Strategies(i).B_longitudinal, u_longitudinal'),...

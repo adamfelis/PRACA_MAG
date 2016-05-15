@@ -74,11 +74,14 @@ namespace Main.ServerCommunication
         {
             clientDataPresentedExecutor.SetupAndRun(dispatcher, (() =>
         {
-                return this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+             List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
                     aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())
                     );
+            if(dataEventArgs.Id == this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.ActiveShooter)
+                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext(result[0]);
+            return result;
             }));
-            //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext()
+            
         }
 
         public RemoveClientHandler OnClientRemoved => onClientRemoved;

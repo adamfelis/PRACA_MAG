@@ -8,7 +8,7 @@ using Common.Containers;
 
 namespace ToolsManager
 {
-    public sealed class ToolsManager : Common.Tool.IToolsManagerForCommonUsage
+    public sealed class ToolsManager : ToolAdapter.Tool.IToolsManagerForCommonUsage
     {
         private static ToolsManager instance;
         private MathToolCommunicator mathToolCommunicator;
@@ -34,13 +34,17 @@ namespace ToolsManager
 
         private ToolsManager()
         {
-            toolsManagement = new ToolsManagement.ToolsManagement();
             mathToolCommunicator = new RefinedMathToolCommunicator();
         }
 
         public void SetScriptTypeForComputations(Common.Scripts.ScriptType scriptType)
         {
             mathToolCommunicator.SetMethodImplementor(scriptType);
+        }
+
+        public void SetActionForToolsAdding(Action<ToolAdapter.Tool.ITool> toolAddedAction)
+        {
+            toolsManagement = new ToolsManagement.ToolsManagement(toolAddedAction);
         }
 
         public List<IData> Compute(List<IData> parameters)
