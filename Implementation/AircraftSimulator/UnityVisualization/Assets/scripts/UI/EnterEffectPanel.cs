@@ -12,7 +12,7 @@ public class EnterEffectPanel : MonoBehaviour , IPointerEnterHandler, IPointerEx
 
     private Image image;
     private float elapsedTime;
-    private const float animationTime = 0.5f;
+    private const float animationTime = 0.2f;
     private bool animationPending = false;
 
     private void Awake()
@@ -23,7 +23,7 @@ public class EnterEffectPanel : MonoBehaviour , IPointerEnterHandler, IPointerEx
 
     public void OnPointerEnter(PointerEventData data)
     {
-        desiredAlphaChannel = maxImageAlphaChannel;
+        desiredAlphaChannel = minImageAlphaChannel;
         StartCoroutine(changeAlphaChannel());
     }
 
@@ -31,7 +31,7 @@ public class EnterEffectPanel : MonoBehaviour , IPointerEnterHandler, IPointerEx
     {
         StopAllCoroutines();
         elapsedTime = 0;
-        desiredAlphaChannel = minImageAlphaChannel;
+        desiredAlphaChannel = maxImageAlphaChannel;
         StartCoroutine(changeAlphaChannel());
     }
 

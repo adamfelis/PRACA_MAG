@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class DragPanel : MonoBehaviour , IPointerDownHandler, IDragHandler
+public class DragPanel1 : MonoBehaviour , IPointerDownHandler, IDragHandler
 {
 
     private Vector2 pointerOffset;

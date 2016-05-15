@@ -18,9 +18,9 @@ namespace Client.Priveleges
             ServerDataReceived?.Invoke(this, eventArgs);
         }
 
-        public void OnServerDisconnected()
+        public void OnServerDisconnected(ErrorCode e)
         {
-            ServerDisconnected?.Invoke(this);
+            ServerDisconnected?.Invoke(this, e);
         }
 
     }

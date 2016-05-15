@@ -29,6 +29,7 @@ namespace Server
             //client already disconnected
             catch (KeyNotFoundException e)
             {
+                bool a = false;
             }
         }
 
@@ -43,7 +44,10 @@ namespace Server
                         string data = dataStorage.PrepareDataForClient(eventHandler.Id, eventHandler.DataList);
                         client.SendMessage(data);
                     }
-                    catch(MessageIgnoreException e) { }
+                    catch(MessageIgnoreException e)
+                    {
+                        bool a = false;
+                    }
                     break;
                 default:
                 break;

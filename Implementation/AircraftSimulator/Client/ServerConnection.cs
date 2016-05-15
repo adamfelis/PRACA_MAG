@@ -7,10 +7,11 @@ using System.Net.Sockets;
 using Common.Containers;
 using System.Net;
 using Common.DataParser;
+using Common.Exceptions;
 
 namespace Client
 {
-    public delegate void ServerConnectionInterruptedHandler();
+    public delegate void ServerConnectionInterruptedHandler(ErrorCode error);
     public class ServerConnection : Connector, IServerConnection
     {
         private const int PortNum = 10000;
@@ -31,7 +32,8 @@ namespace Client
                     new Data
                     {
                         MessageType = MessageType.ClientDisconnected,
-                        Response = ActionType.NoResponse
+                        Response = ActionType.NoResponse,
+                        Error =  ErrorCode.ClientException
                     }
                 }
             });
@@ -64,9 +66,30 @@ namespace Client
             SendMessage(Disconnected);
         }
 
-        protected override void onDisconnected()
+        public void AcceptDisconnection()
         {
-            onServerDisconnected();
+            string toSend = new DataParser<DataList>().Serialize(
+            new DataList()
+            {
+                DataArray = new[]
+                {
+                    new Data
+                    {
+                        MessageType = MessageType.ClientAcceptDisconnection,
+                        Response = ActionType.NoResponse,
+                    }
+                }
+            });
+            SendMessage(toSend);
+        }
+
+        public override void onDisconnected(ErrorCodeException e)
+        {
+            if (client.Connected)
+            {
+                onServerDisconnected(e.Error);
+                client.Close();
+            }
         }
     }
 }

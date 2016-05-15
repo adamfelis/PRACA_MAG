@@ -36,7 +36,16 @@ namespace DataStorageNamespace
                     data.InputType = request.OutputType;
                 }
             }
-            string toSend = _dataParser.Serialize(dataList);
+            string toSend="";
+            try
+            {
+               toSend = _dataParser.Serialize(dataList);
+            }
+            catch (Exception e)
+            {
+                string a = e.Message;
+            }
+          
             return toSend;
         }
 
@@ -60,33 +69,33 @@ namespace DataStorageNamespace
         {
             _dataParser = new DataParser<DataList>();
             //TOREMOVE
-            var a = _dataParser.Serialize(new DataList()
-            {
-                DataArray = new []
-                {
-                    new Data()
-                    {
-                        Array = new float[][]
-                        {
-                            new float[3]
-                            {
-                                1, 2, 3
-                            },
-                            new float[3]
-                            {
-                                4, 5, 6
-                            }
-                        }
-                    }
-                }
-            });
-            var k = _dataParser.Deserialize(a);
-            var b = _dataParser.Deserialize(a).DataArray.First();
-            var n = b.N;
-            var m = b.M;
-            var d = b.Get2DimArray();
-            b.Set2DimArray(d);
-            var c = false;
+            //var a = _dataParser.Serialize(new DataList()
+            //{
+            //    DataArray = new []
+            //    {
+            //        new Data()
+            //        {
+            //            Array = new float[][]
+            //            {
+            //                new float[3]
+            //                {
+            //                    1, 2, 3
+            //                },
+            //                new float[3]
+            //                {
+            //                    4, 5, 6
+            //                }
+            //            }
+            //        }
+            //    }
+            //});
+            //var k = _dataParser.Deserialize(a);
+            //var b = _dataParser.Deserialize(a).DataArray.First();
+            //var n = b.N;
+            //var m = b.M;
+            //var d = b.Get2DimArray();
+            //b.Set2DimArray(d);
+            //var c = false;
         }
     }
 }

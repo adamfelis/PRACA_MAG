@@ -10,14 +10,21 @@ public class ColliderHandler : MonoBehaviour
     public GameObject Second;
     private bool collided = false;
     public Quaternion InverseInitialRotation { get; set; }
-    public float AnimationTime;
-    public float CalculatedAnimationTime;
-    public float TargetAnimationTime = 2.0f;
+    private float rotationOffset = 0;
+    private float rotationMaxOffset;
     public OnInitializeHandler OnInitializeHandler { get; set; }
 
-    public Quaternion targetRotation;
+    public float RotationOffset
+    {
+        get
+        {
+            return rotationOffset * Mathf.Deg2Rad;
+        }
+    }
 
-    public Vector3 RelativeAxis
+    private Quaternion targetRotation;
+
+    private Vector3 RelativeAxis
     {
         get
         {
@@ -25,7 +32,7 @@ public class ColliderHandler : MonoBehaviour
         }
     }
 
-    public Vector3 CenterOfRotation
+    private Vector3 CenterOfRotation
     {
         get
         {
@@ -33,6 +40,11 @@ public class ColliderHandler : MonoBehaviour
                 return gameObject.GetComponent<MeshRenderer>().bounds.center;
             return First.transform.position + (Second.transform.position - First.transform.position) / 2.0f;
         }
+    }
+
+    public void Initialize(float rotationMaxOffset)
+    {
+        this.rotationMaxOffset = rotationMaxOffset;
     }
 
     // Use this for initialization
@@ -78,5 +90,19 @@ public class ColliderHandler : MonoBehaviour
         First.transform.position = first;
         Second.transform.position = second;
         OnInitializeHandler(gameObject);
+    }
+
+    public void Rotate(float delta, bool checkRequired = true)
+    {
+        if (checkRequired)
+        {
+            var oldRotationOffset = rotationOffset;
+            rotationOffset += delta;
+            rotationOffset = Mathf.Clamp(rotationOffset, -rotationMaxOffset, rotationMaxOffset);
+            delta = rotationOffset - oldRotationOffset;
+        }
+        float eps = 0.00001f;
+        if (Mathf.Abs(delta) > eps)
+            transform.RotateAround(CenterOfRotation, RelativeAxis, delta);
     }
 }

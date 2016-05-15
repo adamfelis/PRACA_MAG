@@ -23,24 +23,26 @@ namespace Assets.scripts
         private Quaternion inverseoffsetRotation;
         private float distanceTargetCamera;
         private Vector3 cameraOffset = new Vector3(0, 0, 0);
-        private float positionFollowFactor = 10;
-        private float rotationFollowFactor = 10;
+        private float positionFollowFactor = 40;
+        private float rotationFollowFactor = 5;
 
         void Start()
         {
             offsetPosition = target.position - Camera.main.transform.position;
-            offsetRotation = target.rotation;
+            offsetRotation = Quaternion.identity;// target.rotation;
             distanceTargetCamera = offsetPosition.magnitude;
             //Debug.Log("distance target camera = " + distanceTargetCamera);
         }
 
-        void LateUpdate()
+        void Update()
         {
-            //-90 rotation is due to axis change from z to x (now plane forward is X)
-            Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, target.rotation * offsetRotation * Quaternion.AngleAxis(-90, Vector3.up),
-    Time.fixedDeltaTime * rotationFollowFactor);
-            Vector3 newPosition = target.position + target.forward * distanceTargetCamera + cameraOffset;
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, 1/*Time.fixedDeltaTime * positionFollowFactor*/);
+                //-180 rotation is due to axis change from z to x (now plane forward is X)
+                Camera.main.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation,
+                    target.rotation*offsetRotation*Quaternion.AngleAxis(-180, Vector3.up),
+                    Time.deltaTime*rotationFollowFactor);
+                Vector3 newPosition = target.position + target.forward*distanceTargetCamera + cameraOffset;
+                Camera.main.transform.position = newPosition;
+                //Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, newPosition, Time.deltaTime * positionFollowFactor);
         }
     }
 }

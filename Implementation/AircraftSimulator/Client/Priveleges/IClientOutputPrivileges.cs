@@ -11,6 +11,6 @@ namespace Client.Priveleges
         void Subscribe(IClientPrivileges clientPrivileges);
 
         void OnServerDataPresented(DataEventArgs eventArgs);
-        void OnServerDisconnected();
+        void OnServerDisconnected(ErrorCode error);
     }
 }

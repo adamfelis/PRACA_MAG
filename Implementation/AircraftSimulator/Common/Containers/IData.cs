@@ -18,7 +18,16 @@ namespace Common.Containers
         ClientDisconnected,
         ClientDataRequest,
         ClientDataResponse,
+        ClientAcceptDisconnection,
         ServerDisconnected
+    }
+
+    public enum MessageContent
+    {
+        NotSet,
+        LateralData,
+        LongitudinalData,
+        PositionData
     }
 
     public enum ActionType
@@ -28,9 +37,21 @@ namespace Common.Containers
         NoResponse
     }
 
+    public enum ErrorCode
+    {
+        None,
+        MainApplicationException,
+        WriteOperation,
+        ReadOperation,
+        StreamClosed,
+        ServerException,
+        ClientException
+    }
+
     public interface IData
     {
         string Sender { get; set; }
+        ErrorCode Error { get; set; }
         MessageType MessageType { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }

@@ -59,6 +59,9 @@
     <Compile Include="DataParser\IDataParser.cs" />
     <Compile Include="EventArgs\DataEventArgs.cs" />
     <Compile Include="Containers\IData.cs" />
+    <Compile Include="Exceptions\ErrorCodeException.cs" />
+    <Compile Include="Exceptions\LawLayerException.cs" />
+    <Compile Include="Exceptions\MainApplicationException.cs" />
     <Compile Include="Exceptions\XMLFileNotFoundException.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Scripts\ScriptType.cs" />

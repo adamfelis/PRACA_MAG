@@ -9,6 +9,13 @@ namespace Client
     public interface IServerConnection : IConnector
     {
         string ConnectToServer();
+        /// <summary>
+        /// Client wants to disconnect from server due to internal client's error
+        /// </summary>
         void DisconnectFromServer();
+        /// <summary>
+        /// Clients received information about server error and accepts disconnection
+        /// </summary>
+        void AcceptDisconnection();
     }
 }
