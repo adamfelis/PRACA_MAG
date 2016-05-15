@@ -283,21 +283,6 @@ namespace AircraftsManager.Aircraft.Strategy
         {
             global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
 
-            longitudinal_simulation_index = (longitudinal_simulation_index + 1) % longitudinal_simulation_time;
-            if (longitudinal_simulation_index == 0)
-                longitudinal_simulation_index++;
-
-            if (longitudinal_simulation_index == 1 || aircraftData.Ni != ni || aircraftData.Tau != tau)
-            {
-                longitudinal_simulation_index = 1; //needed when steering 'u' has changed - simulation is interruped and recalculated
-                V0 = aircraftData.V_0;
-                Q_e = aircraftData.Q_e;
-                theta_e = aircraftData.theta_e;
-                U_e = aircraftData.U_e;
-                W_e = aircraftData.W_e;
-                ni = aircraftData.Ni;
-                tau = aircraftData.Tau;
-            }
 
             List<IData> preparedLongitudinalData = new List<IData>();
 
@@ -315,22 +300,29 @@ namespace AircraftsManager.Aircraft.Strategy
         {
             global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
 
-            if (longitudinal_simulation_index == 1 || aircraftData.Xi != xi || aircraftData.Zeta != zeta)
+
+            longitudinal_simulation_index = (longitudinal_simulation_index + 1) % longitudinal_simulation_time;
+            if (longitudinal_simulation_index == 0)
+                longitudinal_simulation_index++;
+
+            if (longitudinal_simulation_index == 1 || aircraftData.Ni != ni || aircraftData.Tau != tau || aircraftData.Xi != xi || aircraftData.Zeta != zeta)
             {
                 longitudinal_simulation_index = 1; //needed when steering 'u' has changed - simulation is interruped and recalculated
                 V0 = aircraftData.V_0;
-                P_e = aircraftData.P_e;
-                R_e = aircraftData.R_e;
+                Q_e = aircraftData.Q_e;
                 theta_e = aircraftData.theta_e;
                 U_e = aircraftData.U_e;
                 W_e = aircraftData.W_e;
+                ni = aircraftData.Ni;
+                tau = aircraftData.Tau;
+                P_e = aircraftData.P_e;
+                R_e = aircraftData.R_e;
                 V_e = aircraftData.V_e;
                 xi = aircraftData.Xi;
                 zeta = aircraftData.Zeta;
                 phi = aircraftData.phi_e;
                 psi = aircraftData.psi_e;
             }
-
             List<IData> preparedLateralData = new List<IData>();
 
             float[][] x0_dataArray = new float[1][] { new float[5] { V_e, P_e, R_e, phi, psi } };
