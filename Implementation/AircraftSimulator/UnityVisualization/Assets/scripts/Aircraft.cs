@@ -96,7 +96,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return aircraftInterpolator.TargetTheta * Mathf.Deg2Rad;
+            return trimValueToRange(aircraftInterpolator.TargetTheta * Mathf.Deg2Rad);
         }
     }
     /// <summary>
@@ -106,7 +106,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return aircraftInterpolator.TargetPsi * Mathf.Deg2Rad;
+            return trimValueToRange(aircraftInterpolator.TargetPsi * Mathf.Deg2Rad);
         }
     }
     /// <summary>
@@ -116,7 +116,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return aircraftInterpolator.TargetPhi * Mathf.Deg2Rad;
+            return trimValueToRange(aircraftInterpolator.TargetPhi * Mathf.Deg2Rad);
         }
     }
 
@@ -136,6 +136,30 @@ public class Aircraft : IAircraft
         get; set;
     }
     #endregion
+
+    private float trimValueToRange(float value)
+    {
+        return value;
+
+        float rangeMin = 0;
+        float rangeMax = 2*Mathf.PI;
+        var clamped = Mathf.Clamp(value, rangeMin, rangeMax);
+        float trimmed = 0.0f;
+        float eps = 0.0001f;
+        if (Mathf.Abs(clamped - rangeMax) < eps && value > 0)
+        {
+            trimmed = value % rangeMax;
+        }else if (Mathf.Abs(clamped - rangeMin) < eps && value < 0)
+        {
+            trimmed = -value%rangeMax;
+            trimmed = rangeMax - trimmed;
+        }
+        else
+        {
+            trimmed = clamped;
+        }
+        return trimmed;
+    }
 
     private void initializeFlightConditions()
     {
