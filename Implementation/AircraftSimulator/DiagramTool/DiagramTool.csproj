@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\BIN\Release\DiagramTool\</OutputPath>
+    <OutputPath>..\AppInput\DLLFiles\</OutputPath>
     <IntermediateOutputPath>..\..\..\..\OBJ\Release\DiagramTool\</IntermediateOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>

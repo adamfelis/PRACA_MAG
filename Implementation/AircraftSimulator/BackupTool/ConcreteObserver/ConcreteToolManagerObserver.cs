@@ -20,7 +20,7 @@ namespace BackupTool.ConcreteObserver
 
         }
 
-        public override void OnNext(IData value)
+        public override void OnNext(List<IData> value)
         {
 
         }

@@ -99,6 +99,42 @@ namespace AircraftsManager
             }
             return data;
         }
+
+        public List<IData> GetShooterInitalDataForTheSpecifiedStrategy(int sender, Shooters.ShooterType shooterType, IData additionalInformation = null)
+        {
+            //return new List<IData>();
+            if (!instance.activeShooters.ContainsKey(sender))
+                throw new Shooter.InvalidShooterIdException();
+            List<IData> data = new List<IData>();
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { sender } }, Sender = "client_id" });
+            List<Common.Strategy> strategies = instance.activeShooters[sender].Context.Strategies;
+
+            int strategy_id = -1;
+
+            for(int i = 0; i < strategies.Count; i++)
+            {
+                if(strategies[i].ShooterType == shooterType)
+                {
+                    strategy_id = i;
+                    break;
+                }
+            }
+
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { strategy_id } }, Sender = "strategy_id" });
+            Common.Strategy strategy = strategies[strategy_id];
+                switch (strategy.ShooterType)
+                {
+                    case Shooters.ShooterType.F16:
+                    case Shooters.ShooterType.F17:
+                        data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLateralInitialData(additionalInformation));
+                        data.AddRange((strategy as Aircraft.Strategy.AircraftStrategy).GetLongitudinalInitialData(additionalInformation));
+                        break;
+                    default:
+                        throw new Common.InvalidShooterTypeException();
+                }
+            return data;
+        }
+
         public List<IData> GetShooterData(int sender, IData additionalInformation = null)
         {
             //return new List<IData>();
@@ -163,6 +199,45 @@ namespace AircraftsManager
         }
 
 
+        public Aircraft.Strategy.IAircraftParameters GetAircraftParameters()
+        {
+            List<Common.Strategy> shooterStrategies = this.activeShooters[activeShooter].Context.Strategies;
+            foreach (Common.Strategy strategy in shooterStrategies)
+            {
+                if (strategy.ShooterType == ActiveShooterType)
+                {
+                    switch (ActiveShooterType)
+                    {
+                        case Shooters.ShooterType.F16:
+                        case Shooters.ShooterType.F17:
+                            return (strategy as Aircraft.Strategy.AircraftStrategy).AircraftParameters;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public void RefreshAircraftParameters(Aircraft.Strategy.IAircraftParameters aircraftParameters)
+        {
+            List<Common.Strategy> shooterStrategies = this.activeShooters[activeShooter].Context.Strategies;
+            foreach (Common.Strategy strategy in shooterStrategies)
+            {
+                if (strategy.ShooterType == ActiveShooterType)
+                {
+                    switch (ActiveShooterType)
+                    {
+                        case Shooters.ShooterType.F16:
+                        case Shooters.ShooterType.F17:
+                            (strategy as Aircraft.Strategy.AircraftStrategy).AircraftParameters = aircraftParameters;
+                            (strategy as Aircraft.Strategy.AircraftStrategy).RefreshMatrixes();
+                            SetActiveStrategy(ActiveShooterType);
+                            break;
+                    }
+                }
+            }
+        }
+
+
         private ObservableCollection<Shooters.ShooterType> optionalStrategies;
         public ObservableCollection<Shooters.ShooterType> OptionalStrategies
         {
@@ -179,6 +254,20 @@ namespace AircraftsManager
             get
             {
                 return activeShooter;
+            }
+        }
+
+        private Shooters.ShooterType activeShooterType;
+
+        public Shooters.ShooterType ActiveShooterType
+        {
+            get
+            {
+                return activeShooterType;
+            }
+            set
+            {
+                activeShooterType = value;
             }
         }
 

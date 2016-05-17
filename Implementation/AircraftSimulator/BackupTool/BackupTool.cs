@@ -30,7 +30,7 @@ namespace BackupTool
         }
 
         private ConcreteObserver.ConcreteToolManagerObserver observer;
-        public IObserver<IData> Observer
+        public IObserver<List<IData>> Observer
         {
             get
             {

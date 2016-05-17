@@ -30,7 +30,7 @@ namespace DiagramTool
         }
 
         private ConcreteObserver.ConcreteToolManagerObserver observer;
-        public IObserver<IData> Observer
+        public IObserver<List<IData>> Observer
         {
             get
             {
@@ -65,8 +65,9 @@ namespace DiagramTool
 
         private void CompositionTargetRendering(object sender, EventArgs e)
         {
-            viewModel.UpdateModel();
-            (this.tabItem.Content as Content.TabContent).Plot1Property.RefreshPlot(true);
+            viewModel.UpdateModels();
+            (this.tabItem.Content as Content.TabContent).LongitudinalPlotProperty.RefreshPlot(true);
+            (this.tabItem.Content as Content.TabContent).LateralPlotProperty.RefreshPlot(true);
         }
     }
 }

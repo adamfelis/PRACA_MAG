@@ -53,6 +53,7 @@ namespace Common.Containers
         string Sender { get; set; }
         ErrorCode Error { get; set; }
         MessageType MessageType { get; set; }
+        MessageContent MessageContent { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
         Shooters.ShooterType ShooterType { get; set; }

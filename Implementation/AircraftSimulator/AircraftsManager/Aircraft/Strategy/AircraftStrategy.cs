@@ -44,11 +44,23 @@ namespace AircraftsManager.Aircraft.Strategy
             }
         }
 
-        protected AircraftParameters aircraftParameters;
+        protected IAircraftParameters aircraftParameters;
+        public IAircraftParameters AircraftParameters
+        {
+            get
+            {
+                return aircraftParameters;
+            }
+            set
+            {
+                aircraftParameters = value;
+            }
+        }
+
         internal abstract List<IData> GetLongitudinalData(IData additionalInformation = null);
         internal abstract List<IData> GetLateralData(IData additionalInformation = null);
-        internal abstract List<IData> GetLongitudinalInitialData(IData additionalInformation);
-        internal abstract List<IData> GetLateralInitialData(IData additionalInformation);
+        internal abstract List<IData> GetLongitudinalInitialData(IData additionalInformation = null);
+        internal abstract List<IData> GetLateralInitialData(IData additionalInformation = null);
 
         private List<IData> matrixes;
 
@@ -58,6 +70,13 @@ namespace AircraftsManager.Aircraft.Strategy
             {
                 return matrixes;
             }
+        }
+
+        public void RefreshMatrixes()
+        {
+            this.matrixes.Clear();
+            GetLateralInitialData();
+            GetLongitudinalInitialData();
         }
 
         protected override void Initialize()
@@ -73,7 +92,12 @@ namespace AircraftsManager.Aircraft.Strategy
             AircraftParameters parameters = null;
             try
             {
-                using (TextReader reader = new StreamReader(@"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\" + dataFileName))
+                string path = "";
+#if !DEBUG
+                path += @"..\";
+#endif
+                path += @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\XMLFiles\";
+                using (TextReader reader = new StreamReader(path + dataFileName))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(AircraftParameters));
                     parameters = (AircraftParameters)serializer.Deserialize(reader);
@@ -88,7 +112,10 @@ namespace AircraftsManager.Aircraft.Strategy
 
         protected List<IData> PrepareLongitudinalMatrixes(IData additionalInformation)
         {
-            this.additionalInformation = additionalInformation;
+            if (additionalInformation == null)
+                additionalInformation = this.additionalInformation;
+            else
+                this.additionalInformation = additionalInformation;
             #region A, B calculations
             const int A_size = 4;
             float m_prim = aircraftParameters.m / (0.5f * aircraftParameters.p * aircraftParameters.S);
@@ -180,7 +207,7 @@ namespace AircraftsManager.Aircraft.Strategy
             List<IData> preparedLongitudinalData = new List<IData>();
             preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = A_dataArray_longitudinal, Sender = "A_longitudinal" });
             preparedLongitudinalData.Add(new Data() { InputType = DataType.Matrix, Array = B_dataArray_longitudinal, Sender = "B_longitudinal" });
-
+            
             matrixes.AddRange(preparedLongitudinalData);
 
             return preparedLongitudinalData;
@@ -194,8 +221,13 @@ namespace AircraftsManager.Aircraft.Strategy
             float I_x_prim = aircraftParameters.I_x / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
             float I_z_prim = aircraftParameters.I_z / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
             float I_xz_prim = aircraftParameters.I_xz / (0.5f * aircraftParameters.p * aircraftParameters.S * aircraftParameters.b);
+            if (additionalInformation == null)
+                additionalInformation = this.additionalInformation;
+            else
+                this.additionalInformation = additionalInformation;
 
             global::Common.AircraftData.AircraftData aircraftData = new global::Common.AircraftData.AircraftData(additionalInformation.Array);
+
             float initial_V0 = aircraftData.V_0;
             float initial_theta_e = aircraftData.theta_e;
             float initial_U_e = aircraftData.U_e;

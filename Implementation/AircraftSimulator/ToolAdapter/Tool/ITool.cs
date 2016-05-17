@@ -1,12 +1,13 @@
 ﻿using System;
 using Common.Containers;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace ToolAdapter.Tool
 {
     public interface ITool
     {
-        IObserver<IData> Observer
+        IObserver<List<IData>> Observer
         {
             get;
         }

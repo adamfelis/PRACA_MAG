@@ -1,0 +1,4 @@
+-> Mo¿liwosc wyboru samolotu przy starcie aplikacji
+-> Dodanie mo¿liwoœci wyboru kamery (dodanie kamery z boku i z góry która przesuwa sie wraz z samolotem lecz siê nie obraca, by mo¿na bylo œledzic ruch w longitudinal i lateral)
+-> Radar (w postaci jakiejs mapy czy cos) + menu do wystrzelenia pocisku przeciwko konkretnemu samolotowi
+-> Z³e handlowanie IData po stronie Unity - np przy dwóch strategiach oba IData dotyczace wersji longitudinal s¹ przetwarzane, a powinno tylko pierwsze, a drugie w backgroundzie ewentualnie

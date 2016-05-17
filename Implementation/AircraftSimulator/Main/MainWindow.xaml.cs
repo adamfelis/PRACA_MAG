@@ -58,7 +58,8 @@ namespace Main
             {
                 this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.
                     SetActiveShooter(int.Parse((clientsListView.SelectedValue as ServerCommunication.ServerCommunication.Client).Name));
-                this.availableStrategies_textblock.Visibility = Visibility.Visible;
+                //this.availableStrategies_textblock.Visibility = Visibility.Visible;
+                this.connected_strategies_groupbox.Visibility = Visibility.Visible;
                 this.AvailableStrategies.Visibility = Visibility.Visible;
                 this.manageStrategiesButton.Visibility = Visibility.Visible;
                 this.manageStrategiesHelpButton.Visibility = Visibility.Visible;
@@ -70,6 +71,7 @@ namespace Main
         private void manageStrategiesButton_Click(object sender, RoutedEventArgs e)
         {
             this.shooter_strategies_flyout.IsOpen = !this.shooter_strategies_flyout.IsOpen;
+            this.shooter_properties_flyout.IsOpen = false;
         }
 
         private void algorithmsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -85,14 +87,26 @@ namespace Main
             if (e.AddedItems.Count > 0)
             {
                 activeShooterType = (Shooters.ShooterType)(e.AddedItems[0] as Image).Tag;
-                this.A_lateral_textblock.Visibility = Visibility.Visible;
-                this.A_longitudinal_textblock.Visibility = Visibility.Visible;
-                this.B_lateral_textblock.Visibility = Visibility.Visible;
-                this.B_longitudinal_textblock.Visibility = Visibility.Visible;
+                //this.A_lateral_textblock.Visibility = Visibility.Visible;
+                this.A_lateral_groupbox.Visibility = Visibility.Visible;
+                //this.A_longitudinal_textblock.Visibility = Visibility.Visible;
+                this.A_longitudinal_groupbox.Visibility = Visibility.Visible;
+                //this.B_lateral_textblock.Visibility = Visibility.Visible;
+                this.B_lateral_groupbox.Visibility = Visibility.Visible;
+                //this.B_longitudinal_textblock.Visibility = Visibility.Visible;
+                this.B_longitudinal_groupbox.Visibility = Visibility.Visible;
                 this.dataGrid_A_lateral.Visibility = Visibility.Visible;
                 this.dataGrid_A_longitudinal.Visibility = Visibility.Visible;
                 this.dataGrid_B_lateral.Visibility = Visibility.Visible;
                 this.dataGrid_B_longitudinal.Visibility = Visibility.Visible;
+
+                this.manageStrategiesPropertiesButton.IsEnabled = true;
+
+                if (activeShooterType.HasValue)
+                {
+                    this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooterType = activeShooterType.Value;
+                    this.applicationDataContext.UpdateStrategiesParameters(this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.GetAircraftParameters());
+                }
             }
 
             
@@ -103,6 +117,7 @@ namespace Main
         private void manageStrategiesPropertiesButton_Click(object sender, RoutedEventArgs e)
         {
             this.shooter_properties_flyout.IsOpen = !this.shooter_properties_flyout.IsOpen;
+            this.shooter_strategies_flyout.IsOpen = false;
         }
 
         private void manageStrategiesHelpButton_Click(object sender, RoutedEventArgs e)

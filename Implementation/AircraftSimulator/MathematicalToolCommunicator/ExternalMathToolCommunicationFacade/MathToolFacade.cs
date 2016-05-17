@@ -75,6 +75,9 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
                     case SpecialScriptType.GetState:
                         availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptGetState());
                         break;
+                    case SpecialScriptType.WorkspaceUpdater:
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptWorkspaceUpdater());
+                        break;
                     default:
                         throw new Scripts.InvalidScriptTypeException();
                 }

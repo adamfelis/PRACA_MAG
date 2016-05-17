@@ -12,7 +12,8 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <oxy:Plot  Grid.Row="0" Grid.Column="0" x:Name="Plot1" Title="A Graph" Model="{Binding PlotModel}" Margin="10"/>
+        <oxy:Plot   Grid.Row="0" Grid.Column="0" x:Name="LongitudinalPlot" Title="A Graph" Model="{Binding LongitudinalPlotModel}" Margin="10"/>
+        <oxy:Plot  Grid.Row="1" Grid.Column="0" x:Name="LateralPlot" Title="A Graph 2" Model="{Binding LateralPlotModel}" Margin="10"/>
 
     </Grid>
 </UserControl>

@@ -78,7 +78,7 @@ namespace Main.ServerCommunication
                     aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())
                     );
             if(dataEventArgs.Id == this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.ActiveShooter)
-                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext(result[0]);
+                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext(result);
             return result;
             }));
             

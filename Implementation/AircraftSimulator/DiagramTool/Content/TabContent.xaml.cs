@@ -25,11 +25,19 @@ namespace DiagramTool.Content
             InitializeComponent();
         }
 
-        public OxyPlot.Wpf.Plot Plot1Property
+        public OxyPlot.Wpf.Plot LongitudinalPlotProperty
         {
             get
             {
-                return Plot1;
+                return LongitudinalPlot;
+            }
+        }
+
+        public OxyPlot.Wpf.Plot LateralPlotProperty
+        {
+            get
+            {
+                return LateralPlot;
             }
         }
 

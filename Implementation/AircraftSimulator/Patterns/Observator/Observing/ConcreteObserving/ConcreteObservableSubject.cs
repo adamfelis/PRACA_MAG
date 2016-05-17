@@ -9,17 +9,17 @@ namespace Patterns.Observator.Observing.ConcreteObserving
     {
         public ConcreteObservableSubject()
         {
-            this.observers = new Dictionary<int, IObserver<IData>>();
+            this.observers = new Dictionary<int, IObserver<List<IData>>>();
         }
 
-        public override IDisposable Subscribe(IObserver<IData> observer)
+        public override IDisposable Subscribe(IObserver<List<IData>> observer)
         {
             return base.Subscribe(observer);
         }
 
-        public void NotifySubscribersOnNext(IData data)
+        public void NotifySubscribersOnNext(List<IData> data)
         {
-            foreach (IObserver<IData> observer in observers.Values)
+            foreach (IObserver<List<IData>> observer in observers.Values)
             {
                 observer.OnNext(data);
             }
@@ -39,9 +39,9 @@ namespace Patterns.Observator.Observing.ConcreteObserving
             }
         }
 
-        public List<IObserver<IData>> GetSubscribers()
+        public List<IObserver<List<IData>>> GetSubscribers()
         {
-            return this.observers.Values.ToList<IObserver<IData>>();
+            return this.observers.Values.ToList<IObserver<List<IData>>>();
         }
     }
 }

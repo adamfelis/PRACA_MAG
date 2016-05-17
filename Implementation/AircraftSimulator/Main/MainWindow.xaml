@@ -10,8 +10,12 @@
         mc:Ignorable="d"
         Closing ="DataWindow_Closing"
         Title="Aircraft Simulator" WindowState="Maximized"
-                      Width="1000" Height="1000">
+                      Width="1800" Height="1000">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="911*"/>
+            <ColumnDefinition Width="81*"/>
+        </Grid.ColumnDefinitions>
         <Grid Width="300" HorizontalAlignment="Left">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.5*"/>
@@ -38,8 +42,8 @@
             </Grid>
         </Grid>
 
-        <TabControl x:Name="tabControl" Margin="310,10,10,10" BorderBrush="LightBlue" BorderThickness="4">
-            <TabItem Name="aaaaa" Header="Shooter">
+        <TabControl x:Name="tabControl" Margin="300,20,20,10" BorderBrush="LightBlue" BorderThickness="4" Grid.ColumnSpan="2">
+            <TabItem Header="Shooter">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.25*"/>
@@ -48,17 +52,18 @@
                         <ColumnDefinition Width="0.25*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="0.18*"/>
+                        <RowDefinition Height="0.23*"/>
                         <RowDefinition Height="0.07*"/>
                         <RowDefinition Height="0.05*"/>
                         <RowDefinition Height="0.2*"/>
                         <RowDefinition Height="0.05*"/>
                         <RowDefinition Height="0.2*"/>
                         <RowDefinition Height="0.2*"/>
-                        <RowDefinition Height="0.05*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Name="availableStrategies_textblock" Grid.Column="0" Grid.Row="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Available Strategies: " VerticalAlignment="Top" Visibility="Hidden"/>
-                    <ListBox Name="AvailableStrategies" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,40,10,10"
+                    <GroupBox Name="connected_strategies_groupbox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="1" 
+                              Header="Connected Strategies" Margin="10" Visibility="Hidden"/>
+                    <!--<TextBlock Name="availableStrategies_textblock" Grid.Column="0" Grid.Row="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Available Strategies: " VerticalAlignment="Top" Visibility="Hidden"/>-->
+                    <ListBox  Name="AvailableStrategies" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,45,20,20"
                              ItemsSource="{Binding Path=StrategiesImages}"  HorizontalContentAlignment="Left" Padding="5" 
                              AllowDrop="True" SelectionChanged="AvailableStrategies_SelectionChanged" Visibility="Hidden">
                         <ListBox.ItemsPanel>
@@ -67,17 +72,18 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>
-                    <Controls:Flyout Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="6" 
+                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="8" 
                                      Header="Shooter Strategies Management" Position="Right" Name="shooter_strategies_flyout"
-                                     Background="LightSkyBlue" Foreground="Black" Margin="0">
+                                     Background="White" Foreground="Black" BorderBrush="LightBlue" BorderThickness="3" Margin="0" Panel.ZIndex="1">
 
-                        <Grid Width="{Binding ElementName=shooter_strategies_flyout, Path=Width}">
+                        <Grid MinWidth="1000">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.3*"/>
                                 <RowDefinition Height="0.56*"/>
                                 <RowDefinition Height="0.14*"/>
                             </Grid.RowDefinitions>
-                            <ListBox Grid.Row="0" Margin="10,10,10,10" Background="LightBlue" Name="optional_strategies"
+                            <GroupBox Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="1" Header="Optional Strategies" Margin="10"/>
+                            <ListBox Grid.Row="0" Margin="20,45,20,20" Background="White" Name="optional_strategies"
                              ItemsSource="{Binding Path=OptionalStrategiesImages}"  HorizontalContentAlignment="Left" Padding="5" AllowDrop="True">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -85,19 +91,21 @@
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
                             </ListBox>
+                            <GroupBox Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="1" Header="Information" Margin="10"/>
                             <Controls:FlipView  Grid.Row="1" Name="flip_view_strategies"
-                                         IsBannerEnabled="True" 
-                                          Margin="10,10,10,10"
+                                         IsBannerEnabled="False" 
+                                          Margin="20,45,20,20"
                                            />
 
-                            <Button Foreground="Black" Grid.Row="2" Name="addStrategiesButton" Grid.Column="0" Height="70" Width="70"
-                                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Padding="-5"
-                            Content="{StaticResource appbar_add}" Style="{DynamicResource MetroCircleButtonStyle}" Visibility="Visible"
-                                    Click="addStrategiesButton_Click"/>
-                            
+                            <Button Grid.Row="2" Name="addStrategiesButton" Grid.Column="0" Height="auto" Width="auto"
+                                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Padding="0" BorderBrush="LightBlue"
+                                    Content="{StaticResource appbar_add}" Style="{DynamicResource MetroCircleButtonStyle}" Visibility="Visible"
+                                    Click="addStrategiesButton_Click" Foreground="Beige"/>
+
                         </Grid>
                     </Controls:Flyout>
-                    <TextBlock Name="A_lateral_textblock" Grid.Column="0" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <GroupBox Name="A_lateral_groupbox" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2" Header="Lateral A matrix" Visibility="Hidden"/>
+                    <!--<TextBlock Name="A_lateral_textblock" Grid.Column="0" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
                     <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_A_lateral" Margin="10,10,10,10" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=A_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden">
                         <DataGrid.Columns>
@@ -109,7 +117,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <TextBlock Name="B_lateral_textblock"  Grid.Column="1" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <GroupBox Name="B_lateral_groupbox" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2" Header="Lateral B matrix" Visibility="Hidden"/>
+                    <!--<TextBlock Name="B_lateral_textblock"  Grid.Column="1" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
                     <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_B_lateral" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=B_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
@@ -118,7 +127,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <TextBlock Name="A_longitudinal_textblock"  Grid.Column="0" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+
+                    <GroupBox Name="A_longitudinal_groupbox" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal A matrix" Visibility="Hidden"/>
+                    <!--<TextBlock Name="A_longitudinal_textblock"  Grid.Column="0" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
                     <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_A_longitudinal" Margin="10,10,10,10" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=A_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
@@ -129,7 +140,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <TextBlock Name="B_longitudinal_textblock" Grid.Column="1" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <GroupBox Name="B_longitudinal_groupbox" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal B matrix" Visibility="Hidden"/>
+                    <!--<TextBlock Name="B_longitudinal_textblock" Grid.Column="1" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
                     <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_B_longitudinal" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=B_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
@@ -138,17 +150,220 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="6" Grid.RowSpan="2" Header="Strategy Properties" Position="Bottom" Name="shooter_properties_flyout"
-                                     Background="LightBlue">
+                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0"  Grid.RowSpan="8" Header="Strategy Properties" Position="Right" Name="shooter_properties_flyout"
+                                     Background="White" Foreground="Black" BorderBrush="LightBlue" Panel.ZIndex="1">
+                        <Grid MinWidth="1000">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
+                            <GridSplitter Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Width="2" Margin="0,5,0,5"/>
+                            <GridSplitter Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Width="2" Margin="0,5,0,5"/>
+
+                            <!--<Border BorderBrush="LightBlue" BorderThickness="3" Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="0" Grid.RowSpan="19"/>-->
+
+                            <GroupBox Grid.Column="0" Grid.ColumnSpan="9" Grid.Row="0" Grid.RowSpan="3" 
+                                      Header="Common" Margin="5,5,5,0"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Margin="10" Text="S"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Margin="10" Text="g"/>
+                            <TextBlock Grid.Row="1" Grid.Column="3" Margin="10" Text="p"/>
+                            <TextBlock Grid.Row="1" Grid.Column="6" Margin="10" Text="m"/>
+
+                            <TextBox Grid.Row="1" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[0]}"/>
+                            <TextBox Grid.Row="1" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[1]}"/>
+                            <TextBox Grid.Row="1" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[2]}"/>
+                            <TextBox Grid.Row="2" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[3]}"/>
+
+                            <Slider Grid.Row="1" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[0]}" Minimum="{Binding StrategiesMinimumParameters[0]}" Maximum="{Binding StrategiesMaximumParameters[0]}"/>
+                            <Slider Grid.Row="1" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[1]}" Minimum="{Binding StrategiesMinimumParameters[1]}" Maximum="{Binding StrategiesMaximumParameters[1]}"/>
+                            <Slider Grid.Row="1" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[2]}" Minimum="{Binding StrategiesMinimumParameters[2]}" Maximum="{Binding StrategiesMaximumParameters[2]}"/>
+                            <Slider Grid.Row="2" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[3]}" Minimum="{Binding StrategiesMinimumParameters[3]}" Maximum="{Binding StrategiesMaximumParameters[3]}"/>
+
+
+                            <GridSplitter Grid.Column="2" Grid.Row="4" Grid.RowSpan="7" Width="2" Margin="0,5,0,5"/>
+                            <GridSplitter Grid.Column="5" Grid.Row="4" Grid.RowSpan="7" Width="2" Margin="0,5,0,5"/>
+                            <GroupBox Grid.Column="0" Grid.ColumnSpan="9" Grid.Row="3" Grid.RowSpan="8" 
+                                      Header="Lateral" Margin="5,5,5,0"/>
+
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Margin="10" Text="Y_v"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Margin="10" Text="Y_p"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Margin="10" Text="Y_r"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" Margin="10" Text="Y_xi"/>
+                            <TextBlock Grid.Row="8" Grid.Column="0" Margin="10" Text="Y_zeta"/>
+                            <TextBlock Grid.Row="9" Grid.Column="0" Margin="10" Text="b"/>
+                            <TextBlock Grid.Row="10" Grid.Column="0" Margin="10" Text="I_xz"/>
+
+                            <TextBox Grid.Row="4" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[4]}"/>
+                            <TextBox Grid.Row="5" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[7]}"/>
+                            <TextBox Grid.Row="6" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[10]}"/>
+                            <TextBox Grid.Row="7" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[13]}"/>
+                            <TextBox Grid.Row="8" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[16]}"/>
+                            <TextBox Grid.Row="9" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[19]}"/>
+                            <TextBox Grid.Row="10" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[22]}"/>
+
+                            <Slider Grid.Row="4" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[4]}" Minimum="{Binding StrategiesMinimumParameters[4]}" Maximum="{Binding StrategiesMaximumParameters[4]}"/>
+                            <Slider Grid.Row="5" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[7]}" Minimum="{Binding StrategiesMinimumParameters[7]}" Maximum="{Binding StrategiesMaximumParameters[7]}"/>
+                            <Slider Grid.Row="6" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[10]}" Minimum="{Binding StrategiesMinimumParameters[10]}" Maximum="{Binding StrategiesMaximumParameters[10]}"/>
+                            <Slider Grid.Row="7" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[13]}" Minimum="{Binding StrategiesMinimumParameters[13]}" Maximum="{Binding StrategiesMaximumParameters[13]}"/>
+                            <Slider Grid.Row="8" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[16]}" Minimum="{Binding StrategiesMinimumParameters[16]}" Maximum="{Binding StrategiesMaximumParameters[16]}"/>
+                            <Slider Grid.Row="9" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[19]}" Minimum="{Binding StrategiesMinimumParameters[19]}" Maximum="{Binding StrategiesMaximumParameters[19]}"/>
+                            <Slider Grid.Row="10" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[22]}" Minimum="{Binding StrategiesMinimumParameters[22]}" Maximum="{Binding StrategiesMaximumParameters[22]}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="3" Margin="10" Text="L_v"/>
+                            <TextBlock Grid.Row="5" Grid.Column="3" Margin="10" Text="L_p"/>
+                            <TextBlock Grid.Row="6" Grid.Column="3" Margin="10" Text="L_r"/>
+                            <TextBlock Grid.Row="7" Grid.Column="3" Margin="10" Text="L_xi"/>
+                            <TextBlock Grid.Row="8" Grid.Column="3" Margin="10" Text="L_zeta"/>
+                            <TextBlock Grid.Row="9" Grid.Column="3" Margin="10" Text="I_x"/>
+
+                            <TextBox Grid.Row="4" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[5]}"/>
+                            <TextBox Grid.Row="5" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[8]}"/>
+                            <TextBox Grid.Row="6" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[11]}"/>
+                            <TextBox Grid.Row="7" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[14]}"/>
+                            <TextBox Grid.Row="8" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[17]}"/>
+                            <TextBox Grid.Row="9" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[20]}"/>
+
+                            <Slider Grid.Row="4" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[5]}" Minimum="{Binding StrategiesMinimumParameters[5]}" Maximum="{Binding StrategiesMaximumParameters[5]}"/>
+                            <Slider Grid.Row="5" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[8]}" Minimum="{Binding StrategiesMinimumParameters[8]}" Maximum="{Binding StrategiesMaximumParameters[8]}"/>
+                            <Slider Grid.Row="6" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[11]}" Minimum="{Binding StrategiesMinimumParameters[11]}" Maximum="{Binding StrategiesMaximumParameters[11]}"/>
+                            <Slider Grid.Row="7" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[14]}" Minimum="{Binding StrategiesMinimumParameters[14]}" Maximum="{Binding StrategiesMaximumParameters[14]}"/>
+                            <Slider Grid.Row="8" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[17]}" Minimum="{Binding StrategiesMinimumParameters[17]}" Maximum="{Binding StrategiesMaximumParameters[17]}"/>
+                            <Slider Grid.Row="9" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[20]}" Minimum="{Binding StrategiesMinimumParameters[20]}" Maximum="{Binding StrategiesMaximumParameters[20]}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="6" Margin="10" Text="N_v"/>
+                            <TextBlock Grid.Row="5" Grid.Column="6" Margin="10" Text="N_p"/>
+                            <TextBlock Grid.Row="6" Grid.Column="6" Margin="10" Text="N_r"/>
+                            <TextBlock Grid.Row="7" Grid.Column="6" Margin="10" Text="N_xi"/>
+                            <TextBlock Grid.Row="8" Grid.Column="6" Margin="10" Text="N_zeta"/>
+                            <TextBlock Grid.Row="9" Grid.Column="6" Margin="10" Text="I_z"/>
+
+                            <TextBox Grid.Row="4" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[6]}"/>
+                            <TextBox Grid.Row="5" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[9]}"/>
+                            <TextBox Grid.Row="6" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[12]}"/>
+                            <TextBox Grid.Row="7" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[15]}"/>
+                            <TextBox Grid.Row="8" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[18]}"/>
+                            <TextBox Grid.Row="9" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[21]}"/>
+
+                            <Slider Grid.Row="4" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[6]}" Minimum="{Binding StrategiesMinimumParameters[6]}" Maximum="{Binding StrategiesMaximumParameters[6]}"/>
+                            <Slider Grid.Row="5" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[9]}" Minimum="{Binding StrategiesMinimumParameters[9]}" Maximum="{Binding StrategiesMaximumParameters[9]}"/>
+                            <Slider Grid.Row="6" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[12]}" Minimum="{Binding StrategiesMinimumParameters[12]}" Maximum="{Binding StrategiesMaximumParameters[12]}"/>
+                            <Slider Grid.Row="7" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[15]}" Minimum="{Binding StrategiesMinimumParameters[15]}" Maximum="{Binding StrategiesMaximumParameters[15]}"/>
+                            <Slider Grid.Row="8" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[18]}" Minimum="{Binding StrategiesMinimumParameters[18]}" Maximum="{Binding StrategiesMaximumParameters[18]}"/>
+                            <Slider Grid.Row="9" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[21]}" Minimum="{Binding StrategiesMinimumParameters[21]}" Maximum="{Binding StrategiesMaximumParameters[21]}"/>
+
+                            <GridSplitter Grid.Column="2" Grid.Row="12" Grid.RowSpan="7" Width="2" Margin="0,5,0,5"/>
+                            <GridSplitter Grid.Column="5" Grid.Row="12" Grid.RowSpan="7" Width="2" Margin="0,5,0,5"/>
+                            <GroupBox Grid.Column="0" Grid.ColumnSpan="9" Grid.Row="11" Grid.RowSpan="8" 
+                                      Header="Longitudinal" Margin="5,5,5,0"/>
+
+                            <TextBlock Grid.Row="12" Grid.Column="0" Margin="10" Text="c"/>
+                            <TextBlock Grid.Row="13" Grid.Column="0" Margin="10" Text="Z_dot_u"/>
+                            <TextBlock Grid.Row="14" Grid.Column="0" Margin="10" Text="Z_dot_w"/>
+                            <TextBlock Grid.Row="15" Grid.Column="0" Margin="10" Text="Z_dot_w_dot"/>
+                            <TextBlock Grid.Row="16" Grid.Column="0" Margin="10" Text="Z_dot_q"/>
+                            <TextBlock Grid.Row="17" Grid.Column="0" Margin="10" Text="Z_dot_ni"/>
+                            <TextBlock Grid.Row="18" Grid.Column="0" Margin="10" Text="Z_dot_tau"/>
+
+                            <TextBox Grid.Row="12" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[23]}"/>
+                            <TextBox Grid.Row="13" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[26]}"/>
+                            <TextBox Grid.Row="14" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[29]}"/>
+                            <TextBox Grid.Row="15" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[32]}"/>
+                            <TextBox Grid.Row="16" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[35]}"/>
+                            <TextBox Grid.Row="17" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[38]}"/>
+                            <TextBox Grid.Row="18" Grid.Column="2" Margin="10" Text="{Binding StrategiesParameters[41]}"/>
+
+                            <Slider Grid.Row="12" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[23]}" Minimum="{Binding StrategiesMinimumParameters[23]}" Maximum="{Binding StrategiesMaximumParameters[23]}"/>
+                            <Slider Grid.Row="13" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[26]}" Minimum="{Binding StrategiesMinimumParameters[26]}" Maximum="{Binding StrategiesMaximumParameters[26]}"/>
+                            <Slider Grid.Row="14" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[29]}" Minimum="{Binding StrategiesMinimumParameters[29]}" Maximum="{Binding StrategiesMaximumParameters[29]}"/>
+                            <Slider Grid.Row="15" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[32]}" Minimum="{Binding StrategiesMinimumParameters[32]}" Maximum="{Binding StrategiesMaximumParameters[32]}"/>
+                            <Slider Grid.Row="16" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[35]}" Minimum="{Binding StrategiesMinimumParameters[35]}" Maximum="{Binding StrategiesMaximumParameters[35]}"/>
+                            <Slider Grid.Row="17" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[38]}" Minimum="{Binding StrategiesMinimumParameters[38]}" Maximum="{Binding StrategiesMaximumParameters[38]}"/>
+                            <Slider Grid.Row="18" Grid.Column="1" Margin="10" Value="{Binding StrategiesParameters[41]}" Minimum="{Binding StrategiesMinimumParameters[41]}" Maximum="{Binding StrategiesMaximumParameters[41]}"/>
+
+                            <TextBlock Grid.Row="12" Grid.Column="3" Margin="10" Text="I_y"/>
+                            <TextBlock Grid.Row="13" Grid.Column="3" Margin="10" Text="M_dot_u"/>
+                            <TextBlock Grid.Row="14" Grid.Column="3" Margin="10" Text="M_dot_w"/>
+                            <TextBlock Grid.Row="15" Grid.Column="3" Margin="10" Text="M_dot_w_dot"/>
+                            <TextBlock Grid.Row="16" Grid.Column="3" Margin="10" Text="M_dot_q"/>
+                            <TextBlock Grid.Row="17" Grid.Column="3" Margin="10" Text="M_dot_ni"/>
+                            <TextBlock Grid.Row="18" Grid.Column="3" Margin="10" Text="M_dot_tau"/>
+
+                            <TextBox Grid.Row="12" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[24]}"/>
+                            <TextBox Grid.Row="13" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[27]}"/>
+                            <TextBox Grid.Row="14" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[30]}"/>
+                            <TextBox Grid.Row="15" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[33]}"/>
+                            <TextBox Grid.Row="16" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[36]}"/>
+                            <TextBox Grid.Row="17" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[39]}"/>
+                            <TextBox Grid.Row="18" Grid.Column="5" Margin="10" Text="{Binding StrategiesParameters[42]}"/>
+
+                            <Slider Grid.Row="12" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[24]}" Minimum="{Binding StrategiesMinimumParameters[24]}" Maximum="{Binding StrategiesMaximumParameters[24]}"/>
+                            <Slider Grid.Row="13" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[27]}" Minimum="{Binding StrategiesMinimumParameters[27]}" Maximum="{Binding StrategiesMaximumParameters[27]}"/>
+                            <Slider Grid.Row="14" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[30]}" Minimum="{Binding StrategiesMinimumParameters[30]}" Maximum="{Binding StrategiesMaximumParameters[30]}"/>
+                            <Slider Grid.Row="15" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[33]}" Minimum="{Binding StrategiesMinimumParameters[33]}" Maximum="{Binding StrategiesMaximumParameters[33]}"/>
+                            <Slider Grid.Row="16" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[36]}" Minimum="{Binding StrategiesMinimumParameters[36]}" Maximum="{Binding StrategiesMaximumParameters[36]}"/>
+                            <Slider Grid.Row="17" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[39]}" Minimum="{Binding StrategiesMinimumParameters[39]}" Maximum="{Binding StrategiesMaximumParameters[39]}"/>
+                            <Slider Grid.Row="18" Grid.Column="4" Margin="10" Value="{Binding StrategiesParameters[42]}" Minimum="{Binding StrategiesMinimumParameters[42]}" Maximum="{Binding StrategiesMaximumParameters[42]}"/>
+
+                            <TextBlock Grid.Row="12" Grid.Column="6" Margin="10" Text="X_dot_u"/>
+                            <TextBlock Grid.Row="13" Grid.Column="6" Margin="10" Text="X_dot_w"/>
+                            <TextBlock Grid.Row="14" Grid.Column="6" Margin="10" Text="X_dot_w_dot"/>
+                            <TextBlock Grid.Row="15" Grid.Column="6" Margin="10" Text="X_dot_q"/>
+                            <TextBlock Grid.Row="16" Grid.Column="6" Margin="10" Text="X_dot_ni"/>
+                            <TextBlock Grid.Row="17" Grid.Column="6" Margin="10" Text="X_dot_tau"/>
+
+                            <TextBox Grid.Row="12" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[25]}"/>
+                            <TextBox Grid.Row="13" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[28]}"/>
+                            <TextBox Grid.Row="14" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[31]}"/>
+                            <TextBox Grid.Row="15" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[34]}"/>
+                            <TextBox Grid.Row="16" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[37]}"/>
+                            <TextBox Grid.Row="17" Grid.Column="8" Margin="10" Text="{Binding StrategiesParameters[40]}"/>
+
+                            <Slider Grid.Row="12" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[25]}" Minimum="{Binding StrategiesMinimumParameters[25]}" Maximum="{Binding StrategiesMaximumParameters[25]}"/>
+                            <Slider Grid.Row="13" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[28]}" Minimum="{Binding StrategiesMinimumParameters[28]}" Maximum="{Binding StrategiesMaximumParameters[28]}"/>
+                            <Slider Grid.Row="14" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[31]}" Minimum="{Binding StrategiesMinimumParameters[31]}" Maximum="{Binding StrategiesMaximumParameters[31]}"/>
+                            <Slider Grid.Row="15" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[34]}" Minimum="{Binding StrategiesMinimumParameters[34]}" Maximum="{Binding StrategiesMaximumParameters[34]}"/>
+                            <Slider Grid.Row="16" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[37]}" Minimum="{Binding StrategiesMinimumParameters[37]}" Maximum="{Binding StrategiesMaximumParameters[37]}"/>
+                            <Slider Grid.Row="17" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[40]}" Minimum="{Binding StrategiesMinimumParameters[40]}" Maximum="{Binding StrategiesMaximumParameters[40]}"/>
+                        </Grid>
                     </Controls:Flyout>
 
-                    <Button Name="manageStrategiesButton" Grid.Column="0" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="10,0,0,0" Padding="-5"
-                            Content="{StaticResource appbar_app_plus}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesButton_Click"  Visibility="Hidden"/>
-                    <Button Name="manageStrategiesPropertiesButton" Grid.Column="0" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="90,0,0,0" Padding="-5"
-                            Content="{StaticResource appbar_settings}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesPropertiesButton_Click" Visibility="Hidden"/>
-                    <Button Name="manageStrategiesHelpButton" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Height="70" Width="70" HorizontalAlignment="Left" Margin="170,0,0,0" Padding="-5"
-                            Content="{StaticResource appbar_question}" Style="{DynamicResource MetroCircleButtonStyle}" Click="manageStrategiesHelpButton_Click" Visibility="Hidden"/>
+                    <Button Name="manageStrategiesButton" Grid.Column="0" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="10,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_app_plus}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesButton_Click"  Visibility="Hidden"/>
+                    <Button IsEnabled="False" Name="manageStrategiesPropertiesButton" Grid.Column="0" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="90,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_settings}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesPropertiesButton_Click"  Visibility="Hidden"/>
+                    <Button Name="manageStrategiesHelpButton" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="170,0,0,0" Padding="-5"
+                            Content="{StaticResource appbar_question}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesHelpButton_Click" Visibility="Hidden"/>
 
 
                     <!--<Controls:FlipView Name="flip_view_strategies" Grid.Column="1"

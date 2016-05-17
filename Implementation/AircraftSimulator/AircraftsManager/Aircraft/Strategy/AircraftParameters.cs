@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Common.Containers
+namespace AircraftsManager.Aircraft.Strategy
 {
     [Serializable]
     public class AircraftParameters : IAircraftParameters

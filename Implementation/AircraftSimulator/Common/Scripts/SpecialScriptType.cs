@@ -10,6 +10,7 @@ namespace Common.Scripts
         Inverse,
         WorkspaceInitializator,
         StrategyCreator,
-        GetState
+        GetState,
+        WorkspaceUpdater
     }
 }

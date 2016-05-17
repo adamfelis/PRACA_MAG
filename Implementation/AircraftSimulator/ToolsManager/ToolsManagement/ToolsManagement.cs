@@ -31,6 +31,9 @@ namespace ToolsManager.ToolsManagement
         private void InitializeTools(Action<ToolAdapter.Tool.ITool> toolAddedAction)
         {
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#if !DEBUG
+            baseDirectory += @"..\";
+#endif
             string dllsDirectory = baseDirectory + @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\" + toolsPath;
 
             string[] toolPaths = Directory.GetFiles(dllsDirectory, "*Tool.dll", SearchOption.TopDirectoryOnly);

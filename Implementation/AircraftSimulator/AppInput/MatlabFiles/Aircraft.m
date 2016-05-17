@@ -37,6 +37,12 @@ classdef Aircraft < handle & Shooter
                                         new_A_lateral, new_B_lateral)];  
         end
         %
+        function ModifyStrategy(obj, strategy_id, new_A_longitudinal, new_B_longitudinal,...
+                                        new_A_lateral, new_B_lateral)
+           obj.Strategies(strategy_id + 1) = AircraftStrategy(new_A_longitudinal, new_B_longitudinal,...
+                                        new_A_lateral, new_B_lateral);                    
+        end
+        %
         function total_simulation_time = GetTotalSimulationTime(obj)
             total_simulation_time = obj.simulation_step_from_fixed_update * (obj.simulation_time_from_AircraftStrategy_cs - 1);
         end

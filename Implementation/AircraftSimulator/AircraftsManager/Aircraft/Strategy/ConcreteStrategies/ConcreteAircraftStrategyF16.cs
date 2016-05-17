@@ -45,12 +45,12 @@ namespace AircraftsManager.Aircraft.Strategy.ConcreteStrategies
             return this.longitudinalData;
         }
 
-        internal override List<IData> GetLateralInitialData(IData additionalInformation)
+        internal override List<IData> GetLateralInitialData(IData additionalInformation = null)
         {
             return PrepareLateralMatrixes(additionalInformation);
         }
 
-        internal override List<IData> GetLongitudinalInitialData(IData additionalInformation)
+        internal override List<IData> GetLongitudinalInitialData(IData additionalInformation = null)
         {
             return PrepareLongitudinalMatrixes(additionalInformation);
         }
