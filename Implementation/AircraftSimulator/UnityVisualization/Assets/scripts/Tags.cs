@@ -44,4 +44,8 @@ public static class Tags
     public static string ButtonDisconnect = "ButtonDisconnect";
     #endregion
 
+    #region ui - main scene
+    public static string MiniMap = "MiniMap";
+    #endregion
+
 }

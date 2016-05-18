@@ -17,7 +17,6 @@ namespace Assets.Scripts
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
-
         }
 
         public override void PreStartClient()
@@ -32,6 +31,13 @@ namespace Assets.Scripts
             var aircraftsController = GetComponent<AircraftsController>();
             aircraftsController.Initialized += AircraftsControllerOnInitialized;
             aircraftsController.enabled = true;
+
+            if (isLocalPlayer)
+            {
+                var miniMap = GameObject.FindGameObjectWithTag(Tags.MiniMap);
+                miniMap.GetComponent<MapCanvasController>().AircraftsController = aircraftsController;
+                miniMap.GetComponent<MapCanvasController>().enabled = true;
+            }
         }
 
         private void AircraftsControllerOnInitialized()
@@ -39,6 +45,8 @@ namespace Assets.Scripts
             //aircraftModel.SetActive(true);
             if (isLocalPlayer)
                 GetComponent<BoxCollider>().enabled = true;
+            if (!isLocalPlayer)
+                GetComponent<MapMarker>().enabled = true;
         }
     }
 }
