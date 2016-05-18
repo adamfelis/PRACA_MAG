@@ -19,23 +19,23 @@ public class Communication : MonoBehaviour, ICommunication
     private IDataReader dataReader;
     private IDataWriter dataWriter;
     private IDataHandler dataHandler;
-	
+
     public void NotifyUnityShell(string toOutput)
-	{
+    {
         Debug.Log(toOutput);
-	}
+    }
 
     private void Initialize()
     {
         var gameObjects = GameObject.FindGameObjectsWithTag(Tags.Player);
         foreach (GameObject gameobject in gameObjects)
-    {
-            if (gameobject.GetComponent<Player_ID>().isLocalPlayer)
         {
+            if (gameobject.GetComponent<Player_ID>().isLocalPlayer)
+            {
                 aircraftsController = gameobject.GetComponent<AircraftsController>();
-                        break;
-                            }
-                        }
+                break;
+            }
+        }
 
         dataHandler = new DataHandler(this, aircraftsController);
         dataReader = new DataReader(dataHandler, this);
@@ -52,22 +52,22 @@ public class Communication : MonoBehaviour, ICommunication
     }
 
     private void Start()
-        {
+    {
         Initialize();
         dataWriter.SendJoinMessage();
     }
 
     private void Update()
-        {
+    {
     }
 
     private void FixedUpdate()
-              {
+    {
         dataReader.ReadDataSentFromServer();
     }
 
     private void OnApplicationQuit()
-            {
+    {
         dataWriter.DisconnectFromServer();
     }
 }

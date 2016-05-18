@@ -12,19 +12,19 @@ namespace Assets.Scripts
         [SerializeField]
         private AudioListener audioListener;
 
-        private GameObject aircraftModel;
+        //private GameObject aircraftModel;
 
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
+
         }
 
         public override void PreStartClient()
         {
             transform.rotation = Quaternion.Euler(0, 270, 0);
             GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
-            aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
-            //aircraftModel.SetActive(false);
+            //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
         }
 
         private void OnPlayerIdentitySet()
@@ -37,6 +37,8 @@ namespace Assets.Scripts
         private void AircraftsControllerOnInitialized()
         {
             //aircraftModel.SetActive(true);
+            if (isLocalPlayer)
+                GetComponent<BoxCollider>().enabled = true;
         }
     }
 }
