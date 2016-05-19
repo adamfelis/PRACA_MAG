@@ -55,6 +55,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = ElevatorRight.GetComponent<ColliderHandler>();
+            //return (float)Math.Round(collider.RotationOffset, 2);
             return collider.RotationOffset;
         }
     }
@@ -66,6 +67,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = AileronRight.GetComponent<ColliderHandler>();
+            //return (float)Math.Round(collider.RotationOffset, 2);
             return collider.RotationOffset;
         }
     }
@@ -77,6 +79,7 @@ public class Aircraft : IAircraft
         get
         {
             var collider = RudderRight.GetComponent<ColliderHandler>();
+            //return (float)Math.Round(collider.RotationOffset, 2);
             return collider.RotationOffset;
         }
     }
@@ -165,7 +168,7 @@ public class Aircraft : IAircraft
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
         Velocity_0 = new Vector3(0, 0, 178);
-        Theta_0 = 0.0f;//9.4f;
+        Theta_0 = 9.4f;
         aircraftInterpolator.TargetTheta = Theta_0;
         aircraftInterpolator.Interpolate(1.0f, 1.0f);
     }

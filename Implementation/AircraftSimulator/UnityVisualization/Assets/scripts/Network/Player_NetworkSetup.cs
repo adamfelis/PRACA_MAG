@@ -19,14 +19,22 @@ namespace Assets.Scripts
         {
         }
 
+        //private void Start()
+        //{
+        //    transform.rotation = Quaternion.Euler(0, 270, 0);
+        //    GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
+        //    //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
+        //}
+
         public override void PreStartClient()
         {
             transform.rotation = Quaternion.Euler(0, 270, 0);
             GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
+            GetComponent<Player_ID>().enabled = true;
             //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
         }
 
-        private void OnPlayerIdentitySet()
+        public void OnPlayerIdentitySet()
         {
             var aircraftsController = GetComponent<AircraftsController>();
             aircraftsController.Initialized += AircraftsControllerOnInitialized;

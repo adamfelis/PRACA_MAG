@@ -54,6 +54,7 @@ namespace Common.Containers
         ErrorCode Error { get; set; }
         MessageType MessageType { get; set; }
         MessageContent MessageContent { get; set; }
+        int StrategyNumber { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
         Shooters.ShooterType ShooterType { get; set; }

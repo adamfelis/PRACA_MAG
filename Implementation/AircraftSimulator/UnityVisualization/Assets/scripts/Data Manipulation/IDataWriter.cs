@@ -8,7 +8,7 @@ namespace Assets.scripts.Data_Manipulation
 {
     public interface IDataWriter
     {
-        void SendJoinMessage();
+        void SendJoinMessage(string localIPAddress);
         void SendInputToServer();
         void DisconnectFromServer();
     }

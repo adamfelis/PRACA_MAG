@@ -98,9 +98,7 @@ namespace Assets.scripts
             float iterations = wholeInterpolationTime/singleIterationTime;
             globalIterationCounter += singleIterationTime;
             float t = globalIterationCounter / wholeInterpolationTime;
-            float eps = 0.0001f;
-            float diff = Mathf.Abs(globalIterationCounter - wholeInterpolationTime);
-            if (diff < eps)
+            if (globalIterationCounter > wholeInterpolationTime)
                 globalIterationCounter = 0.0f;
 
             interpolateLateralRotation(iterations);

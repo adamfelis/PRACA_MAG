@@ -8,7 +8,7 @@ namespace Client
 {
     public interface IServerConnection : IConnector
     {
-        string ConnectToServer();
+        string ConnectToServer(string passedIp);
         /// <summary>
         /// Client wants to disconnect from server due to internal client's error
         /// </summary>

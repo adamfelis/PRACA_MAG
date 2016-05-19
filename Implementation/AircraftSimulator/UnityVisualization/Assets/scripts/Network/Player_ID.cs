@@ -63,7 +63,7 @@ public class Player_ID : NetworkBehaviour
     void Start()
     {
         myTransform = transform;
-        SetIdentity();
+        //SetIdentity();
     }
 
     // Update is called once per frame
@@ -71,10 +71,10 @@ public class Player_ID : NetworkBehaviour
     {
         //We are assigning identity in update cause it requires time for the player object to get instantianted.
         //That is the reason code cannot be applied in Start/Awake function
-        //if (myTransform.name == "" || myTransform.name == "Player(Clone)")
-        //{
-        //    SetIdentity();
-        //}
+        if (myTransform.name == "" || myTransform.name == "Player(Clone)")
+        {
+            SetIdentity();
+        }
     }
 
     [Client]

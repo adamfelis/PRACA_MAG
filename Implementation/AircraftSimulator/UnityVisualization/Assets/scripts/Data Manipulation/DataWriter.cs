@@ -21,7 +21,7 @@ namespace Assets.scripts
             base.unityShellNotifier = communication;
         }
 
-        public void SendJoinMessage()
+        public void SendJoinMessage(string localIPAddress)
         {
             var aircraft = aircraftsController.aircraft;
             string toOutput = communicator.ConnectToServer(new AircraftData(
@@ -29,7 +29,7 @@ namespace Assets.scripts
             aircraft.Theta,
             Time.fixedDeltaTime,
             1.0f //????????????????????????????????
-            ));
+            ), localIPAddress);
             unityShellNotifier.NotifyUnityShell(toOutput);
         }
 

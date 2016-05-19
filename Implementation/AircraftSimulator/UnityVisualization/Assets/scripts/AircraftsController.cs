@@ -43,6 +43,12 @@ public class AircraftsController : NetworkBehaviour
 	// Update is called once per frame
 	void Update () {
         if (isLocalPlayer)
-	        aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
+            aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
     }
+
+    //void FixedUpdate()
+    //{
+    //    if (isLocalPlayer)
+    //        aircraft.aircraftInterpolator.Interpolate(Time.fixedDeltaTime, Time.fixedDeltaTime);
+    //}
 }

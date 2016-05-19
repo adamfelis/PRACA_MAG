@@ -54,7 +54,11 @@ public class Communication : MonoBehaviour, ICommunication
     private void Start()
     {
         Initialize();
-        dataWriter.SendJoinMessage();
+        string localIPAddress =
+            GameObject.FindGameObjectWithTag(Tags.NetworkManager)
+                .GetComponent<CustomNetworkManager>()
+                .LocalIPAddress;
+        dataWriter.SendJoinMessage(localIPAddress);
     }
 
     private void Update()

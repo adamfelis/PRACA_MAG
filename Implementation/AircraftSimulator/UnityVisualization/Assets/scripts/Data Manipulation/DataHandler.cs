@@ -13,6 +13,7 @@ namespace Assets.scripts.Data_Manipulation
     {
         public event ClientResponseHandler ClientResponseHandler;
         public event ClientResponseHandler ClientDisconnected;
+        private int currentStrategy = 0;
         public DataHandler (ICommunication communication, AircraftsController aircraftsController)
         {
             base.aircraftsController = aircraftsController;
@@ -32,8 +33,10 @@ namespace Assets.scripts.Data_Manipulation
             unityShellNotifier.NotifyUnityShell(toOutput);
             foreach (Data data in dataList.DataArray)
             {
+                if (data.StrategyNumber != currentStrategy)
+                    continue;
                 MessageContent messageContent = data.MessageContent;
-                toOutput = messageContent.ToString() + ": ";
+                toOutput = "strategy" + data.StrategyNumber+": " + messageContent.ToString() + ": ";
                 foreach (var f in data.Array)
                 {
                     toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
@@ -54,6 +57,7 @@ namespace Assets.scripts.Data_Manipulation
             unityShellNotifier.NotifyUnityShell(toOutput);
         }
 
+        private float prevTheta = 0.0f;
         private void handleLongitudinalData(IData data)
         {
             var aircraft = aircraftsController.aircraft;
@@ -69,6 +73,8 @@ namespace Assets.scripts.Data_Manipulation
 
             aircraft.TranslateInLongitudinal(velocityX, velocityY);
             var theta = data.Array[0][3];
+            unityShellNotifier.NotifyUnityShell("delta theta: " + (theta-prevTheta).ToString("n2"));
+            prevTheta = theta;
             aircraft.RotateInLongitudinal(theta);
         }
 

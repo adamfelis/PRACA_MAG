@@ -52,8 +52,10 @@ namespace Client
             throw new Exception("Local IP Address Not Found!");
         }
 
-        public string ConnectToServer()
+        public string ConnectToServer(string passedIp)
         {
+            if (passedIp != String.Empty)
+                NetIP = passedIp;
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 throw new Exception("Please connect to network.");
             base.client = new TcpClient(NetIP, PortNum);

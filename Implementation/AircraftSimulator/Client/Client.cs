@@ -46,12 +46,12 @@ namespace Client
             clientInputPriveleges = new ClientInputPriveleges(ref dataParser, ref serverConnection);
         }
 
-        public string ConnectToServer(AircraftData aircraftData)
+        public string ConnectToServer(AircraftData aircraftData, string passedIP)
         {
             string toSend;
             try
             {
-                serverConnection.ConnectToServer();
+                serverConnection.ConnectToServer(passedIP);
                 Data join = new Data()
                 {
                     MessageType = MessageType.ClientJoinRequest,

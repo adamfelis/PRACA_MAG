@@ -15,6 +15,12 @@ public class CustomNetworkManager : NetworkManager
 {
     public event ClientDisconnectedHandler ClientDisconnected;
     private Dictionary<string, MatchDesc> myMatches = new Dictionary<string, MatchDesc>();
+    private string localIPAddress;
+
+    public string LocalIPAddress
+    {
+        get { return localIPAddress;}
+    }
     private string RoomName
     {
         get
@@ -32,6 +38,7 @@ public class CustomNetworkManager : NetworkManager
     void StartupHost()
     {
         SetPort();
+        setupLocalIP();
         NetworkManager.singleton.StartHost();
     }
 
@@ -71,6 +78,17 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
+    private void setupLocalIP()
+    {
+        var inputField = GameObject.FindGameObjectWithTag(Tags.InputLocalAddress);
+        string ipAdress = inputField.GetComponent<Text>().text;
+        if (ipAdress == "")
+        {
+            ipAdress = inputField.transform.parent.FindChild("Placeholder").GetComponent<Text>().text;
+        }
+        localIPAddress = ipAdress;
+    }
+
 
     void StartRemoteHost()
     {
@@ -107,6 +125,7 @@ public class CustomNetworkManager : NetworkManager
         {
             ipAdress = inputField.transform.parent.FindChild("Placeholder").GetComponent<Text>().text;
         }
+        localIPAddress = ipAdress;
         NetworkManager.singleton.networkAddress = ipAdress;
     }
 

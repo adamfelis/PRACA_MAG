@@ -30,6 +30,12 @@ namespace Common.Containers
             get; set;
         }
 
+        public int StrategyNumber
+        {
+            get { return 0; }
+            set { }
+        }
+
         public ActionType Response
         {
             get; set;

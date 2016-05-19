@@ -11,7 +11,7 @@ namespace Client
     public interface IClient
     {
         IClientInputPriveleges ClientInputPriveleges { get; }
-        string ConnectToServer(AircraftData aircraftData);
+        string ConnectToServer(AircraftData aircraftData, string NetIp);
         void DisconnectFromServer();
     }
 }
