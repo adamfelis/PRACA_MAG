@@ -157,13 +157,13 @@ public class MapCanvasController : MonoBehaviour
         if (rotateMap)
         {
             //mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, playerTransform.eulerAngles.y));
-            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
+            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
             mapArrow.rotate(Quaternion.identity);
         }
         else
         {
             //mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -playerTransform.eulerAngles.y)) );
-            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
+            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
         }
     }
 

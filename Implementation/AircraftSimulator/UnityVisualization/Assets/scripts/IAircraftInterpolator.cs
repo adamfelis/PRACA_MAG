@@ -16,6 +16,14 @@ namespace Assets.scripts
         float TargetVelocityY { get; set; }
         float TargetVelocityZ { get; set; }
 
-        void Interpolate(float singleIterationTime, float wholeInterpolationTime);
+        bool InterpolationPending { get; }
+
+        void Interpolate(float singleIterationTime);
+        //when this metho is called neither of rotation or translastion will be performed
+        //untill 'UnlockInterpolation' is called
+        void LockInterpolation();
+        void UnclockInterpolation();
+
+        void SetupInitial(float theta0, float phi0, float psi0);
     }
 }

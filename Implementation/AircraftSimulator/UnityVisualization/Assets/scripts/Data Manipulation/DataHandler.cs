@@ -31,6 +31,7 @@ namespace Assets.scripts.Data_Manipulation
         {
             string toOutput = "Response received from the server:";
             unityShellNotifier.NotifyUnityShell(toOutput);
+            aircraftsController.aircraft.aircraftInterpolator.LockInterpolation();
             foreach (Data data in dataList.DataArray)
             {
                 if (data.StrategyNumber != currentStrategy)
@@ -47,6 +48,7 @@ namespace Assets.scripts.Data_Manipulation
                 if (messageContent == MessageContent.LateralData)
                     handleLateralData(data);
             }
+            aircraftsController.aircraft.aircraftInterpolator.UnclockInterpolation();
             ClientResponseHandler.Invoke();
         }
 

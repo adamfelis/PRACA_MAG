@@ -169,8 +169,9 @@ public class Aircraft : IAircraft
         rotationMaxOffset = new Vector3(angle, angle, angle);
         Velocity_0 = new Vector3(0, 0, 178);
         Theta_0 = 9.4f;
-        aircraftInterpolator.TargetTheta = Theta_0;
-        aircraftInterpolator.Interpolate(1.0f, 1.0f);
+        Psi_0 = 0.0f;
+        Phi_0 = 0.0f;
+        aircraftInterpolator.SetupInitial(Theta_0, Phi_0, Psi_0);
     }
 
     public void Initialize()

@@ -63,11 +63,13 @@ public class Communication : MonoBehaviour, ICommunication
 
     private void Update()
     {
+        if (!aircraftsController.aircraft.aircraftInterpolator.InterpolationPending)
+            dataReader.ReadDataSentFromServer();
     }
 
     private void FixedUpdate()
     {
-        dataReader.ReadDataSentFromServer();
+
     }
 
     private void OnApplicationQuit()

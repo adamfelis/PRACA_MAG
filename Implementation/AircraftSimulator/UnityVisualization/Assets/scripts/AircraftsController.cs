@@ -28,7 +28,11 @@ public class AircraftsController : NetworkBehaviour
             AileronLeft = Tags.FindGameObjectWithTagInParent(Tags.AileronLeft, name),
             AileronRight = Tags.FindGameObjectWithTagInParent(Tags.AileronRight, name)
         };
+        //var aircraftInterpolator = gameObject.AddComponent<AircraftInterpolator>();
+        //aircraftInterpolator.Body = gameObject;
+        //aircraft.aircraftInterpolator = aircraftInterpolator;
         aircraft.Initialize();
+        
 	    if (isLocalPlayer)
 	    {
 	        Camera.main.GetComponent<CameraSmoothFollow>().target = aircraft.Body.transform;
@@ -39,11 +43,12 @@ public class AircraftsController : NetworkBehaviour
 	    }
         Initialized.Invoke();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (isLocalPlayer)
-            aircraft.aircraftInterpolator.Interpolate(Time.deltaTime, Time.fixedDeltaTime);
+            aircraft.aircraftInterpolator.Interpolate(Time.deltaTime);
     }
 
     //void FixedUpdate()
