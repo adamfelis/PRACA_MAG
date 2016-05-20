@@ -167,7 +167,7 @@ public class Aircraft : IAircraft
     private void initializeFlightConditions()
     {
         rotationMaxOffset = new Vector3(angle, angle, angle);
-        Velocity_0 = new Vector3(0, 0, 178);
+        Velocity_0 = new Vector3(0, 0, 400);
         Theta_0 = 9.4f;
         Psi_0 = 0.0f;
         Phi_0 = 0.0f;

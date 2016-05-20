@@ -115,7 +115,7 @@ namespace Assets.scripts
         {
             prevTheta = currentTheta = targetTheta = theta0;
             prevPhi = currentPhi = targetPhi = phi0;
-            prevPsi = currentPsi = targetPsi = theta0;
+            prevPsi = currentPsi = targetPsi = psi0;
             globalIterationCounter = wholeInterpolationTime + 1.0f;
 
             //theta0 rotation
