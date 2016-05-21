@@ -207,22 +207,23 @@ namespace Assets.scripts
             delta /= iterations;
             currentTheta += delta;
             var rot = new Vector3(delta, 0, 0);
-            Body.transform.Rotate(rot);
+            Body.transform.Rotate(rot, Space.Self);
         }
 
         private void interpolateLateralRotation(float iterations)
         {
+
             float delta = TargetPhi - prevPhi;
             delta /= iterations;
             currentPhi += delta;
             var rot = new Vector3(0, 0, -delta);
-            Body.transform.Rotate(rot);
+            Body.transform.Rotate(rot, Space.Self);
 
             delta = TargetPsi - prevPsi;
             delta /= iterations;
             currentPsi += delta;
             rot = new Vector3(0, delta, 0);
-            Body.transform.Rotate(rot);
+            Body.transform.Rotate(rot, Space.Self);
         }
 
         private void interpolateLongitudinalVelocity(float t)
@@ -235,6 +236,7 @@ namespace Assets.scripts
 
         private void interpolateLateralVelocity(float t)
         {
+
             float Z = Mathf.Lerp(prevVelocityZ, TargetVelocityZ, t);
             var velocity = new Vector3(Z, 0, 0);
             Body.transform.Translate(velocity * Time.deltaTime, Space.Self);

@@ -42,7 +42,7 @@ namespace Assets.scripts
         {
             var aircraft = aircraftsController.aircraft;
             //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
-            string toOutput = "eta: " + aircraft.Eta + ", xi: " + aircraft.Xi + ", zeta: " + aircraft.Zeta; 
+            string toOutput = "theta: " + aircraft.Theta + " eta: " + aircraft.Eta + ", xi: " + aircraft.Xi + ", zeta: " + aircraft.Zeta; 
             unityShellNotifier.NotifyUnityShell(toOutput);
             communicator.ClientInputPriveleges.SendDataRequest(
             new DataList()

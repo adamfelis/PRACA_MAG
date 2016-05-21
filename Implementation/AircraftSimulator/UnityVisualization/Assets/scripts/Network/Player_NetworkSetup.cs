@@ -28,7 +28,7 @@ namespace Assets.Scripts
 
         public override void PreStartClient()
         {
-            transform.rotation = Quaternion.Euler(0, 270, 0);
+            //transform.rotation = Quaternion.Euler(0, 270, 0);
             GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
             GetComponent<Player_ID>().enabled = true;
             //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);

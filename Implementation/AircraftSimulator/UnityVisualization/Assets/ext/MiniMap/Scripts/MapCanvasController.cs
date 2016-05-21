@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using Assets.scripts;
 
 [AddComponentMenu("MiniMap/Map canvas controller")]
 [RequireComponent(typeof(RectTransform))]
@@ -44,10 +43,9 @@ public class MapCanvasController : MonoBehaviour
     #endregion
 
     #region Public
-     
+
     /* Transform of the player that will be shown in the center of the map
-     */ 
-    //public Transform playerTransform;
+     */
     public AircraftsController AircraftsController;
 
     /* Distance from which the objects will be shown on the map
@@ -149,21 +147,14 @@ public class MapCanvasController : MonoBehaviour
 
 	void Update () 
     {
-        //if (!playerTransform)
-        //{
-        //    //error was already fired in Awake()
-        //    return;
-        //}
         if (rotateMap)
         {
-            //mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, playerTransform.eulerAngles.y));
-            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
+            mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, AircraftsController.aircraft.Body.transform.eulerAngles.y));
             mapArrow.rotate(Quaternion.identity);
         }
         else
         {
-            //mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -playerTransform.eulerAngles.y)) );
-            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, AircraftsController.aircraft.aircraftInterpolator.TargetPsi)));
+            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.aircraft.Body.transform.eulerAngles.y)));
         }
     }
 
@@ -173,11 +164,6 @@ public class MapCanvasController : MonoBehaviour
 
     public void checkIn(MapMarker marker)
     {
-        if (AircraftsController == null)
-        {
-            //error was already fired in Awake()
-            return;
-        }
 
         float scaledRadarDistance = radarDistance * scale;
         float scaledMaxRadarDistance = maxRadarDistance * scale;
@@ -238,9 +224,8 @@ public class MapCanvasController : MonoBehaviour
                 marker.show();
             }
 
-            Vector3 posDif = marker.getPosition() - AircraftsController.transform.position;
-            Vector3 newPos = new Vector3(posDif.z, posDif.x, 0);
-            
+            Vector3 posDif = marker.getPosition() - AircraftsController.aircraft.Body.transform.position;
+            Vector3 newPos = new Vector3(-posDif.x, -posDif.z, 0);
             newPos.Normalize();
 
             float markerRadius = (marker.markerSize / 2);
@@ -262,7 +247,7 @@ public class MapCanvasController : MonoBehaviour
     private float distanceToPlayer(Vector3 other)
     {
         
-        return Vector2.Distance(new Vector2(AircraftsController.transform.position.x, AircraftsController.transform.position.z), new Vector2(other.x, other.z));
+        return Vector2.Distance(new Vector2(AircraftsController.aircraft.Body.transform.position.x, AircraftsController.aircraft.Body.transform.position.z), new Vector2(other.x, other.z));
     }
 
     #endregion

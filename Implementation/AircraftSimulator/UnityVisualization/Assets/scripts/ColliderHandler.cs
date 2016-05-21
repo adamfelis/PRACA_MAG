@@ -56,7 +56,7 @@ public class ColliderHandler : MonoBehaviour
         Second = new GameObject("second");
         Second.transform.parent = transform;
         First.transform.position = Vector3.zero;
-        Second.transform.position = Vector3.forward;
+        Second.transform.position = Vector3.right;
         //TargetRotation = Quaternion.identity;
 	}
 	
