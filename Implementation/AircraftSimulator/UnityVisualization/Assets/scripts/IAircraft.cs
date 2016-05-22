@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using UnityEngine;
 namespace Assets.scripts
 {
-    //public enum AircraftPart
-    //{
-    //    RudderLeft,
-    //    RudderRight,
-    //    ElevatorLeft,
-    //    ElevatorRight,
-    //    AileronLeft,
-    //    AileronRight
-    //}
     public interface IAircraft
     {
-        void RotateAircraft(float deltaAileron, float deltaRudder, float deltaElevator);
+        void RotateSteers(float deltaAileron, float deltaRudder, float deltaElevator);
+
+        float Theta { get; }
+        float Psi { get; }
+        float Phi { get; }
+
+        float Eta { get; }
+        float Xi { get; }
+        float Zeta { get; }
+
+        Vector3 Velocity { get; }
+        Vector3 Position { get; }
     }
 }

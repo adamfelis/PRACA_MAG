@@ -36,7 +36,6 @@ public class Communication : MonoBehaviour, ICommunication
                 break;
             }
         }
-
         dataHandler = new DataHandler(this, aircraftsController);
         dataReader = new DataReader(dataHandler, this);
         dataWriter = new DataWriter(dataReader, this, aircraftsController);

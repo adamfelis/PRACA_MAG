@@ -29,6 +29,7 @@ namespace Assets.scripts.Data_Manipulation
 
         public void OnServerDataResponse(IDataList dataList)
         {
+            //return;
             string toOutput = "Response received from the server:";
             unityShellNotifier.NotifyUnityShell(toOutput);
             aircraftsController.aircraft.aircraftInterpolator.LockInterpolation();

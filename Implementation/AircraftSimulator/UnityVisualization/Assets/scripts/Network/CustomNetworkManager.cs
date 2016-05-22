@@ -16,6 +16,7 @@ public class CustomNetworkManager : NetworkManager
     public event ClientDisconnectedHandler ClientDisconnected;
     private Dictionary<string, MatchDesc> myMatches = new Dictionary<string, MatchDesc>();
     private string localIPAddress;
+    private SceneController sceneController;
 
     public string LocalIPAddress
     {
@@ -35,7 +36,7 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
-    void StartupHost()
+    public void StartupHost()
     {
         SetPort();
         setupLocalIP();
@@ -46,7 +47,8 @@ public class CustomNetworkManager : NetworkManager
     {
         while (true)
         {
-            matchMaker.ListMatches(0, 20, "", OnMatchList);
+            if (SceneManager.GetActiveScene().name == "Menu")
+                matchMaker.ListMatches(0, 20, "", OnMatchList);
             yield return new WaitForSeconds(3);
         }
     }
@@ -90,7 +92,7 @@ public class CustomNetworkManager : NetworkManager
     }
 
 
-    void StartRemoteHost()
+    public void StartRemoteHost()
     {
         uint roomSize = 2;
         matchMaker.CreateMatch(RoomName, roomSize, true, "", OnMatchCreate);
@@ -102,7 +104,7 @@ public class CustomNetworkManager : NetworkManager
         matchMaker.JoinMatch(matchInfo.networkId, "", OnMatchJoined);
     }
 
-    void JoinGame()
+    public void JoinGame()
     {
         SetIpAdress();
         SetPort();
@@ -110,7 +112,7 @@ public class CustomNetworkManager : NetworkManager
     }
 
 
-    void JoinRemote()
+    public void JoinRemote()
     {
         var dropdown = GameObject.FindGameObjectWithTag(Tags.DropdownRemoteAddress);
         string roomName = dropdown.GetComponent<Dropdown>().captionText.text;
@@ -136,7 +138,7 @@ public class CustomNetworkManager : NetworkManager
 
     void Start()
     {
-        SetupMenuScene();
+        sceneController = GetComponent<SceneController>();
         StartCoroutine(refreshMatchList());
     }
 
@@ -145,66 +147,31 @@ public class CustomNetworkManager : NetworkManager
         StartCoroutine(waitForEndOfFrameAndSetup(level));
     }
 
-    private void dropdownValueChanged(int index)
-    {
-        var dropdown = GameObject.FindGameObjectWithTag(Tags.DropdownRemoteAddress);
-        string content = dropdown.GetComponent<Dropdown>().options[index].text;
-        dropdown.transform.FindChild("Label").GetComponent<Text>().text = content;
-    }
-
-    void SetupMenuScene()
-    {
-        NetworkManager.singleton.StartMatchMaker();
-
-        GameObject.FindGameObjectWithTag(Tags.ButtonStartLocal).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.ButtonStartLocal).GetComponent<Button>().onClick.AddListener(StartupHost);
-
-        GameObject.FindGameObjectWithTag(Tags.ButtonJoinLocal).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.ButtonJoinLocal).GetComponent<Button>().onClick.AddListener(JoinGame);
-
-        GameObject.FindGameObjectWithTag(Tags.ButtonStartRemote).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.ButtonStartRemote).GetComponent<Button>().onClick.AddListener(StartRemoteHost);
-
-        GameObject.FindGameObjectWithTag(Tags.ButtonJoinRemote).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.ButtonJoinRemote).GetComponent<Button>().onClick.AddListener(JoinRemote);
-
-        GameObject.FindGameObjectWithTag(Tags.DropdownRemoteAddress)
-            .GetComponent<Dropdown>()
-            .onValueChanged.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.DropdownRemoteAddress).GetComponent<Dropdown>().onValueChanged.AddListener(new UnityAction<int>(dropdownValueChanged));
-    }
-
     IEnumerator waitForEndOfFrameAndSetup(int level)
     {
         yield return new WaitForEndOfFrame();
         if (level == 0)
-            SetupMenuScene();
+            sceneController.SetupMenuScene();
         else
         {
-            SetupOtherSceneButtons();
+            sceneController.SetupOtherSceneButtons();
         }
     }
 
-    void disconnectFromServer()
+    public void DisconnectFromServer()
     {
         StartCoroutine(waitForEndOfFrameAndStopServer());
     }
 
     IEnumerator waitForEndOfFrameAndStopServer()
     {
-        Camera.main.GetComponent<CameraSmoothFollow>().enabled = false;
-        Camera.main.GetComponent<InputController>().enabled = false;
+        var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
+        applicationManager.GetComponent<InputController>().enabled = false;
         ClientDisconnected.Invoke();
         yield return new WaitForEndOfFrame();
         yield return new WaitForFixedUpdate();
         NetworkManager.singleton.StopHost();
     }
 
-    void SetupOtherSceneButtons()
-    {
-        GameObject.FindGameObjectWithTag(Tags.ButtonDisconnect).GetComponent<Button>().onClick.RemoveAllListeners();
-        GameObject.FindGameObjectWithTag(Tags.ButtonDisconnect)
-            .GetComponent<Button>()
-            .onClick.AddListener(disconnectFromServer);
-    }
+
 }

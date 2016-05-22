@@ -53,7 +53,7 @@ namespace Assets.scripts
                 {
                     Array = new AircraftData(
                         aircraft.V_0,
-                        aircraft.V,
+                        aircraft.V_e,
                         aircraft.Eta, //NI
                         aircraft.Xi,
                         aircraft.Zeta,

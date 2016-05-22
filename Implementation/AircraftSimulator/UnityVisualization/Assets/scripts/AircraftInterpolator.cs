@@ -33,11 +33,14 @@ namespace Assets.scripts
         private bool interpolationActive = false;
         private float wholeInterpolationTime = Time.fixedDeltaTime;
 
+        private SceneController sceneController;
+
         public GameObject Body;
 
-        public AircraftInterpolator(GameObject Body)
+        public AircraftInterpolator(GameObject Body, SceneController sceneController)
         {
             this.Body = Body;
+            this.sceneController = sceneController;
         }
 
         public bool InterpolationPending
@@ -193,11 +196,16 @@ namespace Assets.scripts
             globalIterationCounter += singleIterationTime;
             float t = globalIterationCounter / wholeInterpolationTime;
 
-            interpolateLateralRotation(iterations);
-            interpolateLateralVelocity(t);
 
-            interpolateLongitudinalRotation(iterations);
-            interpolateLongitudinalVelocity(t);
+            if (sceneController.LateralRotationActive)
+                interpolateLateralRotation(iterations);
+            if (sceneController.LateralTranslationActive)
+                interpolateLateralVelocity(t);
+
+            if (sceneController.LongitudinalRotationActive)
+                interpolateLongitudinalRotation(iterations);
+            if (sceneController.LongitudinalTranslationActive)
+                interpolateLongitudinalVelocity(t);
         }
 
 

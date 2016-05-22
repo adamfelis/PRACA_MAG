@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.scripts;
+using Assets.scripts.UI;
 using UnityEngine.Networking;
 
 public enum AircraftType
@@ -16,7 +17,6 @@ public class AircraftsController : NetworkBehaviour
     // Use this for initialization
     void Start ()
 	{
-        //var aircraftModel = GameObject.FindGameObjectWithTag(Tags.F15);
 	    GameObject body = this.gameObject;
         aircraft = new Aircraft()
 	    {
@@ -28,32 +28,24 @@ public class AircraftsController : NetworkBehaviour
             AileronLeft = Tags.FindGameObjectWithTagInParent(Tags.AileronLeft, name),
             AileronRight = Tags.FindGameObjectWithTagInParent(Tags.AileronRight, name)
         };
-        //var aircraftInterpolator = gameObject.AddComponent<AircraftInterpolator>();
-        //aircraftInterpolator.Body = gameObject;
-        //aircraft.aircraftInterpolator = aircraftInterpolator;
-        aircraft.Initialize();
+        var sceneController = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<SceneController>();
+        aircraft.Initialize(sceneController);
         
 	    if (isLocalPlayer)
 	    {
-	        Camera.main.GetComponent<CameraSmoothFollow>().target = aircraft.Body.transform;
-	        Camera.main.GetComponent<CameraSmoothFollow>().enabled = true;
-	        Camera.main.GetComponent<InputController>().aircraft = aircraft;
-	        Camera.main.GetComponent<InputController>().enabled = true;
-	        Camera.main.GetComponent<Communication>().enabled = true;
+	        body.AddComponent<GUIUpdater>().Aircraft = aircraft;
+            var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
+            applicationManager.GetComponent<InputController>().aircraft = aircraft;
+            applicationManager.GetComponent<InputController>().cameraSmoothFollow = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, name).GetComponent<CameraSmoothFollow>();
+            applicationManager.GetComponent<InputController>().enabled = true;
+            applicationManager.GetComponent<Communication>().enabled = true;
 	    }
         Initialized.Invoke();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isLocalPlayer)
             aircraft.aircraftInterpolator.Interpolate(Time.deltaTime);
     }
-
-    //void FixedUpdate()
-    //{
-    //    if (isLocalPlayer)
-    //        aircraft.aircraftInterpolator.Interpolate(Time.fixedDeltaTime, Time.fixedDeltaTime);
-    //}
 }

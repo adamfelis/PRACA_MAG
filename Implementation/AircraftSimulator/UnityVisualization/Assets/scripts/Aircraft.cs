@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Assets.scripts;
-using UnityEngine.UI;
+
 
 public class Aircraft : IAircraft
 {
@@ -19,32 +19,56 @@ public class Aircraft : IAircraft
 
     public IDictionary<GameObject, bool> partsInitialized;
 
-    private GameObject roll, pitch, yaw;
-    private GameObject aileron, elevator, rudder;
     private Vector3 rotationMaxOffset;
     private const float angle = 40;
-    private Quaternion initialInverseRotation;
 
     private float theta_prev, psi_prev, phi_prev;
 
     public IAircraftInterpolator aircraftInterpolator;
 
-    #region Velocities
-    public Vector3 Velocity;
+    #region Initial conditions
     public Vector3 Velocity_0;
     public float Theta_0;
     public float Psi_0;
     public float Phi_0;
+    #endregion
+
+    #region Velocities
+    public Vector3 Velocity
+    {
+        get
+        {
+            //return Velocity.z;
+            return new Vector3(
+                aircraftInterpolator.TargetVelocityX,
+                aircraftInterpolator.TargetVelocityY,
+                aircraftInterpolator.TargetVelocityZ);
+        }
+    }
+
     public float V_0
     {
         get { return Velocity_0.z; }
     }
-
-    public float V
+    public float V_e
     {
-        get { return Velocity.z; }
+        get { return aircraftInterpolator.TargetVelocityX; }
     }
     #endregion
+
+    #region Positions
+    public Vector3 Position
+    {
+        get
+        {
+            return new Vector3(
+                -Body.transform.position.z,
+                Body.transform.position.y,
+                Body.transform.position.x
+                );
+        }
+    }
+    #endregion  
 
     #region Steering
     /// <summary>
@@ -140,6 +164,8 @@ public class Aircraft : IAircraft
     }
     #endregion
 
+
+
     private float trimValueToRange(float value)
     {
         //return value;
@@ -177,13 +203,9 @@ public class Aircraft : IAircraft
         aircraftInterpolator.SetupInitial(Theta_0, Phi_0, Psi_0);
     }
 
-    public void Initialize()
+    public void Initialize(SceneController sceneController)
     {
-        
-        initialInverseRotation = Quaternion.Inverse(Body.transform.rotation);
-        aircraftInterpolator = new AircraftInterpolator(Body);
-
-        
+        aircraftInterpolator = new AircraftInterpolator(Body, sceneController);
 
         partsInitialized = new Dictionary<GameObject, bool>();
         partsInitialized.Add(new KeyValuePair<GameObject, bool>(RudderLeft, false));
@@ -199,14 +221,6 @@ public class Aircraft : IAircraft
             if (meshCollider != null)
                 meshCollider.enabled = true;
         }
-
-        roll = GameObject.FindGameObjectWithTag(Tags.Roll);
-        pitch = GameObject.FindGameObjectWithTag(Tags.Pitch);
-        yaw = GameObject.FindGameObjectWithTag(Tags.Yaw);
-
-        aileron = GameObject.FindGameObjectWithTag(Tags.Aileron);
-        elevator = GameObject.FindGameObjectWithTag(Tags.Elevator);
-        rudder = GameObject.FindGameObjectWithTag(Tags.Rudder);
 
         initializeFlightConditions();
         initializeSteers();
@@ -296,19 +310,18 @@ public class Aircraft : IAircraft
         aircraftInterpolator.TargetVelocityZ = velocityZ;
     }
 
-    public void RotateAircraft(float deltaAileron, float deltaRudder, float deltaElevator)
+    public void RotateSteers(float deltaAileron, float deltaRudder, float deltaElevator)
     {
         RotateAileron(deltaAileron);
         RotateRudder(deltaRudder);
         RotateElevator(deltaElevator);
 
+        return;
         string format = "n2";
-        aileron.GetComponent<Text>().text = (Xi * Mathf.Rad2Deg).ToString(format);
-        elevator.GetComponent<Text>().text = (Eta * Mathf.Rad2Deg).ToString(format);
-        rudder.GetComponent<Text>().text = (Zeta * Mathf.Rad2Deg).ToString(format);
+        //aileron.GetComponent<Text>().text = (Xi * Mathf.Rad2Deg).ToString(format);
+        //elevator.GetComponent<Text>().text = (Eta * Mathf.Rad2Deg).ToString(format);
+        //rudder.GetComponent<Text>().text = (Zeta * Mathf.Rad2Deg).ToString(format);
 
-        roll.GetComponent<Text>().text = (Phi * Mathf.Rad2Deg).ToString(format);
-        pitch.GetComponent<Text>().text = (Theta * Mathf.Rad2Deg).ToString(format);
-        yaw.GetComponent<Text>().text = (Psi * Mathf.Rad2Deg).ToString(format);
+        
     }
 }

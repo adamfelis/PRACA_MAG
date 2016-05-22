@@ -15,5 +15,8 @@ namespace Assets.scripts
         void OnClientJoinResponse();
         void OnServerDataResponse(IDataList dataList);
         void OnServerDisconnected();
+
+        
+
     }
 }

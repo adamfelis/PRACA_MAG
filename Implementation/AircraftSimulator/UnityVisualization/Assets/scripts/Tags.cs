@@ -46,6 +46,21 @@ public static class Tags
 
     #region ui - main scene
     public static string MiniMap = "MiniMap";
+    public static string VelocityForwardU = "VelocityForwardU";
+    public static string VelociyRightV = "VelociyRightV";
+    public static string VelocityDownW = "VelocityDownW";
+    public static string PositionX = "PositionX";
+    public static string PositionY = "PositionY";
+    public static string PositionZ = "PositionZ";
+
+    public static string LongitudinalRotation = "LongitudinalRotation";
+    public static string LongitudinalTranslation = "LongitudinalTranslation";
+    public static string LateralRotation = "LateralRotation";
+    public static string LateralTranslation = "LateralTranslation";
+
     #endregion
 
+    public static string ApplicationManager = "ApplicationManager";
+    public static string CameraManager = "CameraManager";
+    public static string MainCamera = "MainCamera";
 }
