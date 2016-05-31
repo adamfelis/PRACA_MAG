@@ -7,8 +7,9 @@ namespace Assets.scripts
 {
     public interface IAircraft
     {
-        void RotateSteers(float deltaAileron, float deltaRudder, float deltaElevator);
-
+        void RotateSteersKeyboard(float deltaAileron, float deltaRudder, float deltaElevator);
+        void RotateSteersJoystick(float deltaAileron, float deltaRudder, float deltaElevator);
+        
         float Theta { get; }
         float Psi { get; }
         float Phi { get; }

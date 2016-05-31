@@ -168,7 +168,7 @@ public class Aircraft : IAircraft
 
     private float trimValueToRange(float value)
     {
-        //return value;
+        return value;
 
         //float rangeMin = 0;
         //float rangeMax = 2*Mathf.PI;
@@ -261,28 +261,28 @@ public class Aircraft : IAircraft
 
     }
 
-    private void rotateObject(GameObject gameObject, float delta, bool checkRequired = true)
+    private void rotateObject(GameObject gameObject, float delta, bool checkRequired = true,  bool fromKeyboard = true)
     {
         var colliderHandler = gameObject.GetComponent<ColliderHandler>();
-        colliderHandler.Rotate(delta, checkRequired);
+        colliderHandler.Rotate(delta, checkRequired, fromKeyboard);
     }
 
-    public void RotateAileron(float delta, bool checkRequired = true)
+    public void RotateAileron(float delta, bool checkRequired = true, bool fromKeyboard = true)
     {
-        rotateObject(AileronLeft, delta, checkRequired);
-        rotateObject(AileronRight, delta, checkRequired);
+        rotateObject(AileronLeft, delta, checkRequired, fromKeyboard);
+        rotateObject(AileronRight, delta, checkRequired, fromKeyboard);
     }
 
-    public void RotateRudder(float delta, bool checkRequired = true)
+    public void RotateRudder(float delta, bool checkRequired = true, bool fromKeyboard = true)
     {
-        rotateObject(RudderLeft, -delta, checkRequired);
-        rotateObject(RudderRight, delta, checkRequired);
+        rotateObject(RudderLeft, -delta, checkRequired, fromKeyboard);
+        rotateObject(RudderRight, delta, checkRequired, fromKeyboard);
     }
 
-    public void RotateElevator(float delta, bool checkRequired = true)
+    public void RotateElevator(float delta, bool checkRequired = true, bool fromKeyboard = true)
     {
-        rotateObject(ElevatorLeft, -delta, checkRequired);
-        rotateObject(ElevatorRight, -delta, checkRequired);
+        rotateObject(ElevatorLeft, -delta, checkRequired, fromKeyboard);
+        rotateObject(ElevatorRight, -delta, checkRequired, fromKeyboard);
     }
 
     public void RotateInLongitudinal(float theta)
@@ -310,18 +310,17 @@ public class Aircraft : IAircraft
         aircraftInterpolator.TargetVelocityZ = velocityZ;
     }
 
-    public void RotateSteers(float deltaAileron, float deltaRudder, float deltaElevator)
+    public void RotateSteersJoystick(float deltaAileron, float deltaRudder, float deltaElevator)
+    {
+        RotateAileron(deltaAileron, true, false);
+        RotateRudder(deltaRudder, true, false);
+        RotateElevator(deltaElevator, true, false);
+    }
+
+    public void RotateSteersKeyboard(float deltaAileron, float deltaRudder, float deltaElevator)
     {
         RotateAileron(deltaAileron);
         RotateRudder(deltaRudder);
         RotateElevator(deltaElevator);
-
-        return;
-        string format = "n2";
-        //aileron.GetComponent<Text>().text = (Xi * Mathf.Rad2Deg).ToString(format);
-        //elevator.GetComponent<Text>().text = (Eta * Mathf.Rad2Deg).ToString(format);
-        //rudder.GetComponent<Text>().text = (Zeta * Mathf.Rad2Deg).ToString(format);
-
-        
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 using Assets.scripts;
 using UnityEngine.UI;
 
@@ -9,21 +10,50 @@ public class InputController : MonoBehaviour {
     public float horizontalSpeed = 0.01F;
     public float verticalSpeed = 0.01F;
     public Aircraft aircraft;
-    public float Horizontal;
-    public float Vertical;
 
     public CameraSmoothFollow cameraSmoothFollow;
 
+    private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
+    private bool readKeyboardInput;
+
+    private bool isJoystickConnected
+    {
+        get { return Input.GetJoystickNames().First().ToString() != String.Empty; }
+    }
+
     void Update()
     {
-        Horizontal = horizontalSpeed * Input.GetAxis("Mouse X");
-        Vertical = verticalSpeed * Input.GetAxis("Mouse Y");
-        //transform.Rotate(Vertical, Horizontal, 0);
-        //aircraft.RotateAircraft(Vertical, Horizontal);
+        readKeyboardInput = false;
         testKeyboard();
         testCameraInput();
         testWheel();
+        if (!readKeyboardInput && isJoystickConnected)
+            testJoystick();
+    }
 
+    private void testJoystick()
+    {
+        float horizontal;
+        float vertical;
+        float z;
+        float rangeHalfRange = 20;
+        float horizontalRange = rangeHalfRange;
+        float verticalRange = rangeHalfRange;
+        float zRange = rangeHalfRange;
+        horizontal = horizontalRange * Input.GetAxis("horizontal");
+        vertical = verticalRange * Input.GetAxis("vertical");
+        z = zRange * Input.GetAxis("z");
+        //Debug.Log(horizontal);
+        //Debug.Log(vertical);
+        //Debug.Log(z);
+
+        float deltaAileron, deltaRudder, deltaElevator;
+
+        deltaElevator = vertical;
+        deltaAileron = horizontal;
+        deltaRudder = z;
+
+        aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, deltaElevator);
     }
 
     private void testWheel()
@@ -68,7 +98,7 @@ public class InputController : MonoBehaviour {
         }
     }
 
-    private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
+
     void testKeyboard()
     {
         float deltaAileron, deltaRudder, deltaElevator;
@@ -107,11 +137,16 @@ public class InputController : MonoBehaviour {
         }
         #endregion
 
-
-
         deltaAileron *= steeringSensitivity.x;
         deltaRudder *= steeringSensitivity.y;
         deltaElevator *= steeringSensitivity.z;
-        aircraft.RotateSteers(deltaAileron, deltaRudder, deltaElevator);
+        float eps = 0.0001f;
+        if (Mathf.Abs(deltaAileron) > eps ||
+            Mathf.Abs(deltaRudder) > eps ||
+            Mathf.Abs(deltaElevator) > eps)
+        {
+            aircraft.RotateSteersKeyboard(deltaAileron, deltaRudder, deltaElevator);
+            readKeyboardInput = true;
+        }
     }
 }
