@@ -36,7 +36,7 @@ namespace Assets.scripts
                     switch (data.MessageType)
                     {
                         case MessageType.ClientJoinResponse:
-                            dataHandler.OnClientJoinResponse();
+                            dataHandler.OnClientJoinResponse(eventArgs.DataList.DataArray.First());
                             break;
                         case MessageType.ServerDisconnected:
                             dataHandler.OnServerDisconnected();

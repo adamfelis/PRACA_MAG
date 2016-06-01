@@ -61,7 +61,8 @@ namespace Server.Executors
                 {
                     new Data()
                     {
-                        MessageType = MessageType.ClientJoinResponse
+                        MessageType = MessageType.ClientJoinResponse,
+                        ServerSideId = client.Id
                     }
                 }
             };

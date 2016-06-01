@@ -40,7 +40,8 @@ public class Communication : MonoBehaviour, ICommunication
         dataReader = new DataReader(dataHandler, this);
         dataWriter = new DataWriter(dataReader, this, aircraftsController);
 
-        dataHandler.ClientResponseHandler += dataWriter.SendInputToServer;
+        dataHandler.ClientResponseHandler += dataWriter.SendAircraftSteeringToServer;
+        aircraftsController.MissileController.MissileFired += dataWriter.SendMissileFiredToServer;
         subscribeForClientDisconnection();
     }
 
@@ -62,7 +63,7 @@ public class Communication : MonoBehaviour, ICommunication
 
     private void Update()
     {
-        if (!aircraftsController.aircraft.aircraftInterpolator.InterpolationPending)
+        if (!aircraftsController.Aircraft.aircraftInterpolator.InterpolationPending)
             dataReader.ReadDataSentFromServer();
     }
 

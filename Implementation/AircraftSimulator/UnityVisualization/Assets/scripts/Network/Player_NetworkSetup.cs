@@ -17,6 +17,7 @@ namespace Assets.Scripts
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
+            //GameObject.FindGameObjectWithTag(Tags.EnvironmentCreator).GetComponent<GameController>().enabled = true;
         }
 
         //private void Start()

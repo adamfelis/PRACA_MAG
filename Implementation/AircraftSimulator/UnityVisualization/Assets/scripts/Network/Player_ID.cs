@@ -23,6 +23,9 @@ public class Player_ID : NetworkBehaviour
 {
     [SyncVar]
     public string playerUniqueIdentity;
+
+    [SyncVar]
+    public int ServerAssignedId;
     
     public Team _team;
     private NetworkInstanceId playerNetId;
@@ -85,6 +88,12 @@ public class Player_ID : NetworkBehaviour
         CmdProvideServerMyIdentity(MakeUniqueName());
     }
 
+    [Client]
+    public void SetupRemotelyAssignedId(int id)
+    {
+        CmdProvideServerRemoteAssignedId(id);
+    }
+
     //void SetMapTag(bool isA)
     //{
     //    var n = gameObject.name;
@@ -124,6 +133,17 @@ public class Player_ID : NetworkBehaviour
     void CmdProvideServerMyIdentity(string name)
     {
         playerUniqueIdentity = name;
+    }
+
+    /// <summary>
+    /// This is id assigned by Main application.
+    /// It has nothing to do with UNET authorization mechanism
+    /// </summary>
+    /// <param name="id"></param>
+    [Command]
+    void CmdProvideServerRemoteAssignedId(int id)
+    {
+        ServerAssignedId = id;
     }
 
     private IEnumerable<GameObject> getAllPlayers()

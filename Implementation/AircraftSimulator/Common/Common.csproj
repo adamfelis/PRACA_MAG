@@ -49,7 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AircraftData\AircraftData.cs" />
+    <Compile Include="Data\MissileData.cs" />
+    <Compile Include="Data\AircraftData.cs" />
     <Compile Include="Connection\Connector.cs" />
     <Compile Include="Connection\IConnector.cs" />
     <Compile Include="Containers\Data.cs" />

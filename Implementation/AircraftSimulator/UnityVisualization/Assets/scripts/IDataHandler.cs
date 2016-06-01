@@ -12,7 +12,7 @@ namespace Assets.scripts
         event ClientResponseHandler ClientResponseHandler;
         event ClientResponseHandler ClientDisconnected;
 
-        void OnClientJoinResponse();
+        void OnClientJoinResponse(IData data);
         void OnServerDataResponse(IDataList dataList);
         void OnServerDisconnected();
 

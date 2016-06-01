@@ -3,22 +3,36 @@ using UnityEngine;
 using System.Collections;
 using System.Linq;
 using Assets.scripts;
+using Assets.scripts.Model;
 using UnityEngine.UI;
 
 public class InputController : MonoBehaviour {
 
     public float horizontalSpeed = 0.01F;
     public float verticalSpeed = 0.01F;
-    public Aircraft aircraft;
-
-    public CameraSmoothFollow cameraSmoothFollow;
+    private Aircraft aircraft;
+    private CameraSmoothFollow cameraSmoothFollow;
+    private MissileController missileController;
 
     private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
     private bool readKeyboardInput;
 
+    public void Initialize(AircraftsController aircraftsController)
+    {
+        this.aircraft = aircraftsController.Aircraft;
+        this.missileController = aircraftsController.MissileController;
+        this.cameraSmoothFollow = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, aircraftsController.name).GetComponent<CameraSmoothFollow>();
+        enabled = true;
+    }
+
     private bool isJoystickConnected
     {
-        get { return Input.GetJoystickNames().First().ToString() != String.Empty; }
+        get
+        {
+            if (Input.GetJoystickNames().Length == 0)
+                return false;
+            return Input.GetJoystickNames().First().ToString() != String.Empty;
+        }
     }
 
     void Update()
@@ -98,9 +112,15 @@ public class InputController : MonoBehaviour {
         }
     }
 
+    void testMissileFire()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            missileController.Shoot();
+    }
 
     void testKeyboard()
     {
+        testMissileFire();
         float deltaAileron, deltaRudder, deltaElevator;
         deltaAileron = deltaRudder = deltaElevator = 0.0f;
 
