@@ -86,7 +86,7 @@ public class Aircraft : IAircraft
 
     public float Tau
     {
-        get { return 1; }
+        get { return 0; }
     }
     #endregion
 

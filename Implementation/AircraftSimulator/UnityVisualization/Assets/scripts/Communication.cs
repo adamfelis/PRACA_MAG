@@ -42,9 +42,15 @@ public class Communication : MonoBehaviour, ICommunication
         dataWriter = new DataWriter(dataReader, this, aircraftsController);
 
         dataHandler.ClientResponseHandler += dataWriter.SendInputToServer;
+        dataHandler.ClientResponseHandler += dataResponseFromServer;
         subscribeForClientDisconnection();
     }
-
+    private float delta = 0.0f;
+    private void dataResponseFromServer()
+    {
+        Debug.Log(delta);
+        delta = 0.0f;
+    }
     private void subscribeForClientDisconnection()
     {
         var gameObject = GameObject.FindGameObjectWithTag(Tags.NetworkManager);
