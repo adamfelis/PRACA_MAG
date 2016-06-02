@@ -17,6 +17,7 @@ namespace Assets.Scripts
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
+            //GameObject.FindGameObjectWithTag(Tags.EnvironmentCreator).GetComponent<GameController>().enabled = true;
         }
 
         //private void Start()
@@ -31,7 +32,6 @@ namespace Assets.Scripts
             //transform.rotation = Quaternion.Euler(0, 270, 0);
             GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
             GetComponent<Player_ID>().enabled = true;
-            //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
         }
 
         public void OnPlayerIdentitySet()
@@ -45,12 +45,14 @@ namespace Assets.Scripts
                 var miniMap = GameObject.FindGameObjectWithTag(Tags.MiniMap);
                 miniMap.GetComponent<MapCanvasController>().AircraftsController = aircraftsController;
                 miniMap.GetComponent<MapCanvasController>().enabled = true;
+
+                var mainCamera = GameObject.FindGameObjectWithTag(Tags.MainCamera);
+                mainCamera.GetComponent<Camera>().enabled = true;
             }
         }
 
         private void AircraftsControllerOnInitialized()
         {
-            //aircraftModel.SetActive(true);
             if (isLocalPlayer)
                 GetComponent<BoxCollider>().enabled = true;
             if (!isLocalPlayer)

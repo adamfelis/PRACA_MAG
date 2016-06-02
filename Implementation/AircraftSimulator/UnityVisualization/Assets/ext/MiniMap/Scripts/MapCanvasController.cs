@@ -149,12 +149,12 @@ public class MapCanvasController : MonoBehaviour
     {
         if (rotateMap)
         {
-            mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, AircraftsController.aircraft.Body.transform.eulerAngles.y));
+            mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, AircraftsController.Aircraft.Body.transform.eulerAngles.y));
             mapArrow.rotate(Quaternion.identity);
         }
         else
         {
-            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.aircraft.Body.transform.eulerAngles.y)));
+            mapArrow.rotate(Quaternion.Euler(new Vector3(0, 0, -AircraftsController.Aircraft.Body.transform.eulerAngles.y)));
         }
     }
 
@@ -224,7 +224,7 @@ public class MapCanvasController : MonoBehaviour
                 marker.show();
             }
 
-            Vector3 posDif = marker.getPosition() - AircraftsController.aircraft.Body.transform.position;
+            Vector3 posDif = marker.getPosition() - AircraftsController.Aircraft.Body.transform.position;
             Vector3 newPos = new Vector3(-posDif.x, -posDif.z, 0);
             newPos.Normalize();
 
@@ -247,7 +247,7 @@ public class MapCanvasController : MonoBehaviour
     private float distanceToPlayer(Vector3 other)
     {
         
-        return Vector2.Distance(new Vector2(AircraftsController.aircraft.Body.transform.position.x, AircraftsController.aircraft.Body.transform.position.z), new Vector2(other.x, other.z));
+        return Vector2.Distance(new Vector2(AircraftsController.Aircraft.Body.transform.position.x, AircraftsController.Aircraft.Body.transform.position.z), new Vector2(other.x, other.z));
     }
 
     #endregion

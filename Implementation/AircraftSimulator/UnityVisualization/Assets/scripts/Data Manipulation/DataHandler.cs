@@ -20,18 +20,22 @@ namespace Assets.scripts.Data_Manipulation
             base.unityShellNotifier = communication;
         }
 
-        public void OnClientJoinResponse()
+        public void OnClientJoinResponse(IData data)
         {
             string toOutput = "Connected to the server";
             unityShellNotifier.NotifyUnityShell(toOutput);
+
+            aircraftsController.gameObject.GetComponent<Player_ID>().SetupRemotelyAssignedId(data.ServerSideId);
+
             ClientResponseHandler.Invoke();
         }
 
         public void OnServerDataResponse(IDataList dataList)
         {
+            //return;
             string toOutput = "Response received from the server:";
             unityShellNotifier.NotifyUnityShell(toOutput);
-            aircraftsController.aircraft.aircraftInterpolator.LockInterpolation();
+            aircraftsController.Aircraft.aircraftInterpolator.LockInterpolation();
             foreach (Data data in dataList.DataArray)
             {
                 if (data.StrategyNumber != currentStrategy)
@@ -48,7 +52,7 @@ namespace Assets.scripts.Data_Manipulation
                 if (messageContent == MessageContent.LateralData)
                     handleLateralData(data);
             }
-            aircraftsController.aircraft.aircraftInterpolator.UnclockInterpolation();
+            aircraftsController.Aircraft.aircraftInterpolator.UnclockInterpolation();
             ClientResponseHandler.Invoke();
         }
 
@@ -62,7 +66,7 @@ namespace Assets.scripts.Data_Manipulation
         private float prevTheta = 0.0f;
         private void handleLongitudinalData(IData data)
         {
-            var aircraft = aircraftsController.aircraft;
+            var aircraft = aircraftsController.Aircraft;
             //velocity in X axis (u)
             //aircraft.Velocity.x = data.Array[0][0];
             var velocityX = data.Array[0][0];
@@ -82,7 +86,7 @@ namespace Assets.scripts.Data_Manipulation
 
         private void handleLateralData(IData data)
         {
-            var aircraft = aircraftsController.aircraft;
+            var aircraft = aircraftsController.Aircraft;
             //velocity in Y axis (v)
             //aircraft.Velocity.z = data.Array[0][0];
             var velocityZ = data.Array[0][0];

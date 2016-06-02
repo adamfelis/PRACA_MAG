@@ -15,6 +15,11 @@ namespace Common.Containers
             get; set;
         }
 
+        public int ServerSideId
+        {
+            get; set;
+        }
+
         public ErrorCode Error
         {
             get; set;
@@ -30,11 +35,18 @@ namespace Common.Containers
             get; set;
         }
 
+        public int MissileTargetId
+        {
+            get; set;
+        }
+
         public int StrategyNumber
         {
             get { return 0; }
             set { }
         }
+
+        public bool IsMissileData { get; set; }
 
         public ActionType Response
         {

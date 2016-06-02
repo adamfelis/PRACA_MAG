@@ -56,6 +56,8 @@ namespace Client
         {
             if (passedIp != String.Empty)
                 NetIP = passedIp;
+            if (passedIp == "localhost")
+                NetIP = getLocalIPAddress();
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
                 throw new Exception("Please connect to network.");
             base.client = new TcpClient(NetIP, PortNum);

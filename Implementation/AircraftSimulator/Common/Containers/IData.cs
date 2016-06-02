@@ -51,10 +51,13 @@ namespace Common.Containers
     public interface IData
     {
         string Sender { get; set; }
+        int ServerSideId { get; set; }
         ErrorCode Error { get; set; }
         MessageType MessageType { get; set; }
         MessageContent MessageContent { get; set; }
         int StrategyNumber { get; set; }
+        bool IsMissileData { get; set; }
+        int MissileTargetId { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
         Shooters.ShooterType ShooterType { get; set; }

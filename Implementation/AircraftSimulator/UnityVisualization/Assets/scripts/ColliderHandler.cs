@@ -92,7 +92,32 @@ public class ColliderHandler : MonoBehaviour
         OnInitializeHandler(gameObject);
     }
 
-    public void Rotate(float delta, bool checkRequired = true)
+    //public void Rotate(float delta, bool checkRequired = true)
+    //{
+    //    if (checkRequired)
+    //    {
+    //        var oldRotationOffset = rotationOffset;
+    //        rotationOffset += delta;
+    //        rotationOffset = Mathf.Clamp(rotationOffset, -rotationMaxOffset, rotationMaxOffset);
+    //        delta = rotationOffset - oldRotationOffset;
+    //    }
+    //    float eps = 0.00001f;
+    //    if (Mathf.Abs(delta) > eps)
+    //        transform.RotateAround(CenterOfRotation, RelativeAxis, delta);
+    //}
+
+
+    public void Rotate(float delta, bool checkRequired = true, bool fromKeyboard = true)
+    {
+        if (fromKeyboard)
+            rotateKeyboard(delta, checkRequired);
+        else
+        {
+            rotateJoystick(delta, checkRequired);
+        }
+    }
+
+    private void rotateKeyboard(float delta, bool checkRequired = true)
     {
         if (checkRequired)
         {
@@ -102,6 +127,34 @@ public class ColliderHandler : MonoBehaviour
             delta = rotationOffset - oldRotationOffset;
         }
         float eps = 0.00001f;
+        if (Mathf.Abs(delta) > eps)
+            transform.RotateAround(CenterOfRotation, RelativeAxis, delta);
+    }
+
+    private float timeFromLastChange = 0.0f;
+    private float prevDelta = 0.0f;
+    private void rotateJoystick(float delta, bool checkRequired = true)
+    {
+        float eps = 0.0001f;
+        float minFraction = 0.02f;
+        float maxFraction = 0.5f;
+        float fractionInterpolatationTime = 3.0f;
+        if (checkRequired)
+        {
+
+            if (Mathf.Abs(delta - prevDelta) < eps)
+                timeFromLastChange += Time.deltaTime;
+            else
+            {
+                timeFromLastChange = 0.0f;
+            }
+            prevDelta = delta;
+            var oldRotationOffset = rotationOffset;
+            var fraction = Mathf.Lerp(minFraction, maxFraction, timeFromLastChange / fractionInterpolatationTime);
+            rotationOffset = Mathf.Lerp(rotationOffset, delta, fraction);
+            rotationOffset = Mathf.Clamp(rotationOffset, -rotationMaxOffset, rotationMaxOffset);
+            delta = rotationOffset - oldRotationOffset;
+        }
         if (Mathf.Abs(delta) > eps)
             transform.RotateAround(CenterOfRotation, RelativeAxis, delta);
     }

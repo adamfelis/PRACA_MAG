@@ -1,30 +1,126 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Linq;
 using Assets.scripts;
+using Assets.scripts.Model;
 using UnityEngine.UI;
 
 public class InputController : MonoBehaviour {
 
     public float horizontalSpeed = 0.01F;
     public float verticalSpeed = 0.01F;
-    public Aircraft aircraft;
-    public float Horizontal;
-    public float Vertical;
+    private Aircraft aircraft;
+    private CameraSmoothFollow cameraSmoothFollow;
+    private MissileController missileController;
+
+    private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
+    private bool readKeyboardInput;
+
+    public void Initialize(AircraftsController aircraftsController)
+    {
+        this.aircraft = aircraftsController.Aircraft;
+        this.missileController = aircraftsController.MissileController;
+        this.cameraSmoothFollow = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, aircraftsController.name).GetComponent<CameraSmoothFollow>();
+        enabled = true;
+    }
+
+    private bool isJoystickConnected
+    {
+        get
+        {
+            if (Input.GetJoystickNames().Length == 0)
+                return false;
+            return Input.GetJoystickNames().First().ToString() != String.Empty;
+        }
+    }
 
     void Update()
     {
-        Horizontal = horizontalSpeed * Input.GetAxis("Mouse X");
-        Vertical = verticalSpeed * Input.GetAxis("Mouse Y");
-        //transform.Rotate(Vertical, Horizontal, 0);
-        //aircraft.RotateAircraft(Vertical, Horizontal);
+        readKeyboardInput = false;
         testKeyboard();
+        testCameraInput();
+        testWheel();
+        if (!readKeyboardInput && isJoystickConnected)
+            testJoystick();
     }
 
+    private void testJoystick()
+    {
+        float horizontal;
+        float vertical;
+        float z;
+        float rangeHalfRange = 20;
+        float horizontalRange = rangeHalfRange;
+        float verticalRange = rangeHalfRange;
+        float zRange = rangeHalfRange;
+        horizontal = horizontalRange * Input.GetAxis("horizontal");
+        vertical = verticalRange * Input.GetAxis("vertical");
+        z = zRange * Input.GetAxis("z");
+        //Debug.Log(horizontal);
+        //Debug.Log(vertical);
+        //Debug.Log(z);
 
-    private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
+        float deltaAileron, deltaRudder, deltaElevator;
+
+        deltaElevator = vertical;
+        deltaAileron = horizontal;
+        deltaRudder = z;
+
+        aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, deltaElevator);
+    }
+
+    private void testWheel()
+    {
+        float intensity = 10.0f;
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        d *= intensity;
+        if (d != 0.0f)
+        {
+            cameraSmoothFollow.ZoomCamera(-d);
+        }
+    }
+
+    private void testCameraInput()
+    {
+        
+        if (Input.GetKeyDown(KeyCode.Keypad6))
+        {
+            cameraSmoothFollow.SmoothTransist(CameraView.RightView);
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad6))
+        {
+            cameraSmoothFollow.Interrupt();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            cameraSmoothFollow.SmoothTransist(CameraView.LeftView);
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad4))
+        {
+            cameraSmoothFollow.Interrupt();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            cameraSmoothFollow.SmoothTransist(CameraView.FrontView);
+        }
+        if (Input.GetKeyUp(KeyCode.Keypad2))
+        {
+            cameraSmoothFollow.Interrupt();
+        }
+    }
+
+    void testMissileFire()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            missileController.Shoot();
+    }
+
     void testKeyboard()
     {
+        testMissileFire();
         float deltaAileron, deltaRudder, deltaElevator;
         deltaAileron = deltaRudder = deltaElevator = 0.0f;
 
@@ -61,11 +157,16 @@ public class InputController : MonoBehaviour {
         }
         #endregion
 
-
-
         deltaAileron *= steeringSensitivity.x;
         deltaRudder *= steeringSensitivity.y;
         deltaElevator *= steeringSensitivity.z;
-        aircraft.RotateAircraft(deltaAileron, deltaRudder, deltaElevator);
+        float eps = 0.0001f;
+        if (Mathf.Abs(deltaAileron) > eps ||
+            Mathf.Abs(deltaRudder) > eps ||
+            Mathf.Abs(deltaElevator) > eps)
+        {
+            aircraft.RotateSteersKeyboard(deltaAileron, deltaRudder, deltaElevator);
+            readKeyboardInput = true;
+        }
     }
 }

@@ -9,7 +9,8 @@ namespace Assets.scripts.Data_Manipulation
     public interface IDataWriter
     {
         void SendJoinMessage(string localIPAddress);
-        void SendInputToServer();
+        void SendAircraftSteeringToServer();
+        void SendMissileFiredToServer(int missileTargetId);
         void DisconnectFromServer();
     }
 }
