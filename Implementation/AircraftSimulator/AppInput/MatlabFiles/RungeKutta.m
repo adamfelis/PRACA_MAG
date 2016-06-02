@@ -4,7 +4,11 @@ clear aircraft;
 %% Workspace loader
 load(strcat('../../AppOutput/', num2str(client_id)));
 %% Calculations
-result_from_matlab = aircraft.Simulate(x0_longitudinal, x0_lateral, u_longitudinal, u_lateral, simulation_index);
+result_from_matlab = aircraft.SimulateLaplace( u_longitudinal', u_lateral');
+for i = 1 : 1: length(result_from_matlab)
+    result_from_matlab(i) = double(vpa(result_from_matlab(i), 4));
+end
+result_from_matlab = double(result_from_matlab);
 %% Workspace saver
 
 if aircraft.DEBUG_MODE == true

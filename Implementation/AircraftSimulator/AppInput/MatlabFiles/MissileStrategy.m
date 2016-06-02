@@ -1,4 +1,4 @@
-classdef MissileStrategy < Strategy
+classdef MissileStrategy < handle & Strategy
     %Describes one strategy of the missile
     
     properties

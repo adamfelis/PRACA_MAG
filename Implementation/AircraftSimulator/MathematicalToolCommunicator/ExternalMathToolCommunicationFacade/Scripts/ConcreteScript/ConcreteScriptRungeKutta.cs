@@ -26,8 +26,15 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             mlApp.Execute(ScriptName);
             object objRes;
             mlApp.GetWorkspaceData("result_from_matlab", "base", out objRes);
-            float[,] res = objRes as float[,];
-
+            double[,] resDouble = (double[,])objRes;
+            float[,] res = new float[resDouble.GetLength(0), resDouble.GetLength(1)];
+            for(int i = 0; i < resDouble.GetLength(0); i++)
+            {
+                for (int j = 0; j < resDouble.GetLength(1); j++)
+                {
+                    res[i, j] = (float)resDouble[i, j];
+                }
+            }
 
             int strategiesAmount = res.GetLength(0);
             for (int i = 0; i < strategiesAmount; i++)

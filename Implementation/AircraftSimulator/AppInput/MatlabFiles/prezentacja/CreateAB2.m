@@ -1,4 +1,4 @@
-function [ A, B ] = CreateAB2( V0, theta_e )
+function [ A, B ] = CreateAB2( U_e, W_e, V0, theta_e )
 %WSZYTKIE OBLICZENIA ZGODNE Z MACIERZAMI ZE STRONY 89 chapter 5
 %% A and B setter
 %theta_e = 9.4 * (2*pi)/360;%Dodano
@@ -26,8 +26,8 @@ Z_tau = 0;
 M_tau = 0;
 
 %V0 = 178;% ZMIANA sqrt(U_e * U_e + W_e * W_e);
-U_e = V0*cos(theta_e);%DODANO
-W_e = V0*sin(theta_e);%DODANO
+% U_e = V0*cos(theta_e);%DODANO
+% W_e = V0*sin(theta_e);%DODANO
 
 S = 49.239;%OK
 c = 4.889;%OK

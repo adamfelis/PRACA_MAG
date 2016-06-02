@@ -17,6 +17,7 @@ classdef Aircraft < handle & Shooter
 
         % 
         DEBUG_MODE = false;
+        
     end
     
     methods
@@ -25,16 +26,18 @@ classdef Aircraft < handle & Shooter
                                         new_A_lateral, new_B_lateral,...
                                         simulation_step, simulation_time)
             AddStrategy(obj, new_A_longitudinal, new_B_longitudinal,...
-                                        new_A_lateral, new_B_lateral);
+                                        new_A_lateral, new_B_lateral, simulation_step);
             obj.simulation_step_from_fixed_update = simulation_step;
             obj.simulation_time_from_AircraftStrategy_cs = simulation_time;
             %obj.previous_result = -1;
         end
+        
+        
         % Add extra strategy
         function AddStrategy(obj, new_A_longitudinal, new_B_longitudinal,...
-                                        new_A_lateral, new_B_lateral)
+                                        new_A_lateral, new_B_lateral, simulation_step)
            obj.Strategies = [obj.Strategies, AircraftStrategy(new_A_longitudinal, new_B_longitudinal,...
-                                        new_A_lateral, new_B_lateral)];  
+                                        new_A_lateral, new_B_lateral, simulation_step)];  
         end
         %
         function ModifyStrategy(obj, strategy_id, new_A_longitudinal, new_B_longitudinal,...
@@ -144,6 +147,24 @@ classdef Aircraft < handle & Shooter
 
             newPosition.value(3) = newPosition.value(3) + ...
                     integral(@(t) obj.VelocityWInTime(t,strategy_index), interval(1), interval(2), 'ArrayValued', true);
+        end
+        
+        function resultsArray = SimulateLaplace(obj, u_longitudinal, u_lateral)
+            results = Results();
+            obj.current_simulation_solutions = [];
+            for i = 1 : 1 : length(obj.Strategies)
+                
+                Y_longitudinal = obj.Strategies(i).SimulateLaplaceLongitudinal(u_longitudinal);
+                Y_longitudinal = real(Y_longitudinal);
+                
+                Y_lateral = obj.Strategies(i).SimulateLaplaceLateral(u_lateral);
+                Y_lateral = real(Y_lateral);
+                
+                obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
+            end
+            results.AddStrategyResult(Y_longitudinal, Y_lateral, [0 0 0]);
+            obj.previous_result = results;
+            resultsArray = results.PresentFinalResults();
         end
     end
     
