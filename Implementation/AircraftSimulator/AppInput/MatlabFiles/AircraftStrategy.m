@@ -261,7 +261,7 @@ classdef AircraftStrategy < handle & Strategy
                     obj.theta_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2))];
                 longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
                 % Is flight stable?
-                syms t;
+                %syms t;
                 if obj.stable_conditions == false && length(obj.previous_longitudinal_result) > 1 && norm(obj.previous_longitudinal_result - longitudinal_result) < obj.longitudinal_stability_condition
                     obj.stable_conditions = true;
                     disp('stable');
@@ -276,10 +276,10 @@ classdef AircraftStrategy < handle & Strategy
                 
                 syms t;
                 
-                obj.last_stable_longitudinal_value = [vpa(limit(obj.u_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3),...
-                    vpa(limit(obj.w_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3),...
-                    vpa(limit(obj.q_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3),...
-                    vpa(limit(obj.theta_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)];
+                obj.last_stable_longitudinal_value = [double(vpa(limit(obj.u_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
+                    double(vpa(limit(obj.w_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
+                    double(vpa(limit(obj.q_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
+                    double(vpa(limit(obj.theta_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3))];
                 %obj.last_stable_longitudinal_value = obj.previous_longitudinal_result;
                 obj.simulation_counter = 1;
                 longitudinal_difference_result = ...

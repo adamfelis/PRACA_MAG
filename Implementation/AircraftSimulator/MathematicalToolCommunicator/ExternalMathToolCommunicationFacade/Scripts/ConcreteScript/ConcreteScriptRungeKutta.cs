@@ -26,13 +26,19 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             mlApp.Execute(ScriptName);
             object objRes;
             mlApp.GetWorkspaceData("result_from_matlab", "base", out objRes);
-            double[,] resDouble = (double[,])objRes;
-            float[,] res = new float[resDouble.GetLength(0), resDouble.GetLength(1)];
-            for(int i = 0; i < resDouble.GetLength(0); i++)
+            float[,] res;
+            if (objRes.GetType() == typeof(float[,]))
+                res = (float[,])objRes;
+            else
             {
-                for (int j = 0; j < resDouble.GetLength(1); j++)
+                double[,] resDouble = (double[,])objRes;
+                res = new float[resDouble.GetLength(0), resDouble.GetLength(1)];
+                for (int i = 0; i < resDouble.GetLength(0); i++)
                 {
-                    res[i, j] = (float)resDouble[i, j];
+                    for (int j = 0; j < resDouble.GetLength(1); j++)
+                    {
+                        res[i, j] = (float)resDouble[i, j];
+                    }
                 }
             }
 
