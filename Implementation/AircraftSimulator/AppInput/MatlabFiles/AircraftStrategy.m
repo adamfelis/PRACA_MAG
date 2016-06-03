@@ -20,6 +20,8 @@ classdef AircraftStrategy < handle & Strategy
         last_stable_longitudinal_value = false;
         longitudinal_result_monotonicity = -1; % true means that function grows
         
+        factor_of_reference
+        
         delta_s
         N_u_eta
         N_w_eta
@@ -214,6 +216,14 @@ classdef AircraftStrategy < handle & Strategy
            obj.q_fun = @(ni,t, tau) (obj.q_t_fun(ni, t) - obj.q_t_fun(ni, obj.simulation_step_from_fixed_update));
            obj.theta_fun = @(ni,t, tau) (obj.theta_t_fun(ni, t) - obj.theta_t_fun(ni, obj.simulation_step_from_fixed_update));
            
+            syms t;
+%                 
+            obj.factor_of_reference = [round(double(limit(obj.u_fun(0.1,t,0),t,Inf)),3) / 0.1,...
+                    round(double(limit(obj.w_fun(0.1,t,0),t,Inf)),3)/0.1,...
+                    round(double(limit(obj.q_fun(0.1,t,0),t,Inf)),3)/0.1,...
+                    round(double(limit(obj.theta_fun(0.1,t,0),t,Inf)),3)/0.1];
+                
+           
         end
         %
         function longitudinal_result = SimulateLaplaceLongitudinal(obj, u_longitudinal)
@@ -253,7 +263,8 @@ classdef AircraftStrategy < handle & Strategy
             end
             
             if ~u_changed || (u_changed && obj.stable_conditions == false && monotonicity_changed == false)
-                obj.difference_longitudinal = obj.difference_longitudinal + (u_longitudinal - obj.previous_u_longitudinal);
+                obj.difference_longitudinal = (u_longitudinal - obj.previous_u_longitudinal) + obj.difference_longitudinal;
+               
                 longitudinal_difference_result = ...
                     [obj.u_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
                     obj.w_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
@@ -269,24 +280,31 @@ classdef AircraftStrategy < handle & Strategy
                 end 
             else % u_changed && (obj.stable_conditions == true || monotonicity_changed == true)
                 %if monotonicity_changed
-                    obj.difference_longitudinal = u_longitudinal - obj.previous_u_longitudinal;
+                    %obj.difference_longitudinal = u_longitudinal - obj.previous_u_longitudinal;
+                    obj.difference_longitudinal = u_longitudinal - ...
+                    [1/obj.factor_of_reference(4) * obj.previous_longitudinal_result(4),0]';
 %                 else
 %                     obj.difference_longitudinal = obj.difference_longitudinal + u_longitudinal - obj.previous_u_longitudinal;
 %                 end
                 
-                syms t;
-                
-                obj.last_stable_longitudinal_value = [double(vpa(limit(obj.u_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
-                    double(vpa(limit(obj.w_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
-                    double(vpa(limit(obj.q_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3)),...
-                    double(vpa(limit(obj.theta_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf),3))];
-                %obj.last_stable_longitudinal_value = obj.previous_longitudinal_result;
-                obj.simulation_counter = 1;
+%                 syms t;
+%                 
+%                 obj.last_stable_longitudinal_value = [round(double(limit(obj.u_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
+%                     round(double(limit(obj.w_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
+%                     round(double(limit(obj.q_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
+%                     round(double(limit(obj.theta_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3)];
+%                 obj.last_stable_longitudinal_value = [obj.factor_of_reference(1) * obj.previous_u_longitudinal(1),...
+%                     obj.factor_of_reference(2) * obj.previous_u_longitudinal(1),...
+%                     obj.factor_of_reference(3) * obj.previous_u_longitudinal(1),...
+%                     obj.factor_of_reference(4) * obj.previous_u_longitudinal(1)];
+                obj.last_stable_longitudinal_value = obj.previous_longitudinal_result;
+                obj.simulation_counter = 2;
                 longitudinal_difference_result = ...
                     [obj.u_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
                     obj.w_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
                     obj.q_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
                     obj.theta_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2))];
+                
                 longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
                 obj.stable_conditions = false;
             end

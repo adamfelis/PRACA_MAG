@@ -12,9 +12,12 @@ for i = 1:1:length(time)
    if(u_longitudinal(1) == -max_elevator && index == -1)
        index = i;
    end
-   if( i > 150 && i < 350 && mod(i,5) == 0)
-       u_longitudinal = u_longitudinal + [2 * 2 * pi /360;0]; 
+   if( i > 30 && i < 300 && mod(i,5) == 0)
+       u_longitudinal = u_longitudinal - [2 * 2 * pi /360;0]; 
    end
+%    if( i > 100 && i < 350 && mod(i,5) == 0)
+%        u_longitudinal = u_longitudinal - [2 * 2 * pi /360;0]; 
+%    end
 %    if( i > 350 && i < 500 && mod(i,5) == 0)
 %        u_longitudinal = u_longitudinal - [2 * 2 * pi /360;0]; 
 %    end
