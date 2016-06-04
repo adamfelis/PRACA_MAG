@@ -7,19 +7,21 @@ classdef AircraftStrategy < handle & Strategy
         A_lateral;
         B_lateral
         
-        simulation_step_from_fixed_update
-        simulation_counter = 1;
+        current_aircraft_velocity = [0 0 300]; %w v u
         
-        stable_conditions = false;
+        simulation_step_from_fixed_update
+        simulation_counter_eta = 1;
+        
+        stable_conditions_eta = false;
         longitudinal_stability_condition = 0.05;
-        previous_longitudinal_result = false;
+        previous_longitudinal_eta_result = false;
         previous_u_longitudinal = false;
         previous_xi_lateral_result = false;
         previous_zeta_lateral_result = false;
         previous_u_lateral = false;
-        difference_longitudinal = false;
-        last_stable_longitudinal_value = false;
-        longitudinal_result_monotonicity = -1; % true means that function grows
+        eta_difference_longitudinal = false;
+        last_stable_longitudinal_eta_value = false;
+        longitudinal_eta_result_monotonicity = -1; % true means that function grows
         
         factor_of_reference_longitudinal
         factor_of_reference_lateral
@@ -39,6 +41,13 @@ classdef AircraftStrategy < handle & Strategy
         lateral_stability_condition = 0.001;
         
         
+        tau_difference_longitudinal = false;
+        last_stable_longitudinal_tau_value = false;
+        longitudinal_tau_result_monotonicity = -1;
+        stable_conditions_tau = false;
+        simulation_counter_tau = 1
+        previous_longitudinal_tau_result = false;
+            
         delta_s
         N_u_eta
         N_w_eta
@@ -292,7 +301,12 @@ classdef AircraftStrategy < handle & Strategy
             obj.factor_of_reference_longitudinal = [round(double(limit(obj.u_fun(0.1,t,0),t,Inf)),3) / 0.1,...
                     round(double(limit(obj.w_fun(0.1,t,0),t,Inf)),3)/0.1,...
                     round(double(limit(obj.q_fun(0.1,t,0),t,Inf)),3)/0.1,...
-                    round(double(limit(obj.theta_fun(0.1,t,0),t,Inf)),3)/0.1];
+                    round(double(limit(obj.theta_fun(0.1,t,0),t,Inf)),3)/0.1;...
+                    ...
+                    round(double(limit(obj.u_fun(0,t,0.1),t,Inf)),3) / 0.1,...
+                    round(double(limit(obj.w_fun(0,t,0.1),t,Inf)),3)/0.1,...
+                    round(double(limit(obj.q_fun(0,t,0.1),t,Inf)),3)/0.1,...
+                    round(double(limit(obj.theta_fun(0,t,0.1),t,Inf)),3)/0.1];
             %lateral
             
            y_v = obj.A_lateral(1,1);
@@ -432,69 +446,123 @@ classdef AircraftStrategy < handle & Strategy
                     round(double(limit(obj.psi_fun(0,t,0.1),t,Inf)), precision)/0.1];
             
         end
-        %
+        %        
         function longitudinal_result = SimulateLaplaceLongitudinal(obj, u_longitudinal)
             %% Initial Conditions
-            if length(obj.difference_longitudinal) == 1
-                obj.difference_longitudinal = [0;0];
+            if length(obj.eta_difference_longitudinal) == 1
+                obj.eta_difference_longitudinal = [0 0 0 0 ; 0 0 0 0 ];
+            end            
+            if length(obj.tau_difference_longitudinal) == 1
+                obj.tau_difference_longitudinal = [0 0 0 0 ; 0 0 0 0 ];
             end
-            if length(obj.last_stable_longitudinal_value) == 1
-                obj.last_stable_longitudinal_value = [0 0 0 0];
+            
+            if length(obj.last_stable_longitudinal_eta_value) == 1
+                obj.last_stable_longitudinal_eta_value = [0 0 0 0];
             end
-            u_changed = false;
-            u_longitudinal_rised = true; % new u_longitudnal is greater or equals than previous one
-            if length(obj.previous_u_longitudinal) > 1 &&  norm(obj.previous_u_longitudinal - u_longitudinal) > 0
-                u_changed = true;
+            if length(obj.last_stable_longitudinal_tau_value) == 1
+                obj.last_stable_longitudinal_tau_value = [0 0 0 0];
+            end
+            
+            eta_changed = false;
+            eta_longitudinal_rised = true; % new u_longitudnal is greater or equals than previous one
+            if length(obj.previous_u_longitudinal) > 1 &&  norm(obj.previous_u_longitudinal(1) - u_longitudinal(1)) > 0
+                eta_changed = true;
                 if length(obj.previous_u_longitudinal) > 1 &&  u_longitudinal(1) - obj.previous_u_longitudinal(1) < 0
-                    u_longitudinal_rised = false;
+                    eta_longitudinal_rised = false;
+                end
+            end
+            tau_changed = false;
+            tau_longitudinal_rised = true; % new u_longitudnal is greater or equals than previous one
+            if length(obj.previous_u_longitudinal) > 1 &&  norm(obj.previous_u_longitudinal(2) - u_longitudinal(2)) > 0
+                tau_changed = true;
+                if length(obj.previous_u_longitudinal) > 1 &&  u_longitudinal(2) - obj.previous_u_longitudinal(2) < 0
+                    tau_longitudinal_rised = false;
                 end
             end
             
                 
             if length(obj.previous_u_longitudinal) > 1 &&  u_longitudinal(1) - obj.previous_u_longitudinal(1) == 0
-                u_longitudinal_rised = -1;
+                eta_longitudinal_rised = -1;
+            end
+            if length(obj.previous_u_longitudinal) > 1 &&  u_longitudinal(2) - obj.previous_u_longitudinal(2) == 0
+                tau_longitudinal_rised = -1;
             end
             
-            monotonicity_changed = false;
-            if obj.longitudinal_result_monotonicity ~= -1
-                if (obj.longitudinal_result_monotonicity == true && u_longitudinal_rised == false) ||...
-                        (obj.longitudinal_result_monotonicity == false && u_longitudinal_rised == true)
-                    monotonicity_changed = true;
+            eta_monotonicity_changed = false;
+            if obj.longitudinal_eta_result_monotonicity ~= -1
+                if (obj.longitudinal_eta_result_monotonicity == true && eta_longitudinal_rised == false) ||...
+                        (obj.longitudinal_eta_result_monotonicity == false && eta_longitudinal_rised == true)
+                    eta_monotonicity_changed = true;
+                end
+            end            
+            tau_monotonicity_changed = false;
+            if obj.longitudinal_tau_result_monotonicity ~= -1
+                if (obj.longitudinal_tau_result_monotonicity == true && tau_longitudinal_rised == false) ||...
+                        (obj.longitudinal_tau_result_monotonicity == false && tau_longitudinal_rised == true)
+                    tau_monotonicity_changed = true;
                 end
             end
-            if u_longitudinal_rised ~= -1
-                obj.longitudinal_result_monotonicity = u_longitudinal_rised;
+            
+            if eta_longitudinal_rised ~= -1
+                obj.longitudinal_eta_result_monotonicity = eta_longitudinal_rised;
+            end
+            if tau_longitudinal_rised ~= -1
+                obj.longitudinal_tau_result_monotonicity = tau_longitudinal_rised;
             end
             %% Main Algorithm
-            if ~u_changed || (u_changed && obj.stable_conditions == false && monotonicity_changed == false)
-                obj.difference_longitudinal = (u_longitudinal - obj.previous_u_longitudinal) + obj.difference_longitudinal;
-                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.difference_longitudinal(1), obj.difference_longitudinal(2), obj.simulation_step_from_fixed_update * obj.simulation_counter);
-                longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
-                if obj.stable_conditions == false && length(obj.previous_longitudinal_result) > 1 && norm(obj.previous_longitudinal_result - longitudinal_result) < obj.longitudinal_stability_condition
-                    obj.stable_conditions = true;
+            if ~eta_changed || (eta_changed && obj.stable_conditions_eta == false && eta_monotonicity_changed == false)
+                dif = (u_longitudinal - obj.previous_u_longitudinal);
+                obj.eta_difference_longitudinal = ([dif(1).* ones(1,4); dif(2).* ones(1,4) ]) + obj.eta_difference_longitudinal;
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.eta_difference_longitudinal(1,:), zeros(1,4), obj.simulation_step_from_fixed_update * obj.simulation_counter_eta);
+                eta_longitudinal_result = obj.last_stable_longitudinal_eta_value + longitudinal_difference_result;
+                if obj.stable_conditions_eta == false && length(obj.previous_longitudinal_eta_result) > 1 && norm(obj.previous_longitudinal_eta_result - eta_longitudinal_result) < obj.longitudinal_stability_condition
+                    obj.stable_conditions_eta = true;
                     %disp('stable');
-                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter);
+                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter_eta);
                 end 
-            else % u_changed && (obj.stable_conditions == true || monotonicity_changed == true)
-                obj.difference_longitudinal = u_longitudinal - [1/obj.factor_of_reference_longitudinal(4) * obj.previous_longitudinal_result(4),0]';
-                obj.last_stable_longitudinal_value = obj.previous_longitudinal_result;
-                obj.simulation_counter = 2;
-                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.difference_longitudinal(1), obj.difference_longitudinal(2), obj.simulation_step_from_fixed_update * obj.simulation_counter);                
-                longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
-                obj.stable_conditions = false;
-            end            
-            %% Variables Update            
+            else % u_changed && (obj.stable_conditions_eta == true || monotonicity_changed == true)
+                temporary_eta_which_replace_current_state = 1./obj.factor_of_reference_longitudinal(1,:) .* obj.previous_longitudinal_eta_result;
+                obj.eta_difference_longitudinal(1,:) = u_longitudinal(1) * ones(1,4) - temporary_eta_which_replace_current_state;
+                obj.last_stable_longitudinal_eta_value = obj.previous_longitudinal_eta_result;
+                obj.simulation_counter_eta = 2;
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.eta_difference_longitudinal(1,:), zeros(1,4), obj.simulation_step_from_fixed_update * obj.simulation_counter_eta);                
+                eta_longitudinal_result = obj.last_stable_longitudinal_eta_value + longitudinal_difference_result;
+                obj.stable_conditions_eta = false;
+            end 
+            if ~tau_changed || (tau_changed && obj.stable_conditions_tau == false && tau_monotonicity_changed == false)
+                dif = (u_longitudinal - obj.previous_u_longitudinal);
+                obj.tau_difference_longitudinal = ([dif(1).* ones(1,4); dif(2).* ones(1,4) ]) + obj.tau_difference_longitudinal;
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(zeros(1,4), obj.tau_difference_longitudinal(2,:), obj.simulation_step_from_fixed_update * obj.simulation_counter_tau);
+                tau_longitudinal_result = obj.last_stable_longitudinal_tau_value + longitudinal_difference_result;
+                if obj.stable_conditions_tau == false && length(obj.previous_longitudinal_tau_result) > 1 && norm(obj.previous_longitudinal_tau_result - tau_longitudinal_result) < obj.longitudinal_stability_condition
+                    obj.stable_conditions_tau = true;
+                    %disp('stable');
+                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter_tau);
+                end 
+            else % u_changed && (obj.stable_conditions_tau == true || monotonicity_changed == true)
+                temporary_tau_which_replace_current_state = 1./obj.factor_of_reference_longitudinal(2,:) .* obj.previous_longitudinal_tau_result;
+                obj.tau_difference_longitudinal(2,:) = u_longitudinal(2) * ones(1,4) - temporary_tau_which_replace_current_state;
+                obj.last_stable_longitudinal_tau_value = obj.previous_longitudinal_tau_result;
+                obj.simulation_counter_tau = 2;
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(zeros(1,4), obj.tau_difference_longitudinal(2,:), obj.simulation_step_from_fixed_update * obj.simulation_counter_tau);                
+                tau_longitudinal_result = obj.last_stable_longitudinal_tau_value + longitudinal_difference_result;
+                obj.stable_conditions_tau = false;
+            end 
+            %% Variables Update      
+            longitudinal_result = eta_longitudinal_result + tau_longitudinal_result;
             obj.previous_u_longitudinal = u_longitudinal;
-            obj.previous_longitudinal_result = longitudinal_result;
-            obj.simulation_counter = obj.simulation_counter + 1;
+            obj.previous_longitudinal_eta_result = eta_longitudinal_result;
+            obj.previous_longitudinal_tau_result = tau_longitudinal_result;
+            obj.simulation_counter_eta = obj.simulation_counter_eta + 1;
+            obj.simulation_counter_tau = obj.simulation_counter_tau + 1;
         end
         %
         
         function longitudinalUpdate = CalculateLongitudinalUpdate(obj, eta, tau, t)
-            longitudinalUpdate = [obj.u_fun(eta, t, tau),...
-                    obj.w_fun(eta, t, tau),...
-                    obj.q_fun(eta, t, tau),...
-                    obj.theta_fun(eta, t, tau)];
+            longitudinalUpdate = [obj.u_fun(eta(1), t, tau(1)),...
+                    obj.w_fun(eta(2), t, tau(2)),...
+                    obj.q_fun(eta(3), t, tau(3)),...
+                    obj.theta_fun(eta(4), t, tau(4))];
         end
         
         function lateral_result = SimulateLaplaceLateral(obj, u_lateral)
@@ -612,6 +680,44 @@ classdef AircraftStrategy < handle & Strategy
                     obj.r_fun(xi(3), t, zeta(3)),...
                     obj.phi_fun(xi(4), t, zeta(4)),...
                     obj.psi_fun(xi(5), t, zeta(5))];
+        end
+        
+        function movementVector = MoveAircraft(obj, longitudinal_solution, lateral_solution, u_longitudinal, u_lateral)
+                        
+            temp_velocity = obj.current_aircraft_velocity + [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
+            
+            longitudinal_derivatives = obj.A_longitudinal * longitudinal_solution + obj.B_longitudinal * u_longitudinal;
+            lateral_derivatives = obj.A_lateral * lateral_solution + obj.B_lateral * u_lateral;
+            
+            acceleration_vector = [longitudinal_derivatives(2); lateral_derivatives(1) ; longitudinal_derivatives(1)];%w v u
+            
+            pitch_angle = longitudinal_solution(4);
+            roll_angle = lateral_solution(4);
+            yaw_angle = lateral_solution(5); 
+            
+            R_x = [1 0 0;...
+                0 cos(roll_angle) -sin(roll_angle);...
+                0 sin(roll_angle) cos(roll_angle)];
+            
+            R_y = [cos(pitch_angle) 0 sin(pitch_angle);...
+                0 1 0;...
+                -sin(pitch_angle) 0 cos(pitch_angle)];
+            
+            R_z = [cos(yaw_angle) -sin(yaw_angle) 0;...
+                sin(yaw_angle) cos(yaw_angle) 0;...
+                0 0 1];
+            
+            rotation_matrix = R_z * R_y * R_x;
+            
+            acceleration_vector_after_rotation = rotation_matrix * acceleration_vector;
+            gravity_vector = [-9.81; 0; 0];
+            acceleration_vector_after_rotation_including_gravity = acceleration_vector_after_rotation + gravity_vector;
+            
+            tmpMovementVector = ...
+                temp_velocity' * obj.simulation_step_from_fixed_update + ... %vt
+                acceleration_vector_after_rotation_including_gravity * ...
+                obj.simulation_step_from_fixed_update * obj.simulation_step_from_fixed_update / 2;%at^2/2
+            movementVector = [tmpMovementVector(3), tmpMovementVector(2), tmpMovementVector(1)];
         end
     end
     

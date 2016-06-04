@@ -239,7 +239,9 @@ namespace Assets.scripts
             float X = Mathf.Lerp(prevVelocityX, TargetVelocityX, t);
             float Y = Mathf.Lerp(prevVelocityY, TargetVelocityY, t);
             var velocity = new Vector3(0, Y, -X);
-            Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
+            velocity = new Vector3(Body.transform.position.x, Y, -X);
+            Body.transform.position = (velocity);
+            //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
         }
 
         private void interpolateLateralVelocity(float t)
@@ -247,7 +249,10 @@ namespace Assets.scripts
 
             float Z = Mathf.Lerp(prevVelocityZ, TargetVelocityZ, t);
             var velocity = new Vector3(Z, 0, 0);
-            Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
+
+            velocity = new Vector3(Z, Body.transform.position.y, Body.transform.position.z);
+            Body.transform.position = (velocity);
+            //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
         }
     }
 }

@@ -301,13 +301,13 @@ public class Aircraft : IAircraft
 
     public void TranslateInLongitudinal(float velocityX, float velocityY)
     {
-        aircraftInterpolator.TargetVelocityX = velocityX;
-        aircraftInterpolator.TargetVelocityY = velocityY;
+        aircraftInterpolator.TargetVelocityX += velocityX;
+        aircraftInterpolator.TargetVelocityY += velocityY;
     }
 
     public void TranslateInLateral(float velocityZ)
     {
-        aircraftInterpolator.TargetVelocityZ = velocityZ;
+        aircraftInterpolator.TargetVelocityZ += velocityZ;
     }
 
     public void RotateSteersJoystick(float deltaAileron, float deltaRudder, float deltaElevator)

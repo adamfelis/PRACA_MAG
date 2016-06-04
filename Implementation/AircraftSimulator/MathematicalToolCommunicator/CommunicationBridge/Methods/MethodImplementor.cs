@@ -56,6 +56,12 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
                 case Common.Scripts.SpecialScriptType.WorkspaceUpdater:
                     result = new ConcreteMethods.ConcreteMethodImplementorWorkspaceUpdater();
                     break;
+                case Common.Scripts.SpecialScriptType.MissileAdder:
+                    result = new ConcreteMethods.ConcreteMethodImplementorMissileAdder();
+                    break;
+                case Common.Scripts.SpecialScriptType.SimulateMissile:
+                    result = new ConcreteMethods.ConcreteMethodImplementorSimulateMissile();
+                    break;
                 default:
                     throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
             }

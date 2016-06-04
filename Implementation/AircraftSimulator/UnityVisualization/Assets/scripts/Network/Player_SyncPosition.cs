@@ -28,9 +28,9 @@ public class Player_SyncPosition : NetworkBehaviour
     {
         nClient = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<NetworkManager>().client;
         myTransform = transform;
-        latencyText = GameObject.FindGameObjectWithTag(Tags.ServerLatency).GetComponent<Text>();
-        if (latencyText == null)
-            Debug.Log("latency text missing");
+        //latencyText = GameObject.FindGameObjectWithTag(Tags.ServerLatency).GetComponent<Text>();
+        //if (latencyText == null)
+        //    Debug.Log("latency text missing");
     }
 
 	void FixedUpdate () 
@@ -41,7 +41,7 @@ public class Player_SyncPosition : NetworkBehaviour
     void Update()
     {
         LerpPosition();
-        ShowLatency();
+        //ShowLatency();
     }
 
     /// <summary>

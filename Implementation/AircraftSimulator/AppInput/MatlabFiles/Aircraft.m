@@ -17,7 +17,8 @@ classdef Aircraft < handle & Shooter
 
         % 
         DEBUG_MODE = false;
-        
+       
+        aircraftPosition = [0 0 0];
     end
     
     methods
@@ -51,8 +52,8 @@ classdef Aircraft < handle & Shooter
         end
         
         % Add missiles
-        function AddMissile(obj)
-            obj.Missiles = [obj.Missiles, Missile()];
+        function AddMissile(obj, missilePos, shooter_id, missile_id)
+            obj.Missiles = [obj.Missiles, Missile(s_id, m_id, missilePos)];
         end
         % Returns concrete missile strategy
         function MissileStrategy = GetMissileStrategy(obj, missile_index, strategy_index)
@@ -160,11 +161,33 @@ classdef Aircraft < handle & Shooter
                 Y_lateral = obj.Strategies(i).SimulateLaplaceLateral(u_lateral);
                 Y_lateral = real(Y_lateral);
                 
+                if i == 1
+                    movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
+                    obj.aircraftPosition = obj.aircraftPosition + movement;
+                end
                 obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
-            end
-            results.AddStrategyResult(Y_longitudinal, Y_lateral, [0 0 0]);
+            end                
+            
+            results.AddStrategyResult(Y_longitudinal, Y_lateral, movement);
             obj.previous_result = results;
             resultsArray = results.PresentFinalResults();
+        end
+        
+        function missileDeltaPositions = SimulateMissile(obj, shooter_id, missile_id)            
+            
+            missileDeltaPositions = zeros(1,3);
+            for i = 1:1:length(obj.Missiles)
+                if ~(obj.Missiles(i).shooter_id == shooter_id && obj.Missiles(i).missile_id == missile_id)
+                    continue;
+                end
+               for j = 1:1:length(obj.Missiles(i).Strategies)
+                   deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition);
+                   if j == 1
+                      missileDeltaPositions = deltaPos; 
+                   end
+               end
+            end
+            
         end
     end
     

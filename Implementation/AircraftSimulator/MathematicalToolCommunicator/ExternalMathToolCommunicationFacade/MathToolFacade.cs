@@ -78,6 +78,12 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
                     case SpecialScriptType.WorkspaceUpdater:
                         availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptWorkspaceUpdater());
                         break;
+                    case SpecialScriptType.MissileAdder:
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptMissileAdder());
+                        break;
+                    case SpecialScriptType.SimulateMissile:
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptSimulateMissile());
+                        break;
                     default:
                         throw new Scripts.InvalidScriptTypeException();
                 }

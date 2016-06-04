@@ -11,6 +11,8 @@ namespace Common.Scripts
         WorkspaceInitializator,
         StrategyCreator,
         GetState,
-        WorkspaceUpdater
+        WorkspaceUpdater,
+        MissileAdder,
+        SimulateMissile
     }
 }

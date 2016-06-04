@@ -51,6 +51,9 @@ namespace Assets.scripts.Data_Manipulation
                     handleLongitudinalData(data);
                 if (messageContent == MessageContent.LateralData)
                     handleLateralData(data);
+                if (messageContent == MessageContent.PositionData)
+                    handlePositionData(data);
+
             }
             aircraftsController.Aircraft.aircraftInterpolator.UnclockInterpolation();
             ClientResponseHandler.Invoke();
@@ -77,11 +80,21 @@ namespace Assets.scripts.Data_Manipulation
             var q = data.Array[0][2];
             aircraft.q = q;
 
-            aircraft.TranslateInLongitudinal(velocityX, velocityY);
+            //aircraft.TranslateInLongitudinal(velocityX, velocityY);
             var theta = data.Array[0][3];
             unityShellNotifier.NotifyUnityShell("delta theta: " + (theta-prevTheta).ToString("n2"));
             prevTheta = theta;
             aircraft.RotateInLongitudinal(theta);
+        }
+        private void handlePositionData(IData data)
+        {
+            var aircraft = aircraftsController.Aircraft;
+            var deltaX = data.Array[0][0];
+            var deltaY = data.Array[0][1];
+            var deltaZ = data.Array[0][2];
+
+            aircraft.TranslateInLongitudinal(deltaX, deltaY);
+            aircraft.TranslateInLateral(deltaZ);
         }
 
         private void handleLateralData(IData data)
@@ -99,7 +112,7 @@ namespace Assets.scripts.Data_Manipulation
             //psi
             var psi = data.Array[0][4];
 
-            aircraft.TranslateInLateral(velocityZ);
+            //aircraft.TranslateInLateral(velocityZ);
             aircraft.RotateInLateral(phi, psi);
         }
     }
