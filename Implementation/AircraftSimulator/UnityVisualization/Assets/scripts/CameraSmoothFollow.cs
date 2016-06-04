@@ -47,13 +47,26 @@ namespace Assets.scripts
             }
             return t;
         }
-        void Start()
+        public void Initialize()
         {
             backCamera = transform.FindChild("BackCamera");
             frontCamera = transform.FindChild("FrontCamera");
             leftCamera = transform.FindChild("LeftCamera");
             rightCamera = transform.FindChild("RightCamera");
             mainCamera = transform.FindChild("MainCamera");
+            mainCamera.GetComponent<AudioListener>().enabled = true;
+        }
+
+        public Camera MainCamera
+        {
+            get { return mainCamera.GetComponent<Camera>(); }
+        }
+
+        public bool IsBackCameraOnItsPlace()
+        {
+            float eps = 5.0f;
+            float toRet = Vector3.Distance(mainCamera.position, backCamera.position);
+            return toRet < eps;
         }
 
         public void SmoothTransist(CameraView view)

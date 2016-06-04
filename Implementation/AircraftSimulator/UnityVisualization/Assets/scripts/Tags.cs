@@ -29,6 +29,7 @@ public static class Tags
     public static string Aileron = "Aileron";
     public static string Elevator = "Elevator";
     public static string Rudder = "Rudder";
+    public static string WingsMain = "WingsMain";
 
     public static string MisilleLeft2 = "MisilleLeft2";
     public static string MisilleRight2 = "MisilleRight2";
@@ -62,6 +63,9 @@ public static class Tags
     public static string LongitudinalTranslation = "LongitudinalTranslation";
     public static string LateralRotation = "LateralRotation";
     public static string LateralTranslation = "LateralTranslation";
+
+    public static string Aim = "Aim";
+    public static string Canvas = "Canvas";
 
     #endregion
 

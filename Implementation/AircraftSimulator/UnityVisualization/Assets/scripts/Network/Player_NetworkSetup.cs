@@ -1,4 +1,6 @@
 ﻿using System;
+using Assets.scripts;
+using Assets.scripts.Model;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -6,57 +8,76 @@ namespace Assets.Scripts
 {
     public class Player_NetworkSetup : NetworkBehaviour
     {
-
-        [SerializeField]
-        private Camera FPSCharacterCam;
-        [SerializeField]
-        private AudioListener audioListener;
-
-        //private GameObject aircraftModel;
-
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
             //GameObject.FindGameObjectWithTag(Tags.EnvironmentCreator).GetComponent<GameController>().enabled = true;
         }
 
-        //private void Start()
-        //{
-        //    transform.rotation = Quaternion.Euler(0, 270, 0);
-        //    GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
-        //    //aircraftModel = Tags.FindGameObjectWithTagInParent(Tags.F15, name);
-        //}
-
         public override void PreStartClient()
         {
-            //transform.rotation = Quaternion.Euler(0, 270, 0);
             GetComponent<Player_ID>().PlayerIdentitySet += OnPlayerIdentitySet;
             GetComponent<Player_ID>().enabled = true;
         }
 
         public void OnPlayerIdentitySet()
         {
+            //Debug.Log("on player identity set");
             var aircraftsController = GetComponent<AircraftsController>();
-            aircraftsController.Initialized += AircraftsControllerOnInitialized;
+            aircraftsController.Initialize();
             aircraftsController.enabled = true;
+            AircraftsControllerOnInitialized();
+        }
 
-            if (isLocalPlayer)
-            {
-                var miniMap = GameObject.FindGameObjectWithTag(Tags.MiniMap);
-                miniMap.GetComponent<MapCanvasController>().AircraftsController = aircraftsController;
-                miniMap.GetComponent<MapCanvasController>().enabled = true;
+        private MissileController getLocalMissileController()
+        {
+            var localPlayer = GetComponent<Player_ID>().GetLocalPlayer();
+            return localPlayer.GetComponent<MissileController>();
+        }
 
-                var mainCamera = GameObject.FindGameObjectWithTag(Tags.MainCamera);
-                mainCamera.GetComponent<Camera>().enabled = true;
-            }
+        private CameraSmoothFollow getLocalCameraSmoothFollow()
+        {
+            var localPlayerName = GetComponent<Player_ID>().GetLocalPlayerName();
+            return Tags.FindGameObjectWithTagInParent(Tags.CameraManager, localPlayerName).GetComponent<CameraSmoothFollow>();
         }
 
         private void AircraftsControllerOnInitialized()
         {
+            //Debug.Log("on controller initialized");
+            var aircraftsController = GetComponent<AircraftsController>();
             if (isLocalPlayer)
+            {
                 GetComponent<BoxCollider>().enabled = true;
-            if (!isLocalPlayer)
-                GetComponent<MapMarker>().enabled = true;
+
+                var cameraManager = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, name);
+                cameraManager.GetComponent<CameraSmoothFollow>().enabled = true;
+                cameraManager.GetComponent<CameraSmoothFollow>().Initialize();
+
+                var mainCamera = Tags.FindGameObjectWithTagInParent(Tags.MainCamera, name);
+                mainCamera.GetComponent<Camera>().enabled = true;
+
+                var miniMap = GameObject.FindGameObjectWithTag(Tags.MiniMap);
+                miniMap.GetComponent<MapCanvasController>().AircraftsController = aircraftsController;
+                miniMap.GetComponent<MapCanvasController>().enabled = true;
+
+                var networkController =
+                    GameObject.FindGameObjectWithTag(Tags.ApplicationManager).GetComponent<NetworkController>();
+                networkController.InitializeUnlocalPlayers(getLocalMissileController(), getLocalCameraSmoothFollow());
+            }
+            //if it is not a local player
+            else
+            {
+                var networkController =
+                   GameObject.FindGameObjectWithTag(Tags.ApplicationManager).GetComponent<NetworkController>();
+                if (networkController.IsLocalPlayerInitialized)
+                {
+                    networkController.InitializeSingleUnlocalPlayer(gameObject, getLocalMissileController(), getLocalCameraSmoothFollow());
+                }
+                else
+                {
+                    networkController.UnlocalPlayers.Add(gameObject);
+                }
+            }
         }
     }
 }

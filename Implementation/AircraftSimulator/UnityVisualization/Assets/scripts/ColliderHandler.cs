@@ -67,6 +67,9 @@ public class ColliderHandler : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.transform.root.name != transform.root.name)
+            return;
+
         Destroy(GetComponent<Rigidbody>());
         Destroy(GetComponent<MeshCollider>());
         collided = true;

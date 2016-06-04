@@ -21,7 +21,7 @@ public delegate void NotifierHandler();
 
 public class Player_ID : NetworkBehaviour
 {
-    [SyncVar]
+    [SyncVar(hook = "OnIdentityChanged")]
     public string playerUniqueIdentity;
 
     [SyncVar]
@@ -29,7 +29,6 @@ public class Player_ID : NetworkBehaviour
     
     public Team _team;
     private NetworkInstanceId playerNetId;
-    private Transform myTransform;
     private const string playerName = "Player";
     private PlayerType playerType;
     private bool amIHost;
@@ -52,8 +51,20 @@ public class Player_ID : NetworkBehaviour
         get
         {
             int toRet;
-            int.TryParse(myTransform.name.TrimStart(playerName.ToCharArray()), out toRet);
+            int.TryParse(transform.name.TrimStart(playerName.ToCharArray()), out toRet);
             return toRet;
+        }
+    }
+
+    private void Start()
+    {
+        if (!isLocalPlayer && playerUniqueIdentity != "")
+        {
+            transform.name = playerUniqueIdentity;
+            if (PlayerIdentitySet == null)
+                Debug.LogWarning("PlayerIdentitySet unsubscribed");
+            else
+                PlayerIdentitySet.Invoke();
         }
     }
 
@@ -62,22 +73,19 @@ public class Player_ID : NetworkBehaviour
         GetNetIdentity();
     }
 
-    // Use this for initialization
-    void Start()
+    private void OnIdentityChanged(string uniqueIdentity)
     {
-        myTransform = transform;
-        //SetIdentity();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //We are assigning identity in update cause it requires time for the player object to get instantianted.
-        //That is the reason code cannot be applied in Start/Awake function
-        if (myTransform.name == "" || myTransform.name == "Player(Clone)")
-        {
-            SetIdentity();
-        }
+        transform.name = uniqueIdentity;
+        if (isLocalPlayer)
+            localPlayerId = Id;
+        if (playerType == PlayerType.Host)
+            amIHost = true;
+        else
+            amIHost = false;
+        if (PlayerIdentitySet == null)
+            Debug.LogWarning("PlayerIdentitySet unsubscribed");
+        else
+            PlayerIdentitySet.Invoke();
     }
 
     [Client]
@@ -92,36 +100,6 @@ public class Player_ID : NetworkBehaviour
     public void SetupRemotelyAssignedId(int id)
     {
         CmdProvideServerRemoteAssignedId(id);
-    }
-
-    //void SetMapTag(bool isA)
-    //{
-    //    var n = gameObject.name;
-    //    var s = n + "/MapTag";
-    //    var mapTag = GameObject.Find(s);
-    //    mapTag.GetComponent<Renderer>().material.color = isA ? Color.red : Color.green;
-    //}
-
-    void SetIdentity()
-    {
-        if (!isLocalPlayer)
-        {
-            myTransform.name = playerUniqueIdentity;
-        }
-        else
-        {
-            myTransform.name = MakeUniqueName();
-            if (playerType == PlayerType.Host)
-                amIHost = true;
-            else
-                amIHost = false;
-        }
-
-        if (isLocalPlayer)
-        {
-            localPlayerId = Id;
-        }
-        PlayerIdentitySet.Invoke();
     }
 
     string MakeUniqueName()
@@ -149,6 +127,11 @@ public class Player_ID : NetworkBehaviour
     private IEnumerable<GameObject> getAllPlayers()
     {
         return GameObject.FindGameObjectsWithTag(Tags.Player);
+    }
+
+    public string GetLocalPlayerName()
+    {
+        return GetLocalPlayer().transform.root.name;
     }
 
     public GameObject GetLocalPlayer()

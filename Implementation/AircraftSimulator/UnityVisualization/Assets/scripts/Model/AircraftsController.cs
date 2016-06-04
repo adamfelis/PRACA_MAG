@@ -18,7 +18,7 @@ public class AircraftsController : NetworkBehaviour
 
     public MissileController MissileController;
     // Use this for initialization
-    void Start ()
+    public void Initialize ()
 	{
 	    GameObject body = this.gameObject;
         Aircraft = new Aircraft()
@@ -33,17 +33,17 @@ public class AircraftsController : NetworkBehaviour
         };
         var sceneController = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<SceneController>();
         Aircraft.Initialize(sceneController);
-        
-	    if (isLocalPlayer)
-	    {
-	        body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
+
+        if (isLocalPlayer)
+        {
+            body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
             MissileController = body.AddComponent<MissileController>();
+            MissileController.Initialize();
             var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
             applicationManager.GetComponent<InputController>().Initialize(this);
             applicationManager.GetComponent<Communication>().enabled = true;
-	    }
-        Initialized.Invoke();
-    }
+        }
+	}
 
     void Update()
     {

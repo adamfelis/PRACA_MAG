@@ -69,6 +69,7 @@ public class Communication : MonoBehaviour, ICommunication
 
     private void Update()
     {
+        delta += Time.deltaTime;
         if (!aircraftsController.Aircraft.aircraftInterpolator.InterpolationPending)
             dataReader.ReadDataSentFromServer();
     }
