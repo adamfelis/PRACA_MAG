@@ -23,10 +23,12 @@ public class Player_SyncPosition : NetworkBehaviour
     private Text latencyText;
     private int latency;
     private float globalIterationCounter = 0.0f;
+    private Player_ID playerId;
 
     void Start()
     {
         nClient = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<NetworkManager>().client;
+        playerId = transform.root.gameObject.GetComponent<Player_ID>();
         myTransform = transform;
         latencyText = GameObject.FindGameObjectWithTag(Tags.ServerLatency).GetComponent<Text>();
         if (latencyText == null)
@@ -49,7 +51,7 @@ public class Player_SyncPosition : NetworkBehaviour
     /// </summary>
     void LerpPosition()
     {
-        if (!isLocalPlayer)
+        if (!playerId.isLocalPlayer)
         {
             float singleIterationTime = Time.deltaTime;
             float wholeInterpolationTime = Time.fixedDeltaTime;

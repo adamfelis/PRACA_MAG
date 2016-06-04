@@ -10,7 +10,7 @@ namespace Assets.scripts.Data_Manipulation
     {
         void SendJoinMessage(string localIPAddress);
         void SendAircraftSteeringToServer();
-        void SendMissileFiredToServer(int missileTargetId);
+        void SendMissileFiredToServer(int shooterId, int targetId, int missileId);
         void DisconnectFromServer();
     }
 }

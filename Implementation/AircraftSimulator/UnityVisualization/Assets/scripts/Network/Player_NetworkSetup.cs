@@ -22,7 +22,6 @@ namespace Assets.Scripts
 
         public void OnPlayerIdentitySet()
         {
-            //Debug.Log("on player identity set");
             var aircraftsController = GetComponent<AircraftsController>();
             aircraftsController.Initialize();
             aircraftsController.enabled = true;

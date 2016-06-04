@@ -53,7 +53,6 @@ public class CustomNetworkManager : NetworkManager
         }
     }
 
-    
 
     public override void OnMatchList(ListMatchResponse matchList)
     {
@@ -155,6 +154,11 @@ public class CustomNetworkManager : NetworkManager
         else
         {
             sceneController.SetupOtherSceneButtons();
+
+            //GameObject missile = (GameObject)GameObject.Instantiate(Resources.Load("Missile"));
+            //var localplayer = GameObject.FindGameObjectWithTag(Tags.Player).GetComponent<Player_ID>().GetLocalPlayer();
+            //NetworkServer.SpawnWithClientAuthority(missile, localplayer);
+
         }
     }
 

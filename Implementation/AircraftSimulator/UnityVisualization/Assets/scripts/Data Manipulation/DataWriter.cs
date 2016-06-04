@@ -73,7 +73,7 @@ namespace Assets.scripts
             });
         }
 
-        public void SendMissileFiredToServer(int missileTargetId)
+        public void SendMissileFiredToServer(int shooterId, int targetId, int missileId)
         {
             var aircraft = aircraftsController.Aircraft;
             communicator.ClientInputPriveleges.SendDataRequest(
@@ -91,7 +91,9 @@ namespace Assets.scripts
                         aircraft.Position.y,
                         aircraft.Position.z).GetData(),
                     IsMissileData = true,
-                    MissileTargetId = missileTargetId,
+                    MissileTargetId = targetId,
+                    MissileId = missileId,
+                    ShooterId = shooterId,
                     MessageType = MessageType.ClientDataRequest,
                     InputType = DataType.Matrix,
                     OutputType = DataType.Vector,//???????????????????????????

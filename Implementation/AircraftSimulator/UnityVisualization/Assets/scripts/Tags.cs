@@ -76,6 +76,8 @@ public static class Tags
     public static string EnvironmentCreator = "EnvironmentCreator";
     public static string Player = "Player";
     public static string NetworkManager = "NetworkManager";
+    public static string Missiles = "Missiles";
+
     #endregion
 
 }

@@ -58,6 +58,8 @@ namespace Common.Containers
         int StrategyNumber { get; set; }
         bool IsMissileData { get; set; }
         int MissileTargetId { get; set; }
+        int ShooterId { get; set; }
+        int MissileId { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
         Shooters.ShooterType ShooterType { get; set; }

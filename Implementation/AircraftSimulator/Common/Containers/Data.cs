@@ -40,6 +40,16 @@ namespace Common.Containers
             get; set;
         }
 
+        public int MissileId
+        {
+            get; set;
+        }
+
+        public int ShooterId
+        {
+            get; set;
+        }
+
         public int StrategyNumber
         {
             get { return 0; }

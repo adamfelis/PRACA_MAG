@@ -15,7 +15,7 @@ public class Player_SyncRotation : NetworkBehaviour
     private Transform playerTransform;
     [SerializeField]
     private float lerpRate = 15;
-
+    private Player_ID playerId;
     private Quaternion lastPlayerRot;
     /// <summary>
     /// exceeding threshold enforces interpolation
@@ -27,6 +27,7 @@ public class Player_SyncRotation : NetworkBehaviour
     void Start()
     {
         playerTransform = transform;
+        playerId = transform.root.gameObject.GetComponent<Player_ID>();
     }
 
     // Update is called once per frame
@@ -44,7 +45,7 @@ public class Player_SyncRotation : NetworkBehaviour
     void LerpRotations()
     {
 
-        if (!isLocalPlayer)
+        if (!playerId.isLocalPlayer)
         { 
             if (IsValidQuaternion(syncPlayeRotation))
             {
