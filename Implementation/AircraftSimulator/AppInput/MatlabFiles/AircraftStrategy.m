@@ -14,13 +14,30 @@ classdef AircraftStrategy < handle & Strategy
         longitudinal_stability_condition = 0.05;
         previous_longitudinal_result = false;
         previous_u_longitudinal = false;
-        previous_lateral_result = false;
+        previous_xi_lateral_result = false;
+        previous_zeta_lateral_result = false;
         previous_u_lateral = false;
         difference_longitudinal = false;
         last_stable_longitudinal_value = false;
         longitudinal_result_monotonicity = -1; % true means that function grows
         
-        factor_of_reference
+        factor_of_reference_longitudinal
+        factor_of_reference_lateral
+        
+        
+        
+        xi_difference_lateral = false
+        zeta_difference_lateral = false
+        last_stable_lateral_xi_value = false
+        last_stable_lateral_zeta_value = false
+        lateral_xi_result_monotonicity = -1
+        lateral_zeta_result_monotonicity = -1
+        stable_conditions_lateral_xi = false
+        stable_conditions_lateral_zeta = false
+        simulation_counter_lateral_xi = 1
+        simulation_counter_lateral_zeta = 1
+        lateral_stability_condition = 0.001;
+        
         
         delta_s
         N_u_eta
@@ -65,6 +82,50 @@ classdef AircraftStrategy < handle & Strategy
         q_fun
         theta_fun
         a_z_fun
+        
+        delta_s_lateral
+        N_v_xi
+        N_p_xi
+        N_r_xi
+        N_phi_xi
+        N_psi_xi
+        
+        N_v_zeta
+        N_p_zeta
+        N_r_zeta
+        N_phi_zeta
+        N_psi_zeta
+        
+        v_xi_s
+        p_xi_s
+        r_xi_s
+        phi_xi_s
+        psi_xi_s
+        
+        v_zeta_s
+        p_zeta_s
+        r_zeta_s
+        phi_zeta_s
+        psi_zeta_s 
+        
+        v_t
+        p_t
+        r_t
+        phi_t
+        psi_t
+        
+        v_t_fun
+        p_t_fun
+        r_t_fun
+        phi_t_fun
+        psi_t_fun
+        
+        
+        v_fun
+        p_fun
+        r_fun
+        phi_fun
+        psi_fun
     end
     
     methods
@@ -87,6 +148,16 @@ classdef AircraftStrategy < handle & Strategy
            
            obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
            obj.B_longitudinal = Nbar * obj.B_longitudinal;
+           
+           C = eye(5);
+           R = eye(2);
+           p = 10000;
+           Q = p * (C' * C);
+           K = lqr(new_A_lateral,new_B_lateral,Q,R);
+           Nbar = 200;
+           
+           obj.A_lateral = obj.A_lateral - obj.B_lateral * K;
+           obj.B_lateral = Nbar * obj.B_lateral;
            
            obj.PrepareTransferFunctions();
         end
@@ -218,25 +289,158 @@ classdef AircraftStrategy < handle & Strategy
            
             syms t;
 %                 
-            obj.factor_of_reference = [round(double(limit(obj.u_fun(0.1,t,0),t,Inf)),3) / 0.1,...
+            obj.factor_of_reference_longitudinal = [round(double(limit(obj.u_fun(0.1,t,0),t,Inf)),3) / 0.1,...
                     round(double(limit(obj.w_fun(0.1,t,0),t,Inf)),3)/0.1,...
                     round(double(limit(obj.q_fun(0.1,t,0),t,Inf)),3)/0.1,...
                     round(double(limit(obj.theta_fun(0.1,t,0),t,Inf)),3)/0.1];
-                
+            %lateral
+            
+           y_v = obj.A_lateral(1,1);
+           y_p = obj.A_lateral(1,2);
+           y_r = obj.A_lateral(1,3);
+           y_phi = obj.A_lateral(1,4);
+           y_psi = obj.A_lateral(1,5);
+            
+           l_v = obj.A_lateral(2,1);
+           l_p = obj.A_lateral(2,2);
+           l_r = obj.A_lateral(2,3);
+           l_phi = obj.A_lateral(2,4);
+           l_psi = obj.A_lateral(2,5);
+            
+           n_v = obj.A_lateral(3,1);
+           n_p = obj.A_lateral(3,2);
+           n_r = obj.A_lateral(3,3);
+           n_phi = obj.A_lateral(3,4);
+           n_psi = obj.A_lateral(3,5);
            
+           y_xi = obj.B_lateral(1,1);
+           y_zeta = obj.B_lateral(1,2);
+           
+           l_xi = obj.B_lateral(2,1);
+           l_zeta = obj.B_lateral(2,2);
+           
+           n_xi = obj.B_lateral(3,1);
+           n_zeta = obj.B_lateral(3,2);
+           
+           a = 1;
+           b = -(l_p + n_r + y_v);
+           c = (l_p * n_r - l_r * n_p) + (n_r * y_v - n_v * y_r) + (l_p*y_v - l_v * y_p) - (l_phi + n_psi);
+           d = (l_p * n_psi - l_psi * n_p) + (l_phi * n_r - l_r *n_phi) + l_v * (n_r * y_p - n_p * y_r - y_phi)+...
+               n_v * (l_p * y_r - l_r * y_p - y_psi) + y_v * (l_r * n_p - l_p * n_r + l_phi + n_psi);
+           e = (l_phi * n_psi - l_psi * n_phi) + l_v * ( (n_r * y_phi - n_phi * y_r) + (n_psi * y_p - n_p * y_psi) ) +...
+               n_v * ( (l_phi * y_r - l_r * y_phi) + (l_p * y_psi - l_psi * y_p) ) +...
+               y_v * ( (l_r * n_phi - l_phi * n_r) + (l_psi * n_p - l_p * n_psi));
+           f = l_v * (n_psi * y_phi - n_phi * y_psi) + n_v * (l_phi * y_psi - l_psi * y_phi) + y_v * (l_psi * n_phi - l_phi * n_psi);
+           
+           obj.delta_s_lateral = a * s^5 + b * s^4 + c * s^3 + d * s^2 + e * s + f;
+           
+           a = y_xi;
+           b = l_xi * y_p + n_xi * y_r - y_xi * (l_p + n_r);
+           c = l_xi * (n_p * y_r - n_r * y_p + y_phi) + n_xi * (l_r * y_p - l_p * y_r + y_psi) + y_xi * (l_p * n_r - l_r * n_p - l_phi - n_psi);
+           d = l_xi * (n_phi * y_r - n_r * y_phi +n_p * y_psi - n_psi * y_p) + ...
+               n_xi * (l_r * y_phi - l_phi * y_r + l_psi * y_p - l_p * y_psi) + ...
+               y_xi * (l_phi * n_r - l_r * n_phi + l_p * n_psi - l_psi * n_p);
+           e = l_xi * (n_phi * y_psi - n_psi * y_phi) + n_xi * (l_psi * y_phi - l_phi * y_psi) + y_xi * (l_phi * n_psi - l_psi * n_phi);
+           
+           obj.N_v_xi = a * s^4 + b * s^3 + c * s^2 + d * s + e;
+           
+           a = l_xi;
+           b = -l_xi * (n_r + y_v) + n_xi * l_r + y_xi * l_v;
+           c = l_xi * (n_r * y_v - n_v * y_r - n_psi) + n_xi * (l_v * y_r - l_r * y_v + l_psi) + y_xi * (l_r * n_v - l_v * n_r);
+           d = l_xi * (n_psi * y_v - n_v * y_psi) + n_xi * (l_v * y_psi - l_psi * y_r) + y_xi * (l_psi * n_v - l_v * n_psi);
+           
+           obj.N_p_xi = s * (a * s^3 + b * s^2 + c * s + d);
+           obj.N_phi_xi = a * s^3 + b * s^2 + c * s + d;
+           
+           a = n_xi;
+           b = l_xi * n_p - n_xi * (l_p + y_v) + y_xi * n_v;
+           c = l_xi * (n_v * y_p - n_p * y_v + n_phi) + n_xi * (l_p * y_v - l_v * y_p - l_phi) + y_xi * (l_v * n_p - l_p * n_v);
+           d = l_xi * (n_v * y_phi - n_phi * y_v) + n_xi * (l_phi * y_v - l_v * y_phi) + y_xi * (l_v * n_phi - l_phi * n_v);
+           
+           obj.N_r_xi = s * (a * s^3 + b * s^2 + c * s + d);
+           obj.N_psi_xi = a * s^3 + b * s^2 + c * s + d;
+           
+           
+           a = y_zeta;
+           b = l_zeta * y_p + n_zeta * y_r - y_zeta * (l_p + n_r);
+           c = l_zeta * (n_p * y_r - n_r * y_p + y_phi) + n_zeta * (l_r * y_p - l_p * y_r + y_psi) + y_zeta * (l_p * n_r - l_r * n_p - l_phi - n_psi);
+           d = l_zeta * (n_phi * y_r - n_r * y_phi +n_p * y_psi - n_psi * y_p) + ...
+               n_zeta * (l_r * y_phi - l_phi * y_r + l_psi * y_p - l_p * y_psi) + ...
+               y_zeta * (l_phi * n_r - l_r * n_phi + l_p * n_psi - l_psi * n_p);
+           e = l_zeta * (n_phi * y_psi - n_psi * y_phi) + n_zeta * (l_psi * y_phi - l_phi * y_psi) + y_zeta * (l_phi * n_psi - l_psi * n_phi);
+           
+           obj.N_v_zeta = a * s^4 + b * s^3 + c * s^2 + d * s + e;
+           
+           a = l_zeta;
+           b = -l_zeta * (n_r + y_v) + n_zeta * l_r + y_zeta * l_v;
+           c = l_zeta * (n_r * y_v - n_v * y_r - n_psi) + n_zeta * (l_v * y_r - l_r * y_v + l_psi) + y_zeta * (l_r * n_v - l_v * n_r);
+           d = l_zeta * (n_psi * y_v - n_v * y_psi) + n_zeta * (l_v * y_psi - l_psi * y_r) + y_zeta * (l_psi * n_v - l_v * n_psi);
+           
+           obj.N_p_zeta = s * (a * s^3 + b * s^2 + c * s + d);
+           obj.N_phi_zeta = a * s^3 + b * s^2 + c * s + d;
+           
+           a = n_zeta;
+           b = l_zeta * n_p - n_zeta * (l_p + y_v) + y_zeta * n_v;
+           c = l_zeta * (n_v * y_p - n_p * y_v + n_phi) + n_zeta * (l_p * y_v - l_v * y_p - l_phi) + y_zeta * (l_v * n_p - l_p * n_v);
+           d = l_zeta * (n_v * y_phi - n_phi * y_v) + n_zeta * (l_phi * y_v - l_v * y_phi) + y_zeta * (l_v * n_phi - l_phi * n_v);
+           
+           obj.N_r_zeta = s * (a * s^3 + b * s^2 + c * s + d);
+           obj.N_psi_zeta = a * s^3 + b * s^2 + c * s + d;
+        
+           syms xi zeta;
+           obj.v_xi_s = vpa(xi/s * obj.N_v_xi / obj.delta_s_lateral, precision);
+           obj.p_xi_s = vpa(xi/s * obj.N_p_xi / obj.delta_s_lateral, precision);
+           obj.r_xi_s = vpa(xi/s * obj.N_r_xi / obj.delta_s_lateral, precision);
+           obj.phi_xi_s = vpa(xi/s * obj.N_phi_xi / obj.delta_s_lateral, precision);
+           obj.psi_xi_s = vpa(xi/s * obj.N_psi_xi / obj.delta_s_lateral, precision);
+           
+           obj.v_zeta_s = vpa(zeta/s * obj.N_v_zeta / obj.delta_s_lateral, precision);
+           obj.p_zeta_s = vpa(zeta/s * obj.N_p_zeta / obj.delta_s_lateral, precision);
+           obj.r_zeta_s = vpa(zeta/s * obj.N_r_zeta / obj.delta_s_lateral, precision);
+           obj.phi_zeta_s = vpa(zeta/s * obj.N_phi_zeta / obj.delta_s_lateral, precision);
+           obj.psi_zeta_s = vpa(zeta/s * obj.N_psi_zeta / obj.delta_s_lateral, precision);
+
+           obj.v_t = vpa(simplify(ilaplace(obj.v_xi_s + obj.v_zeta_s)), precision);
+           obj.p_t = vpa(simplify(ilaplace(obj.p_xi_s + obj.p_zeta_s)), precision);
+           obj.r_t = vpa(simplify(ilaplace(obj.r_xi_s + obj.r_zeta_s)), precision);
+           obj.phi_t = vpa(simplify(ilaplace(obj.phi_xi_s) + ilaplace(obj.phi_zeta_s)), precision);
+           obj.psi_t = vpa(simplify(ilaplace(obj.psi_xi_s + obj.psi_zeta_s)), precision);
+            
+           obj.v_t_fun = matlabFunction(obj.v_t);
+           obj.p_t_fun = matlabFunction(obj.p_t);
+           obj.r_t_fun = matlabFunction(obj.r_t);
+           obj.phi_t_fun = matlabFunction(obj.phi_t);
+           obj.psi_t_fun = matlabFunction(obj.psi_t);
+           
+           obj.v_fun = @(xi,t, zeta) (obj.v_t_fun(t,xi, zeta) - obj.v_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           obj.p_fun = @(xi,t, zeta) (obj.p_t_fun(t,xi, zeta) - obj.p_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           obj.r_fun = @(xi,t, zeta) (obj.r_t_fun(t,xi, zeta) - obj.r_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           obj.phi_fun = @(xi,t, zeta) (obj.phi_t_fun(t,xi, zeta) - obj.phi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           obj.psi_fun = @(xi,t, zeta) (obj.psi_t_fun(t,xi, zeta) - obj.psi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           
+           precision = 5;
+           obj.factor_of_reference_lateral = [round(double(limit(obj.v_fun(0.1,t,0),t,Inf)), precision) / 0.1,...
+                    round(double(limit(obj.p_fun(0.1,t,0),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.r_fun(0.1,t,0),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.phi_fun(0.1,t,0),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.psi_fun(0.1,t,0),t,Inf)), precision)/0.1;...
+                    ...
+                    round(double(limit(obj.v_fun(0,t,0.1),t,Inf)), precision) / 0.1,...
+                    round(double(limit(obj.p_fun(0,t,0.1),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.r_fun(0,t,0.1),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.phi_fun(0,t,0.1),t,Inf)), precision)/0.1,...
+                    round(double(limit(obj.psi_fun(0,t,0.1),t,Inf)), precision)/0.1];
+            
         end
         %
         function longitudinal_result = SimulateLaplaceLongitudinal(obj, u_longitudinal)
-            
+            %% Initial Conditions
             if length(obj.difference_longitudinal) == 1
                 obj.difference_longitudinal = [0;0];
             end
             if length(obj.last_stable_longitudinal_value) == 1
                 obj.last_stable_longitudinal_value = [0 0 0 0];
             end
-%             if length(obj.previous_u_longitudinal) == 1
-%                obj.previous_u_longitudinal = u_longitudinal; 
-%             end
             u_changed = false;
             u_longitudinal_rised = true; % new u_longitudnal is greater or equals than previous one
             if length(obj.previous_u_longitudinal) > 1 &&  norm(obj.previous_u_longitudinal - u_longitudinal) > 0
@@ -261,67 +465,153 @@ classdef AircraftStrategy < handle & Strategy
             if u_longitudinal_rised ~= -1
                 obj.longitudinal_result_monotonicity = u_longitudinal_rised;
             end
-            
+            %% Main Algorithm
             if ~u_changed || (u_changed && obj.stable_conditions == false && monotonicity_changed == false)
                 obj.difference_longitudinal = (u_longitudinal - obj.previous_u_longitudinal) + obj.difference_longitudinal;
-               
-                longitudinal_difference_result = ...
-                    [obj.u_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.w_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.q_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.theta_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2))];
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.difference_longitudinal(1), obj.difference_longitudinal(2), obj.simulation_step_from_fixed_update * obj.simulation_counter);
                 longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
-                % Is flight stable?
-                %syms t;
                 if obj.stable_conditions == false && length(obj.previous_longitudinal_result) > 1 && norm(obj.previous_longitudinal_result - longitudinal_result) < obj.longitudinal_stability_condition
                     obj.stable_conditions = true;
-                    disp('stable');
-                    disp(obj.simulation_step_from_fixed_update * obj.simulation_counter);
+                    %disp('stable');
+                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter);
                 end 
             else % u_changed && (obj.stable_conditions == true || monotonicity_changed == true)
-                %if monotonicity_changed
-                    %obj.difference_longitudinal = u_longitudinal - obj.previous_u_longitudinal;
-                    obj.difference_longitudinal = u_longitudinal - ...
-                    [1/obj.factor_of_reference(4) * obj.previous_longitudinal_result(4),0]';
-%                 else
-%                     obj.difference_longitudinal = obj.difference_longitudinal + u_longitudinal - obj.previous_u_longitudinal;
-%                 end
-                
-%                 syms t;
-%                 
-%                 obj.last_stable_longitudinal_value = [round(double(limit(obj.u_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
-%                     round(double(limit(obj.w_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
-%                     round(double(limit(obj.q_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3),...
-%                     round(double(limit(obj.theta_fun(obj.previous_u_longitudinal(1),t,obj.previous_u_longitudinal(2)),t,Inf)),3)];
-%                 obj.last_stable_longitudinal_value = [obj.factor_of_reference(1) * obj.previous_u_longitudinal(1),...
-%                     obj.factor_of_reference(2) * obj.previous_u_longitudinal(1),...
-%                     obj.factor_of_reference(3) * obj.previous_u_longitudinal(1),...
-%                     obj.factor_of_reference(4) * obj.previous_u_longitudinal(1)];
+                obj.difference_longitudinal = u_longitudinal - [1/obj.factor_of_reference_longitudinal(4) * obj.previous_longitudinal_result(4),0]';
                 obj.last_stable_longitudinal_value = obj.previous_longitudinal_result;
                 obj.simulation_counter = 2;
-                longitudinal_difference_result = ...
-                    [obj.u_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.w_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.q_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2)),...
-                    obj.theta_fun(obj.difference_longitudinal(1),obj.simulation_step_from_fixed_update * obj.simulation_counter, obj.difference_longitudinal(2))];
-                
+                longitudinal_difference_result = obj.CalculateLongitudinalUpdate(obj.difference_longitudinal(1), obj.difference_longitudinal(2), obj.simulation_step_from_fixed_update * obj.simulation_counter);                
                 longitudinal_result = obj.last_stable_longitudinal_value + longitudinal_difference_result;
                 obj.stable_conditions = false;
-            end
-            
-%             obj.previous_u_longitudinal_rised = false;
-%             if length(obj.previous_longitudinal_result) > 1 && longitudinal_result(4) - obj.previous_longitudinal_result(4) > 0
-%                 obj.previous_u_longitudinal_rised = true;
-%             end
-            
+            end            
+            %% Variables Update            
             obj.previous_u_longitudinal = u_longitudinal;
             obj.previous_longitudinal_result = longitudinal_result;
             obj.simulation_counter = obj.simulation_counter + 1;
         end
         %
+        
+        function longitudinalUpdate = CalculateLongitudinalUpdate(obj, eta, tau, t)
+            longitudinalUpdate = [obj.u_fun(eta, t, tau),...
+                    obj.w_fun(eta, t, tau),...
+                    obj.q_fun(eta, t, tau),...
+                    obj.theta_fun(eta, t, tau)];
+        end
+        
         function lateral_result = SimulateLaplaceLateral(obj, u_lateral)
-            lateral_result = ...
-                    [0 0 0 0 0];
+            %% Initial Conditions
+            if length(obj.xi_difference_lateral) == 1
+                obj.xi_difference_lateral = [0 0 0 0 0;0 0 0 0 0];
+            end
+            if length(obj.zeta_difference_lateral) == 1
+                obj.zeta_difference_lateral = [0 0 0 0 0;0 0 0 0 0];
+            end
+            if length(obj.last_stable_lateral_xi_value) == 1
+                obj.last_stable_lateral_xi_value = [0 0 0 0 0];
+            end
+            if length(obj.last_stable_lateral_zeta_value) == 1
+                obj.last_stable_lateral_zeta_value = [0 0 0 0 0];
+            end
+
+            xi_changed = false;
+            xi_lateral_rised = true; % new u_longitudnal is greater or equals than previous one
+            if length(obj.previous_u_lateral) > 1 &&  norm(obj.previous_u_lateral(1) - u_lateral(1)) > 0
+                xi_changed = true;
+                if length(obj.previous_u_lateral) > 1 &&  u_lateral(1) - obj.previous_u_lateral(1) < 0
+                    xi_lateral_rised = false;
+                end
+            end
+            zeta_changed = false;
+            zeta_lateral_rised = true; % new u_longitudnal is greater or equals than previous one
+            if length(obj.previous_u_lateral) > 1 &&  norm(obj.previous_u_lateral(2) - u_lateral(2)) > 0
+                zeta_changed = true;
+                if length(obj.previous_u_lateral) > 1 &&  u_lateral(2) - obj.previous_u_lateral(2) < 0
+                    zeta_lateral_rised = false;
+                end
+            end
+                
+            if length(obj.previous_u_lateral) > 1 &&  u_lateral(1) - obj.previous_u_lateral(1) == 0
+                xi_lateral_rised = -1;
+            end
+            if length(obj.previous_u_lateral) > 1 &&  u_lateral(2) - obj.previous_u_lateral(2) == 0
+                zeta_lateral_rised = -1;
+            end
+            
+            xi_monotonicity_changed = false;
+            if obj.lateral_xi_result_monotonicity ~= -1
+                if (obj.lateral_xi_result_monotonicity == true && xi_lateral_rised == false) ||...
+                        (obj.lateral_xi_result_monotonicity == false && xi_lateral_rised == true)
+                    xi_monotonicity_changed = true;
+                end
+            end
+            if xi_lateral_rised ~= -1
+                obj.lateral_xi_result_monotonicity = xi_lateral_rised;
+            end
+            
+            
+            zeta_monotonicity_changed = false;
+            if obj.lateral_zeta_result_monotonicity ~= -1
+                if (obj.lateral_zeta_result_monotonicity == true && zeta_lateral_rised == false) ||...
+                        (obj.lateral_zeta_result_monotonicity == false && zeta_lateral_rised == true)
+                    zeta_monotonicity_changed = true;
+                end
+            end
+            if zeta_lateral_rised ~= -1
+                obj.lateral_zeta_result_monotonicity = zeta_lateral_rised;
+            end
+            %% Main Algorithm
+            if ~xi_changed || (xi_changed && obj.stable_conditions_lateral_xi == false && xi_monotonicity_changed == false)
+                dif = (u_lateral - obj.previous_u_lateral);
+                obj.xi_difference_lateral = ([dif(1).* ones(1,5); dif(2).* ones(1,5) ]) + obj.xi_difference_lateral;
+                lateral_difference_result = obj.CalculateLateralUpdate(obj.xi_difference_lateral(1,:),zeros(1,5), obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral_xi);
+                xi_lateral_result = obj.last_stable_lateral_xi_value + lateral_difference_result;
+                if obj.stable_conditions_lateral_xi == false && length(obj.previous_xi_lateral_result) > 1 && norm(obj.previous_xi_lateral_result - xi_lateral_result) < obj.lateral_stability_condition
+                    obj.stable_conditions_lateral_xi = true;
+                    %disp('stable');
+                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral);
+                end 
+            else % u_changed && (obj.stable_conditions == true || monotonicity_changed == true)
+                temporary_xi_which_replace_current_state = 1./obj.factor_of_reference_lateral(1,:) .* obj.previous_xi_lateral_result;
+                obj.xi_difference_lateral(1,:) = u_lateral(1) * ones(1,5) - temporary_xi_which_replace_current_state;
+                obj.last_stable_lateral_xi_value = obj.previous_xi_lateral_result;
+                obj.simulation_counter_lateral_xi = 2;                
+                lateral_difference_result = obj.CalculateLateralUpdate(obj.xi_difference_lateral(1,:),zeros(1,5), obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral_xi);
+                xi_lateral_result = obj.last_stable_lateral_xi_value + lateral_difference_result;
+                obj.stable_conditions_lateral_xi = false;
+            end
+            if ~zeta_changed || (zeta_changed && obj.stable_conditions_lateral_zeta == false && zeta_monotonicity_changed == false)
+                dif = (u_lateral - obj.previous_u_lateral);
+                obj.zeta_difference_lateral = ([dif(1).* ones(1,5); dif(2).* ones(1,5) ]) + obj.zeta_difference_lateral;
+                lateral_difference_result = obj.CalculateLateralUpdate(zeros(1,5), obj.zeta_difference_lateral(2,:), obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral_zeta);
+                zeta_lateral_result = obj.last_stable_lateral_zeta_value + lateral_difference_result;
+                if obj.stable_conditions_lateral_zeta == false && length(obj.previous_zeta_lateral_result) > 1 && norm(obj.previous_zeta_lateral_result - zeta_lateral_result) < obj.lateral_stability_condition
+                    obj.stable_conditions_lateral_zeta = true;
+                    %disp('stable');
+                    %disp(obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral);
+                end 
+            else % u_changed && (obj.stable_conditions == true || monotonicity_changed == true)
+                temporary_zeta_which_replace_current_state = 1./obj.factor_of_reference_lateral(2,:) .* obj.previous_zeta_lateral_result;
+                obj.zeta_difference_lateral(2,:) = u_lateral(2) * ones(1,5) - temporary_zeta_which_replace_current_state;
+                obj.last_stable_lateral_zeta_value = obj.previous_zeta_lateral_result;
+                obj.simulation_counter_lateral_zeta = 2;                
+                lateral_difference_result = obj.CalculateLateralUpdate(zeros(1,5), obj.zeta_difference_lateral(2,:), obj.simulation_step_from_fixed_update * obj.simulation_counter_lateral_zeta);
+                zeta_lateral_result = obj.last_stable_lateral_zeta_value + lateral_difference_result;
+                obj.stable_conditions_lateral_zeta = false;
+            end
+            %% Variables Update
+            lateral_result = xi_lateral_result + zeta_lateral_result;
+            obj.previous_u_lateral = u_lateral;
+            obj.previous_xi_lateral_result = xi_lateral_result;
+            obj.previous_zeta_lateral_result = zeta_lateral_result;
+            obj.simulation_counter_lateral_xi = obj.simulation_counter_lateral_xi + 1;
+            obj.simulation_counter_lateral_zeta = obj.simulation_counter_lateral_zeta + 1;
+        end
+        
+        function lateralUpdate = CalculateLateralUpdate(obj, xi, zeta, t)
+            lateralUpdate = [obj.v_fun(xi(1), t, zeta(1)),...
+                    obj.p_fun(xi(2), t, zeta(2)),...
+                    obj.r_fun(xi(3), t, zeta(3)),...
+                    obj.phi_fun(xi(4), t, zeta(4)),...
+                    obj.psi_fun(xi(5), t, zeta(5))];
         end
     end
     
