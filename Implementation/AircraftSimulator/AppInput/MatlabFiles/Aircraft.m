@@ -175,16 +175,14 @@ classdef Aircraft < handle & Shooter
         
         function missileDeltaPositions = SimulateMissile(obj, shooter_id, missile_id)            
             
-            missileDeltaPositions = zeros(1,3);
+            missileDeltaPositions = [];
             for i = 1:1:length(obj.Missiles)
                 if ~(obj.Missiles(i).shooter_id == shooter_id && obj.Missiles(i).missile_id == missile_id)
                     continue;
                 end
                for j = 1:1:length(obj.Missiles(i).Strategies)
                    deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition);
-                   if j == 1
-                      missileDeltaPositions = deltaPos; 
-                   end
+                   missileDeltaPositions = [missileDeltaPositions; deltaPos];
                end
             end
             

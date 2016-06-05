@@ -26,9 +26,9 @@ namespace AircraftsManager.Shooter
             this.activeMissiles = new Dictionary<int, Missile.Missile>();
         }
 
-        internal void AddMissile(Missile.MissileType missileType)
+        internal void AddMissile(Missile.MissileType missileType, int missile_id, int targetId)
         {
-            this.activeMissiles.Add(activeMissiles.Count, new Missile.Missile(missileType));
+            this.activeMissiles.Add(missile_id, new Missile.Missile(missileType, targetId));
         }
 
         internal Missile.Missile GetMissile(int missileId)

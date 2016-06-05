@@ -28,10 +28,11 @@ namespace AircraftsManager.Missile
             }
         }
 
-        internal Missile(MissileType missileType)
+        internal Missile(MissileType missileType, int targetId)
         {
             this.missileType = missileType;
             Initialize();
+            ((this.missileFlightContext).Strategies[0] as Strategy.MissileStrategy).TargetID = targetId;
         }
 
         protected override void Initialize()
