@@ -7,7 +7,6 @@ using Client.Priveleges;
 using Common.AircraftData;
 using Common.Containers;
 using Common.EventArgs;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Assets.scripts.Data_Manipulation
@@ -57,8 +56,8 @@ namespace Assets.scripts.Data_Manipulation
         {
             foreach (Data data in dataList.DataArray)
             {
-                //if (data.StrategyNumber != currentStrategy)
-                //    continue;
+                if (data.StrategyNumber != currentStrategy)
+                    continue;
                 MessageStrategy messageStrategy = data.MessageStrategy;
                 parseDataToString(messageContent, messageStrategy, data);
                 if (messageStrategy == MessageStrategy.LongitudinalData)
@@ -67,7 +66,6 @@ namespace Assets.scripts.Data_Manipulation
                     handleLateralData(data);
                 if (messageStrategy == MessageStrategy.PositionData)
                     handlePositionData(data);
-                break;
             }
         }
 
@@ -75,6 +73,8 @@ namespace Assets.scripts.Data_Manipulation
         {
             string toOutput = "messageContent: " + messageContent + " strategy:" + data.StrategyNumber + ": " +
                   messageStrategy.ToString() + ": ";
+            if (data.Array == null)
+                return;
             foreach (var f in data.Array)
             {
                 toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
@@ -86,6 +86,8 @@ namespace Assets.scripts.Data_Manipulation
         {
             foreach (Data data in dataList.DataArray)
             {
+                if (data.StrategyNumber != currentStrategy)
+                    continue;
                 MessageConcreteType messageConcreteType = data.MessageConcreteType;
                 MessageStrategy messageStrategy = data.MessageStrategy;
                 parseDataToString(messageContent, messageStrategy, data);
@@ -93,10 +95,11 @@ namespace Assets.scripts.Data_Manipulation
                 {
                     case MessageConcreteType.MissileAddedResponse:
                         unityShellNotifier.NotifyUnityShell("Missile added response received");
+                        aircraftsController.MissileController.BeginFly(data.MissileId, data.MissileTargetId);
                         break;
                     case MessageConcreteType.MissileDataResponse:
                         MissileData missileData = new MissileData(data.Array);
-                        Vector3 position = new Vector3(missileData.X_0, missileData.Y_0, missileData.Z_0);
+                        Vector3 position = new Vector3(missileData.Z_0, missileData.Y_0, -missileData.X_0);
                         aircraftsController.MissileController.UpdateMissilePosition(data.MissileId, data.MissileTargetId,
                             position);
                         break;

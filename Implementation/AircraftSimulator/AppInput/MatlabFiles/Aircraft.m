@@ -53,7 +53,7 @@ classdef Aircraft < handle & Shooter
         
         % Add missiles
         function AddMissile(obj, missilePos, shooter_id, missile_id)
-            obj.Missiles = [obj.Missiles, Missile(s_id, m_id, missilePos)];
+            obj.Missiles = [obj.Missiles, Missile(shooter_id, missile_id, missilePos)];
         end
         % Returns concrete missile strategy
         function MissileStrategy = GetMissileStrategy(obj, missile_index, strategy_index)
@@ -182,7 +182,7 @@ classdef Aircraft < handle & Shooter
                 end
                for j = 1:1:length(obj.Missiles(i).Strategies)
                    deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition);
-                   missileDeltaPositions = [missileDeltaPositions; deltaPos];
+                   missileDeltaPositions = [missileDeltaPositions; deltaPos(1:3)];
                end
             end
             

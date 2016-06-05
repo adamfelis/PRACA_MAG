@@ -28,6 +28,7 @@ namespace Assets.scripts.Model
         }
         private Vector3 targetPos;
         private Vector3 prevPos;
+        public bool IsTriggered { get; set; }
     }
 
     public delegate void MissileFiredHandler(int shooterId, int targetId, int missileId);
@@ -49,10 +50,10 @@ namespace Assets.scripts.Model
             mainCamera = Tags.FindGameObjectWithTagInParent(Tags.MainCamera, transform.root.name).GetComponent<Camera>();
             canvas = GameObject.FindGameObjectWithTag(Tags.Canvas).GetComponent<RectTransform>();
             shooter = GetComponent<Player_ID>();
-            missiles.Add(0, new MissileComponents() { Body = GameObject.FindGameObjectWithTag(Tags.MisilleLeft1) });
-            missiles.Add(1, new MissileComponents() { Body = GameObject.FindGameObjectWithTag(Tags.MisilleLeft2) });
-            missiles.Add(2, new MissileComponents() { Body = GameObject.FindGameObjectWithTag(Tags.MisilleRight1) });
-            missiles.Add(3, new MissileComponents() { Body = GameObject.FindGameObjectWithTag(Tags.MisilleRight2) });
+            missiles.Add(0, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleLeft1, name) });
+            missiles.Add(1, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleLeft2, name) });
+            missiles.Add(2, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleRight1, name) });
+            missiles.Add(3, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleRight2, name) });
             onStock = missiles.Values.ToList();
             foreach (var missile in missiles.Values)
             {
@@ -61,16 +62,24 @@ namespace Assets.scripts.Model
             }
         }
 
+        public void BeginFly(int missileId, int targetId)
+        {
+            missiles[missileId].TargetPos = transform.position;
+            MissileResponseHandler.Invoke(shooter.ServerAssignedId, targetId, missileId);
+        }
+
         public void UpdateMissilePosition(int missileId, int targetId, Vector3 position)
         {
-            missiles[missileId].TargetPos = position;
+            missiles[missileId].TargetPos = (position + shooter.transform.position);
+            var targetTransform = shooter.GetPlayerByRemoteAssignedId(targetId).transform;
             elapsedTime = 0.0f;
             var targetPlayer = shooter.GetPlayerByRemoteAssignedId(targetId);
             var dist = Vector3.Distance(position, targetPlayer.transform.position);
-            var distanceToHit = 10.0f;
+            var distanceToHit = 1.0f;
             if (dist < distanceToHit)
             {
                 Debug.Log("AIRCRAFT HIT");
+                Destroy(missiles[missileId].Body.transform.FindChild("Sphere"));
             }
             else
             {
@@ -123,7 +132,8 @@ namespace Assets.scripts.Model
             float t = elapsedTime/globalAnimationTime;
             foreach (var missileComponent in missiles.Values)
             {
-                missileComponent.Body.transform.position = Vector3.Lerp(missileComponent.PrevPos, missileComponent.TargetPos, t);
+                if (missileComponent.IsTriggered)
+                    missileComponent.Body.transform.position = Vector3.Lerp(missileComponent.PrevPos, missileComponent.TargetPos, t);
             }
         }
 
@@ -146,6 +156,16 @@ namespace Assets.scripts.Model
                     var firedMissile = onStock.First();
                     MissileFired.Invoke(shooter.ServerAssignedId, target.ServerAssignedId,
                         getMissileId(firedMissile.Body));
+                    foreach (var missileComponent in missiles.Values)
+                    {
+                        if (missileComponent.Body == firedMissile.Body)
+                        {
+                            missileComponent.IsTriggered = true;
+                            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                            //sphere.transform.s = Vector3.one*10;
+                            //sphere.transform.SetParent(missileComponent.Body.transform);
+                        }
+                    }
                     onStock.Remove(firedMissile);
                 }
             }

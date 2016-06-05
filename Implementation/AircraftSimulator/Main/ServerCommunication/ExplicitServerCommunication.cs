@@ -57,31 +57,15 @@ namespace Main.ServerCommunication
         {
             clientAddedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
-                if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
-                {
-                    if( dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileAddedRequest)
-                    {
-                        this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(
-                            AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id,
-                            dataEventArgs.DataList.DataArray.First().MissileId,
-                            dataEventArgs.DataList.DataArray.First().MissileTargetId
-                            );
-                        this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                            global::Common.Scripts.SpecialScriptType.MissileAdder,
-                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
-                    }
-                }
-                else if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Aircraft)
-                {
-                    Shooters.ShooterType shooterType = dataEventArgs.DataList.DataArray.First().ShooterType;
-                    Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
-                    this.clientsCollection.Add(addedClient);
-                    this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
-                    this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
-                    this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                        global::Common.Scripts.SpecialScriptType.WorkspaceInitializator,
-                        aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterInitalData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First()));
-                }
+                Shooters.ShooterType shooterType = dataEventArgs.DataList.DataArray.First().ShooterType;
+                Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
+                this.clientsCollection.Add(addedClient);
+                this.clientsDictionary.Add(dataEventArgs.Id, addedClient);
+                this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddShooter(shooterType, dataEventArgs.Id);
+                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                    global::Common.Scripts.SpecialScriptType.WorkspaceInitializator,
+                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterInitalData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First()));
+
             }));
         }
 
@@ -93,18 +77,45 @@ namespace Main.ServerCommunication
             {
                 if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
                 {
-                    if(dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileDataRequest)
+                    if (dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileDataRequest)
                     {
                         List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
                             global::Common.Scripts.SpecialScriptType.SimulateMissile,
                             aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(
                                 dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                        foreach (var data in result)
+                        {
+                            data.MissileTargetId = dataEventArgs.DataList.DataArray.First().MissileTargetId;
+                            data.ShooterId = dataEventArgs.DataList.DataArray.First().ShooterId;
+                            data.MissileId = dataEventArgs.DataList.DataArray.First().MissileId;
+                        }
                         return result;
+                    }
+
+                    if (dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileAddedRequest)
+                    {
+                        this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(
+                            AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id,
+                            dataEventArgs.DataList.DataArray.First().MissileId,
+                            dataEventArgs.DataList.DataArray.First().MissileTargetId
+                            );
+                        this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                            global::Common.Scripts.SpecialScriptType.MissileAdder,
+                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                        return new List<IData>()
+                            {
+                                new Data()
+                                {
+                                   MessageContent = MessageContent.Missile,
+                                   MessageConcreteType = MessageConcreteType.MissileAddedResponse,
+                                   MessageType = MessageType.ClientDataResponse
+                                }
+                            };
                     }
                     return null;
                 }
 
-                else if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
+                else if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Aircraft)
                 {
                     List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.AircraftData;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.ConcreteScript
 {
@@ -47,7 +48,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             {
                 IData deltaPosResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[i, 0], res[i, 1], res[i, 2]} },
+                    Array = new MissileData(0, 0, 0, res[i, 0], res[i, 1], res[i, 2]).GetData(),
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse,
                     MessageStrategy = MessageStrategy.PositionData,
