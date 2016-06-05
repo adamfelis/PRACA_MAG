@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.scripts.Model;
 using Client.Priveleges;
+using Common.AircraftData;
 using Common.Containers;
 using Common.EventArgs;
 using UnityEditor.VersionControl;
@@ -14,6 +16,7 @@ namespace Assets.scripts.Data_Manipulation
     {
         public event ClientResponseHandler ClientResponseHandler;
         public event ClientResponseHandler ClientDisconnected;
+
         private int currentStrategy = 0;
         public DataHandler (ICommunication communication, AircraftsController aircraftsController)
         {
@@ -31,49 +34,82 @@ namespace Assets.scripts.Data_Manipulation
             ClientResponseHandler.Invoke();
         }
 
+        private void discoverMessageContent(IDataList dataList)
+        {
+            Data firstData = dataList.DataArray.First();
+            MessageContent messageContent = firstData.MessageContent;
+            switch (messageContent)
+            {
+                case MessageContent.Aircraft:
+                    aircraftsController.Aircraft.aircraftInterpolator.LockInterpolation();
+                    processAircraftData(messageContent, dataList);
+                    aircraftsController.Aircraft.aircraftInterpolator.UnclockInterpolation();
+                    ClientResponseHandler.Invoke();
+                    break;
+                case MessageContent.Missile:
+                    processMissileData(messageContent, dataList);
+
+                    break;
+            }
+        }
+
+        private void processAircraftData(MessageContent messageContent, IDataList dataList)
+        {
+            foreach (Data data in dataList.DataArray)
+            {
+                //if (data.StrategyNumber != currentStrategy)
+                //    continue;
+                MessageStrategy messageStrategy = data.MessageStrategy;
+                parseDataToString(messageContent, messageStrategy, data);
+                if (messageStrategy == MessageStrategy.LongitudinalData)
+                    handleLongitudinalData(data);
+                if (messageStrategy == MessageStrategy.LateralData)
+                    handleLateralData(data);
+                if (messageStrategy == MessageStrategy.PositionData)
+                    handlePositionData(data);
+                break;
+            }
+        }
+
+        private void parseDataToString(MessageContent messageContent, MessageStrategy messageStrategy, Data data)
+        {
+            string toOutput = "messageContent: " + messageContent + " strategy:" + data.StrategyNumber + ": " +
+                  messageStrategy.ToString() + ": ";
+            foreach (var f in data.Array)
+            {
+                toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
+                unityShellNotifier.NotifyUnityShell(toOutput);
+            }
+        }
+
+        private void processMissileData(MessageContent messageContent, IDataList dataList)
+        {
+            foreach (Data data in dataList.DataArray)
+            {
+                MessageConcreteType messageConcreteType = data.MessageConcreteType;
+                MessageStrategy messageStrategy = data.MessageStrategy;
+                parseDataToString(messageContent, messageStrategy, data);
+                switch (messageConcreteType)
+                {
+                    case MessageConcreteType.MissileAddedResponse:
+                        unityShellNotifier.NotifyUnityShell("Missile added response received");
+                        break;
+                    case MessageConcreteType.MissileDataResponse:
+                        MissileData missileData = new MissileData(data.Array);
+                        Vector3 position = new Vector3(missileData.X_0, missileData.Y_0, missileData.Z_0);
+                        aircraftsController.MissileController.UpdateMissilePosition(data.MissileId, data.MissileTargetId,
+                            position);
+                        break;
+                }
+            }
+        }
+
         public void OnServerDataResponse(IDataList dataList)
         {
             //return;
             string toOutput = "Response received from the server:";
             unityShellNotifier.NotifyUnityShell(toOutput);
-            aircraftsController.Aircraft.aircraftInterpolator.LockInterpolation();
-            foreach (Data data in dataList.DataArray)
-            {
-                //if (data.StrategyNumber != currentStrategy)
-                //    continue;
-                MessageContent messageContent = data.MessageContent;
-                MessageStrategy messageStrategy = data.MessageStrategy;
-                MessageConcreteType messageConcreteType = data.MessageConcreteType;
-                toOutput = "messageContent: " + messageContent + " strategy:" + data.StrategyNumber+": " + messageStrategy.ToString() + ": ";
-                foreach (var f in data.Array)
-                {
-                    toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
-                    unityShellNotifier.NotifyUnityShell(toOutput);
-                }
-                switch (messageContent)
-                {
-                        case MessageContent.Aircraft:
-                            if (messageStrategy == MessageStrategy.LongitudinalData)
-                                handleLongitudinalData(data);
-                            if (messageStrategy == MessageStrategy.LateralData)
-                                handleLateralData(data);
-                            if (messageStrategy == MessageStrategy.PositionData)
-                                handlePositionData(data);
-                        break;
-                        case MessageContent.Missile:
-                        switch (messageConcreteType)
-                        {
-                                case MessageConcreteType.MissileAddedResponse:
-                                break;
-                                case MessageConcreteType.MissileDataResponse:
-                                break;
-                        }
-                        break;
-                }
-
-            }
-            aircraftsController.Aircraft.aircraftInterpolator.UnclockInterpolation();
-            ClientResponseHandler.Invoke();
+            discoverMessageContent(dataList);
         }
 
         public void OnServerDisconnected()

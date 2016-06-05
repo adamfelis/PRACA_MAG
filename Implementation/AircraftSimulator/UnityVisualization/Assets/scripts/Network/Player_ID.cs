@@ -129,6 +129,17 @@ public class Player_ID : NetworkBehaviour
         return GameObject.FindGameObjectsWithTag(Tags.Player);
     }
 
+    public GameObject GetPlayerByRemoteAssignedId(int remoteId)
+    {
+        var players = getAllPlayers();
+        foreach (var player in players)
+        {
+            if (player.GetComponent<Player_ID>().ServerAssignedId == remoteId)
+                return player;
+        }
+        return null;
+    }
+
     public string GetLocalPlayerName()
     {
         return GetLocalPlayer().transform.root.name;

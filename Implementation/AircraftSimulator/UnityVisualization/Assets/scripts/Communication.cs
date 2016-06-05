@@ -41,6 +41,7 @@ public class Communication : MonoBehaviour, ICommunication
         dataWriter = new DataWriter(dataReader, this, aircraftsController);
 
         dataHandler.ClientResponseHandler += dataWriter.SendAircraftRequestToServer;
+        aircraftsController.MissileController.MissileResponseHandler += dataWriter.SendMissileRequestToServer;
         aircraftsController.MissileController.MissileFired += dataWriter.SendMissileFiredToServer;
         dataHandler.ClientResponseHandler += dataResponseFromServer;
         subscribeForClientDisconnection();
