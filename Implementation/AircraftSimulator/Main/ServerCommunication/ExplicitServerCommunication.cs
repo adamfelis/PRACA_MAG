@@ -57,14 +57,14 @@ namespace Main.ServerCommunication
         {
             clientAddedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
-                if (dataEventArgs.DataList.DataArray.First().IsMissileData)
-                {
-                    //this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id);
-                    //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                    //    global::Common.Scripts.SpecialScriptType.MissileAdder,
-                    //    );
-                }
-                else
+                //if (dataEventArgs.DataList.DataArray.First().IsMissileData)
+                //{
+                //    //this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id);
+                //    //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                //    //    global::Common.Scripts.SpecialScriptType.MissileAdder,
+                //    //    );
+                //}
+                //else
                 {
                     Shooters.ShooterType shooterType = dataEventArgs.DataList.DataArray.First().ShooterType;
                     Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };

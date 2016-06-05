@@ -22,7 +22,23 @@ namespace Common.Containers
         ServerDisconnected
     }
 
+    public enum MessageConcreteType
+    {
+        NotSet,
+        MissileAddedRequest,
+        MissileAddedResponse,
+        MissileDataRequest,
+        MissileDataResponse
+    }
+
     public enum MessageContent
+    {
+        NotSet,
+        Aircraft,
+        Missile
+    }
+
+    public enum MessageStrategy
     {
         NotSet,
         LateralData,
@@ -55,8 +71,9 @@ namespace Common.Containers
         ErrorCode Error { get; set; }
         MessageType MessageType { get; set; }
         MessageContent MessageContent { get; set; }
+        MessageStrategy MessageStrategy { get; set; }
+        MessageConcreteType MessageConcreteType { get; set; }
         int StrategyNumber { get; set; }
-        bool IsMissileData { get; set; }
         int MissileTargetId { get; set; }
         int ShooterId { get; set; }
         int MissileId { get; set; }

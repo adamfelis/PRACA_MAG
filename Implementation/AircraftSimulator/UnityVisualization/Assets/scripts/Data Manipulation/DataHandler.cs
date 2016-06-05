@@ -5,6 +5,7 @@ using System.Text;
 using Client.Priveleges;
 using Common.Containers;
 using Common.EventArgs;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Assets.scripts.Data_Manipulation
@@ -38,21 +39,37 @@ namespace Assets.scripts.Data_Manipulation
             aircraftsController.Aircraft.aircraftInterpolator.LockInterpolation();
             foreach (Data data in dataList.DataArray)
             {
-                if (data.StrategyNumber != currentStrategy)
-                    continue;
+                //if (data.StrategyNumber != currentStrategy)
+                //    continue;
                 MessageContent messageContent = data.MessageContent;
-                toOutput = "strategy" + data.StrategyNumber+": " + messageContent.ToString() + ": ";
+                MessageStrategy messageStrategy = data.MessageStrategy;
+                MessageConcreteType messageConcreteType = data.MessageConcreteType;
+                toOutput = "messageContent: " + messageContent + " strategy:" + data.StrategyNumber+": " + messageStrategy.ToString() + ": ";
                 foreach (var f in data.Array)
                 {
                     toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
                     unityShellNotifier.NotifyUnityShell(toOutput);
                 }
-                if (messageContent == MessageContent.LongitudinalData)
-                    handleLongitudinalData(data);
-                if (messageContent == MessageContent.LateralData)
-                    handleLateralData(data);
-                if (messageContent == MessageContent.PositionData)
-                    handlePositionData(data);
+                switch (messageContent)
+                {
+                        case MessageContent.Aircraft:
+                            if (messageStrategy == MessageStrategy.LongitudinalData)
+                                handleLongitudinalData(data);
+                            if (messageStrategy == MessageStrategy.LateralData)
+                                handleLateralData(data);
+                            if (messageStrategy == MessageStrategy.PositionData)
+                                handlePositionData(data);
+                        break;
+                        case MessageContent.Missile:
+                        switch (messageConcreteType)
+                        {
+                                case MessageConcreteType.MissileAddedResponse:
+                                break;
+                                case MessageConcreteType.MissileDataResponse:
+                                break;
+                        }
+                        break;
+                }
 
             }
             aircraftsController.Aircraft.aircraftInterpolator.UnclockInterpolation();

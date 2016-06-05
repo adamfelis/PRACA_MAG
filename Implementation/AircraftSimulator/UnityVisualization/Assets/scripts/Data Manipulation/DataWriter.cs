@@ -38,7 +38,7 @@ namespace Assets.scripts
             communicator.DisconnectFromServer();
         }
 
-        public void SendAircraftSteeringToServer()
+        public void SendAircraftRequestToServer()
         {
             var aircraft = aircraftsController.Aircraft;
             //Debug.Log("rotacja przed wysłaniem" + aircraft.Body.transform.rotation.eulerAngles.x);
@@ -49,26 +49,50 @@ namespace Assets.scripts
             {
                 DataArray = new[]
                 {
-                new Data()
-                {
-                    Array = new AircraftData(
-                        aircraft.V_0,
-                        aircraft.V_e,
-                        aircraft.Eta, //NI
-                        aircraft.Xi,
-                        aircraft.Zeta,
-                        aircraft.Tau,
-                        aircraft.Theta,
-                        aircraft.Phi,
-                        aircraft.Psi,
-                        aircraft.p,
-                        aircraft.q,
-                        aircraft.r).GetData(),
-                    MessageType = MessageType.ClientDataRequest,
-                    InputType = DataType.Matrix,
-                    OutputType = DataType.Vector,//???????????????????????????
-                    Response = ActionType.ResponseRequired
+                    new Data()
+                    {
+                        Array = new AircraftData(
+                            aircraft.V_0,
+                            aircraft.V_e,
+                            aircraft.Eta, //NI
+                            aircraft.Xi,
+                            aircraft.Zeta,
+                            aircraft.Tau,
+                            aircraft.Theta,
+                            aircraft.Phi,
+                            aircraft.Psi,
+                            aircraft.p,
+                            aircraft.q,
+                            aircraft.r).GetData(),
+                        MessageType = MessageType.ClientDataRequest,
+                        MessageContent = MessageContent.Aircraft,
+                        InputType = DataType.Matrix,
+                        OutputType = DataType.Vector,//???????????????????????????
+                        Response = ActionType.ResponseRequired
+                    }
                 }
+            });
+        }
+
+        public void SendMissileRequestToServer(int shooterId, int targetId, int missileId)
+        {
+            communicator.ClientInputPriveleges.SendDataRequest(
+            new DataList()
+            {
+                DataArray = new[]
+                {
+                    new Data()
+                    {
+                        MissileTargetId = targetId,
+                        MissileId = missileId,
+                        ShooterId = shooterId,
+                        MessageType = MessageType.ClientDataRequest,
+                        MessageContent = MessageContent.Missile,
+                        MessageConcreteType = MessageConcreteType.MissileDataRequest,
+                        InputType = DataType.Matrix,
+                        OutputType = DataType.Vector,//???????????????????????????
+                        Response = ActionType.ResponseRequired
+                    }
                 }
             });
         }
@@ -81,24 +105,25 @@ namespace Assets.scripts
             {
                 DataArray = new[]
                 {
-                new Data()
-                {
-                    Array = new MissileData(
-                        aircraft.Velocity.x,
-                        aircraft.Velocity.z,
-                        aircraft.Velocity.y,
-                        aircraft.Position.x,
-                        aircraft.Position.y,
-                        aircraft.Position.z).GetData(),
-                    IsMissileData = true,
-                    MissileTargetId = targetId,
-                    MissileId = missileId,
-                    ShooterId = shooterId,
-                    MessageType = MessageType.ClientDataRequest,
-                    InputType = DataType.Matrix,
-                    OutputType = DataType.Vector,//???????????????????????????
-                    Response = ActionType.NoResponse
-                }
+                    new Data()
+                    {
+                        Array = new MissileData(
+                            aircraft.Velocity.x,
+                            aircraft.Velocity.z,
+                            aircraft.Velocity.y,
+                            aircraft.Position.x,
+                            aircraft.Position.y,
+                            aircraft.Position.z).GetData(),
+                        MissileTargetId = targetId,
+                        MissileId = missileId,
+                        ShooterId = shooterId,
+                        MessageType = MessageType.ClientDataRequest,
+                        MessageContent = MessageContent.Missile,
+                        MessageConcreteType = MessageConcreteType.MissileAddedRequest,
+                        InputType = DataType.Matrix,
+                        OutputType = DataType.Vector,//???????????????????????????
+                        Response = ActionType.ResponseRequired
+                    }
                 }
             });
         }

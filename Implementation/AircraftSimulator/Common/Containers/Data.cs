@@ -35,6 +35,16 @@ namespace Common.Containers
             get; set;
         }
 
+        public MessageStrategy MessageStrategy
+        {
+            get; set;
+        }
+
+        public MessageConcreteType MessageConcreteType
+        {
+            get; set;
+        }
+
         public int MissileTargetId
         {
             get; set;
@@ -55,8 +65,6 @@ namespace Common.Containers
             get { return 0; }
             set { }
         }
-
-        public bool IsMissileData { get; set; }
 
         public ActionType Response
         {

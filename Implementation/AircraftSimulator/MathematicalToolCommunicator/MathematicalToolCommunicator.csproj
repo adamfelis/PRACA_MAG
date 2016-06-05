@@ -45,8 +45,10 @@
     <Compile Include="CommunicationBridge\MathToolCommunicator.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorInverse.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorLaplaceTransform.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorMissileAdder.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorRungeKutta.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorGetState.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorSimulateMissile.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorStrategyCreator.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorWorkspaceUpdater.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorWorkspaceInitializator.cs" />
@@ -56,7 +58,9 @@
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptInverse.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptLaplaceTransform.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptGetState.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptMissileAdder.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptRungeKutta.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptSimulateMissile.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptStrategyCreator.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptWorkspaceUpdater.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptWorkspaceInitializator.cs" />

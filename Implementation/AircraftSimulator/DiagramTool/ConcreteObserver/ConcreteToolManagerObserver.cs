@@ -34,11 +34,11 @@ namespace DiagramTool.ConcreteObserver
             List<DataPoint> newLateralDataPoints = new List<DataPoint>();
             for (int i = 0; i < values.Count - 1; i+=3)
             {
-                if (values[i].MessageContent == MessageContent.LongitudinalData)
+                if (values[i].MessageStrategy == MessageStrategy.LongitudinalData)
                 {
                     newLongitudinalDataPoints.Add(new DataPoint(values[i].Array[0][0] * 0.02, values[i].Array[0][1] * 0.02));
                 }
-                if (values[i+1].MessageContent == MessageContent.LateralData)
+                if (values[i+1].MessageStrategy == MessageStrategy.LateralData)
                 {
                     newLateralDataPoints.Add(new DataPoint(values[i].Array[0][1] * 0.02, values[i+1].Array[0][0] * 0.02));
                 }
