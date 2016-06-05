@@ -1,0 +1,247 @@
+-debug
+-target:library
+-nowarn:0169
+-out:Temp/Assembly-CSharp.dll
+-r:"E:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll"
+-r:"E:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
+-r:"E:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
+-r:Assets/dlls/Client/Client.dll
+-r:Assets/dlls/Client/Common.dll
+-r:Assets/dlls/Client/DataParser.dll
+-r:Assets/ext/CloudsToy/DLL/Cloudstoyv5.dll
+-r:"E:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll"
+-define:UNITY_5_3_3
+-define:UNITY_5_3
+-define:UNITY_5
+-define:ENABLE_NEW_BUGREPORTER
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_DUCK_TYPING
+-define:ENABLE_FRAME_DEBUGGER
+-define:ENABLE_GENERICS
+-define:ENABLE_HOME_SCREEN
+-define:ENABLE_IMAGEEFFECTS
+-define:ENABLE_LIGHT_PROBES_LEGACY
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_PLUGIN_INSPECTOR
+-define:ENABLE_SHADOWS
+-define:ENABLE_SINGLE_INSTANCE_BUILD_SETTING
+-define:ENABLE_SPRITERENDERER_FLIPPING
+-define:ENABLE_SPRITES
+-define:ENABLE_SPRITE_POLYGON
+-define:ENABLE_TERRAIN
+-define:ENABLE_RAKNET
+-define:ENABLE_UNET
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_VR
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:INCLUDE_IL2CPP
+-define:INCLUDE_DIRECTX12
+-define:PLATFORM_SUPPORTS_MONO
+-define:RENDER_SOFTWARE_CURSOR
+-define:ENABLE_LOCALIZATION
+-define:ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION
+-define:ENABLE_EDITOR_TESTS_RUNNER
+-define:UNITY_STANDALONE_WIN
+-define:UNITY_STANDALONE
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_TEXTUREID_MAP
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_MOVIES
+-define:ENABLE_NETWORK
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_LOG_MIXED_STACKTRACE
+-define:ENABLE_UNITYWEBREQUEST
+-define:ENABLE_EVENT_QUEUE
+-define:ENABLE_CLUSTERINPUT
+-define:ENABLE_WEBSOCKET_HOST
+-define:ENABLE_MONO
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_WIN
+-define:CROSS_PLATFORM_INPUT
+Assets/NetworkController.cs
+Assets/SceneController.cs
+Assets/ext/CircularScrollingList/ListBank.cs
+Assets/ext/CircularScrollingList/ListBox.cs
+Assets/ext/CircularScrollingList/ListPositionCtrl.cs
+Assets/ext/MapGenerator/Assets/Code/GameController.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Chunk/ChunkCache.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Chunk/TerrainChunk.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Chunk/TerrainChunkGenerator.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Chunk/TerrainChunkNeightborhood.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Chunk/TerrainChunkSettings.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Noise/INoiseProvider.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Noise/NoiseProvider.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Standard/Delegates.cs
+Assets/ext/MapGenerator/Assets/Code/Generator/Standard/Vec2I.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Billow.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Checker.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Const.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Cylinders.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Perlin.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/RidgedMultifractal.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Spheres.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Generator/Voronoi.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/GradientPresets.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/ModuleBase.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Noise2D.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Abs.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Add.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Blend.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Cache.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Clamp.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Curve.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Displace.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Exponent.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Invert.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Max.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Min.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Multiply.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Power.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Rotate.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Scale.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/ScaleBias.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Select.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Subtract.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Terrace.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Translate.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Operator/Turbulence.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Properties/AssemblyInfo.cs
+Assets/ext/MapGenerator/Assets/Code/LibNoise/Utils.cs
+"Assets/ext/MapGenerator/Assets/Standard Assets/Characters/FirstPersonCharacter/Scripts/FirstPersonController.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Characters/FirstPersonCharacter/Scripts/HeadBob.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Characters/FirstPersonCharacter/Scripts/MouseLook.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Characters/FirstPersonCharacter/Scripts/RigidbodyFirstPersonController.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/AxisTouchButton.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/ButtonHandler.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/CrossPlatformInputManager.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/InputAxisScrollbar.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/Joystick.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/MobileControlRig.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/PlatformSpecific/MobileInput.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/PlatformSpecific/StandaloneInput.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/TiltInput.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/TouchPad.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/CrossPlatformInput/Scripts/VirtualInput.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Antialiasing.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Bloom.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/BloomAndFlares.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/BloomOptimized.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Blur.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/BlurOptimized.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/CameraMotionBlur.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ColorCorrectionCurves.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ColorCorrectionLookup.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ColorCorrectionRamp.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ContrastEnhance.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ContrastStretch.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/CreaseShading.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/DepthOfField.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/DepthOfFieldDeprecated.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/EdgeDetection.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Fisheye.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/GlobalFog.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Grayscale.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ImageEffectBase.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ImageEffects.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/MotionBlur.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/NoiseAndGrain.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/NoiseAndScratches.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/PostEffectsBase.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/PostEffectsHelper.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Quads.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ScreenOverlay.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ScreenSpaceAmbientObscurance.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/ScreenSpaceAmbientOcclusion.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/SepiaTone.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/SunShafts.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/TiltShift.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Tonemapping.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Triangles.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Twirl.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/VignetteAndChromaticAberration.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Effects/ImageEffects/Scripts/Vortex.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/ActivateTrigger.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/AutoMobileShaderSwitch.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/AutoMoveAndRotate.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/CameraRefocus.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/CurveControlledBob.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/DragRigidbody.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/DynamicShadowSettings.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/FOVKick.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/FPSCounter.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/FollowTarget.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/ForcedReset.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/LerpControlledBob.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/ObjectResetter.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/ParticleSystemDestroyer.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/PlatformSpecificContent.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/SimpleActivatorMenu.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/SimpleMouseRotator.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/SmoothFollow.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/TimedObjectActivator.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/TimedObjectDestructor.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/WaypointCircuit.cs"
+"Assets/ext/MapGenerator/Assets/Standard Assets/Utility/WaypointProgressTracker.cs"
+Assets/ext/MiniMap/Scripts/InnerMap.cs
+Assets/ext/MiniMap/Scripts/MapArrow.cs
+Assets/ext/MiniMap/Scripts/MapCanvasController.cs
+Assets/ext/MiniMap/Scripts/MapMarker.cs
+Assets/ext/MiniMap/Scripts/MarkerGroup.cs
+Assets/scripts/CameraSmoothFollow.cs
+Assets/scripts/CloudCreator.cs
+Assets/scripts/ColliderHandler.cs
+Assets/scripts/CollisionDetection.cs
+Assets/scripts/Communication.cs
+"Assets/scripts/Data Manipulation/DataHandler.cs"
+"Assets/scripts/Data Manipulation/DataReader.cs"
+"Assets/scripts/Data Manipulation/DataWriter.cs"
+"Assets/scripts/Data Manipulation/IDataReader.cs"
+"Assets/scripts/Data Manipulation/IDataWriter.cs"
+"Assets/scripts/Data Manipulation/UnityNotifier.cs"
+Assets/scripts/DragPanel.cs
+Assets/scripts/IAircraft.cs
+Assets/scripts/IAircraftInterpolator.cs
+Assets/scripts/ICloudCreator.cs
+Assets/scripts/ICommunication.cs
+Assets/scripts/IDataHandler.cs
+Assets/scripts/InputController.cs
+Assets/scripts/MathHelper.cs
+Assets/scripts/Model/Aircraft.cs
+Assets/scripts/Model/AircraftInterpolator.cs
+Assets/scripts/Model/AircraftsController.cs
+Assets/scripts/Model/MissileController.cs
+Assets/scripts/Model/RendererDetector.cs
+Assets/scripts/Network/CustomNetworkManager.cs
+Assets/scripts/Network/Player_ID.cs
+Assets/scripts/Network/Player_NetworkSetup.cs
+Assets/scripts/Network/Player_SyncPosition.cs
+Assets/scripts/Network/Player_SyncRotation.cs
+Assets/scripts/Tags.cs
+Assets/scripts/UI/DragPanel.cs
+Assets/scripts/UI/EnterEffectPanel.cs
+Assets/scripts/UI/GUIUpdater.cs
+-r:"E:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
+-r:"E:\Program Files\Unity\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"

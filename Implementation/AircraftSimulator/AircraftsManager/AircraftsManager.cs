@@ -69,11 +69,11 @@ namespace AircraftsManager
             SetActiveStrategies(sender);
         }
 
-        public void AddMissile(Missile.MissileType missileType, int sender)
+        public void AddMissile(Missile.MissileType missileType, int sender, int missile_id, int targetId)
         {
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
-            instance.activeShooters[sender].AddMissile(missileType);
+            instance.activeShooters[sender].AddMissile(missileType, missile_id, targetId);
         }
 
         public List<IData> GetShooterInitalData(int sender, IData additionalInformation = null)
@@ -165,6 +165,8 @@ namespace AircraftsManager
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             List<IData> data = new List<IData>();
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { sender } }, Sender = "shooter_id" });
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { missileId } }, Sender = "missile_id" });
             Missile.Missile missile = instance.activeShooters[sender].GetMissile(missileId);
             List <Common.Strategy> strategies = missile.MissileFlightContext.Strategies;
             foreach (Common.Strategy strategy in strategies)
@@ -172,10 +174,8 @@ namespace AircraftsManager
                 switch ((strategy as Missile.Strategy.MissileStrategy).MissileType)
                 {
                     case Missile.MissileType.M1:
-                        //(strategy as Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM1).;
-                        break;
                     case Missile.MissileType.M2:
-                        //(strategy as Missile.Strategy.ConcreteStrategies.ConcreteMissileStrategyM1).;
+                        data.Add((strategy as Missile.Strategy.MissileStrategy).GetTargetId());
                         break;
                     default:
                         throw new Common.InvalidShooterTypeException();

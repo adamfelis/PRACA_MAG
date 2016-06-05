@@ -57,14 +57,21 @@ namespace Main.ServerCommunication
         {
             clientAddedExecutor.SetupAndRun(dispatcher, new Action(() =>
             {
-                //if (dataEventArgs.DataList.DataArray.First().IsMissileData)
-                //{
-                //    //this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id);
-                //    //this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                //    //    global::Common.Scripts.SpecialScriptType.MissileAdder,
-                //    //    );
-                //}
-                //else
+                if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
+                {
+                    if( dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileAddedRequest)
+                    {
+                        this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.AddMissile(
+                            AircraftsManager.Missile.MissileType.M1, dataEventArgs.Id,
+                            dataEventArgs.DataList.DataArray.First().MissileId,
+                            dataEventArgs.DataList.DataArray.First().MissileTargetId
+                            );
+                        this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                            global::Common.Scripts.SpecialScriptType.MissileAdder,
+                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                    }
+                }
+                else if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Aircraft)
                 {
                     Shooters.ShooterType shooterType = dataEventArgs.DataList.DataArray.First().ShooterType;
                     Client addedClient = new ServerCommunication.Client() { Name = dataEventArgs.Id.ToString(), Aircraft = shooterType.ToString() };
@@ -83,15 +90,33 @@ namespace Main.ServerCommunication
         void onClientDataPresented(object sender, DataEventArgs dataEventArgs, IClientDataPresentedExecutor clientDataPresentedExecutor)
         {
             clientDataPresentedExecutor.SetupAndRun(dispatcher, (() =>
-        {
-             List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                    aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())
-                    );
-            if(dataEventArgs.Id == this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.ActiveShooter)
-                this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext(result);
-            return result;
+            {
+                if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
+                {
+                    if(dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileDataRequest)
+                    {
+                        List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                            global::Common.Scripts.SpecialScriptType.SimulateMissile,
+                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(
+                                dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                        return result;
+                    }
+                    return null;
+                }
+
+                else if (dataEventArgs.DataList.DataArray.First().MessageContent == MessageContent.Missile)
+                {
+                    List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
+                   aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetShooterData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First())
+                   );
+                    if (dataEventArgs.Id == this.aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.ActiveShooter)
+                        this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnNext(result);
+                    return result;
+                }
+                else
+                    return null;
             }));
-            
+
         }
 
         public RemoveClientHandler OnClientRemoved => onClientRemoved;
