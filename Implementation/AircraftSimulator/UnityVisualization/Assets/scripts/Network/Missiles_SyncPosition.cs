@@ -83,7 +83,7 @@ public class Missiles_SyncPosition : NetworkBehaviour
             {
                 missileComponentse.Body.transform.position =
                     Vector3.Lerp(missileComponentse.PrevPos, missileComponentse.TargetPos, t);
-                Debug.Log(missileComponentse.Body.transform.position);
+                //Debug.Log(missileComponentse.Body.transform.position);
             }
         }
         if (t > 1)
@@ -99,6 +99,7 @@ public class Missiles_SyncPosition : NetworkBehaviour
                 missileController.missiles[0].Body.transform.parent = null;
             missileController.missiles[0].IsTriggered = true;
             missileController.missiles[0].TargetPos = pos;
+            //Debug.Log(pos);
         }
     }
 

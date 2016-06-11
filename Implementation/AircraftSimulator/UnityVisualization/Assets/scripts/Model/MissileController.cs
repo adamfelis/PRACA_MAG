@@ -79,9 +79,9 @@ namespace Assets.scripts.Model
             //missiles[missileId].TargetPos = transform.position;
             //missiles[missileId].TargetPos = transform.position;
             //missiles[missileId].IsTriggered = true;
-            missiles[missileId].RequestPosition = true;
-            missiles[missileId].offset = transform.localPosition;
+            //missiles[missileId].offset = transform.localPosition;
             missiles[missileId].Body.transform.parent = null;
+            missiles[missileId].RequestPosition = true;
         }
 
         public void UpdateMissilePosition(int missileId, int targetId, Vector3 position)
@@ -92,6 +92,8 @@ namespace Assets.scripts.Model
             //var localShooterId = shooter.ServerAssignedId;
             //var shooterTransform = transform;
             //var targetTransform = shooter.GetPlayerByRemoteAssignedId(targetId).transform;
+
+            Debug.Log(position);
 
             if (!missiles[missileId].IsTriggered)
             {
@@ -208,6 +210,7 @@ namespace Assets.scripts.Model
                     Debug.LogWarning("Unsubscribed MissileFired");
                 else
                 {
+                    Debug.Log("Aircraft position on shoot: " + transform.position);
                     var firedMissile = onStock.First();
                     MissileFired.Invoke(shooter.ServerAssignedId, target.ServerAssignedId,
                         getMissileId(firedMissile.Body));

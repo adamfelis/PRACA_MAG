@@ -54,7 +54,7 @@ namespace Assets.scripts
             leftCamera = transform.FindChild("LeftCamera");
             rightCamera = transform.FindChild("RightCamera");
             mainCamera = transform.FindChild("MainCamera");
-            mainCamera.GetComponent<AudioListener>().enabled = true;
+            //mainCamera.GetComponent<AudioListener>().enabled = true;
         }
 
         public Camera MainCamera

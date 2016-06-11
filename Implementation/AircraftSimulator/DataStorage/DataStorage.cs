@@ -26,6 +26,8 @@ namespace DataStorageNamespace
 
         public string PrepareDataForClient(int id, IDataList dataList)
         {
+            if (!ClientRequests.ContainsKey(id))
+                throw new MessageIgnoreException();
             if (ClientRequests[id].Count > 0)
             {
                 IData request = ClientRequests[id].Dequeue();
