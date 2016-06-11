@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.AircraftData;
 
 namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scripts.ConcreteScript
 {
@@ -45,9 +46,15 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
             int strategiesAmount = res.GetLength(0);
             for (int i = 0; i < strategiesAmount; i++)
             {
+                float[] lateralData = new float[] {res[i, 0], res[i, 1], res[i, 2], res[i, 3], res[i, 4]};
+                float[] longitudinalData = new float[] { res[i, 5], res[i, 6], res[i, 7], res[i, 8] };
+                float[] positionData = new float[] { res[i, 9], res[i, 10], res[i, 11] };
+                //TODO
+                // should be sent as single AircraftData result
+                //AircraftData aircraftData = new AircraftData(lateralData, longitudinalData, positionData);
                 IData lateralResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[i, 0], res[i, 1], res[i, 2], res[i, 3], res[i, 4] } },
+                    Array = new float[1][] { lateralData },
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse,
                     MessageStrategy = MessageStrategy.LateralData,
@@ -56,7 +63,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                 };
                 IData longitudinalResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[i, 5], res[i, 6], res[i, 7], res[i, 8] } },
+                    Array = new float[1][] { longitudinalData },
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse,
                     MessageStrategy = MessageStrategy.LongitudinalData,
@@ -65,7 +72,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                 };
                 IData positionResult = new Data()
                 {
-                    Array = new float[1][] { new float[] { res[i, 9], res[i, 10], res[i, 11] } },
+                    Array = new float[1][] { positionData },
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse,
                     MessageStrategy = MessageStrategy.PositionData,

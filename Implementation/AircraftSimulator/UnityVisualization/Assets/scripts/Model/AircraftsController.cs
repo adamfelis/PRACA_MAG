@@ -34,11 +34,13 @@ public class AircraftsController : NetworkBehaviour
         var sceneController = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<SceneController>();
         Aircraft.Initialize(sceneController);
 
+        MissileController = body.AddComponent<MissileController>();
+        MissileController.Initialize();
         if (isLocalPlayer)
         {
             body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
-            MissileController = body.AddComponent<MissileController>();
-            MissileController.Initialize();
+            //MissileController = body.AddComponent<MissileController>();
+            //MissileController.Initialize();
             var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
             applicationManager.GetComponent<InputController>().Initialize(this);
             applicationManager.GetComponent<Communication>().enabled = true;

@@ -20,6 +20,7 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
             this.mlApp = new MLApp.MLApp();
             string mainDirectory = AppDomain.CurrentDomain.BaseDirectory + @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\MatlabFiles\";
             this.mlApp.Execute(@"cd " + mainDirectory);
+            this.mlApp.Execute(@"clear");
         }
 
         internal List<IData> RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)

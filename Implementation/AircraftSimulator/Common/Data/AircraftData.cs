@@ -9,8 +9,8 @@ namespace Common.AircraftData
     {
         private float[][] aircraftData;
 
-        //velocities
-        #region
+
+        #region  equilibrium velocities 
         public float V_0
         {
             get
@@ -42,8 +42,57 @@ namespace Common.AircraftData
         }
         #endregion
 
-        //steering
-        #region
+        //#region current velocities
+
+        //public float U
+        //{
+        //    get
+        //    {
+        //        return aircraftData[5][0];
+        //    }
+        //}
+        //public float V
+        //{
+        //    get
+        //    {
+        //        return aircraftData[5][1];
+        //    }
+        //}
+        //public float W
+        //{
+        //    get
+        //    {
+        //        return aircraftData[5][2];
+        //    }
+        //}
+
+        //#endregion
+
+        //#region positions
+        //public float X
+        //{
+        //    get
+        //    {
+        //        return aircraftData[6][0];
+        //    }
+        //}
+        //public float Y
+        //{
+        //    get
+        //    {
+        //        return aircraftData[6][1];
+        //    }
+        //}
+        //public float Z
+        //{
+        //    get
+        //    {
+        //        return aircraftData[6][2];
+        //    }
+        //}
+        //#endregion
+
+        #region steering
         /// <summary>
         /// Elevator rotation
         /// </summary>
@@ -172,7 +221,39 @@ namespace Common.AircraftData
                 new float[] { Ni, Xi, Zeta, Tau },
                 new float[] { P_e, Q_e, R_e },
                 new float[] { theta_e, phi_e, psi_e },
-                new float[] {empty, empty}
+                new float[] { empty, empty },
+                //new float[] { empty, empty, empty },
+            };
+        }
+
+        public AircraftData(float[] lateralData, float[] longitudinalData, float[] positions)
+        {
+            float empty = 0.0f;
+
+            float v = lateralData[0];
+            float p = lateralData[1];
+            float r = lateralData[2];
+            float phi = lateralData[3];
+            float psi = lateralData[4];
+
+            float u = longitudinalData[0];
+            float w = longitudinalData[1];
+            float q = longitudinalData[2];
+            float theta = longitudinalData[3];
+
+            float x = positions[0];
+            float y = positions[1];
+            float z = positions[2];
+
+
+            this.aircraftData = new float[][]
+            {
+                new float[] { empty, empty },
+                new float[] { empty, empty, empty, empty },
+                new float[] { p, q, r },
+                new float[] { theta, phi, psi },
+                new float[] { empty, empty },
+                //new float[] { u, v, w },
             };
         }
 
@@ -185,7 +266,8 @@ namespace Common.AircraftData
                 new float[] { empty, empty, empty, empty },
                 new float[] { empty, empty, empty },
                 new float[] { theta_e, empty, empty},
-                new float[] { FixedUpdateRate, SimulationTime}
+                new float[] { FixedUpdateRate, SimulationTime},
+                //new float[] { empty, empty, empty }
             };
         }
 

@@ -78,8 +78,8 @@ namespace Assets.scripts.Data_Manipulation
             foreach (var f in data.Array)
             {
                 toOutput += f.Aggregate(String.Empty, (current, f1) => current + (f1 + " "));
-                unityShellNotifier.NotifyUnityShell(toOutput);
             }
+            unityShellNotifier.NotifyUnityShell(toOutput);
         }
 
         private void processMissileData(MessageContent messageContent, IDataList dataList)
@@ -99,7 +99,8 @@ namespace Assets.scripts.Data_Manipulation
                         break;
                     case MessageConcreteType.MissileDataResponse:
                         MissileData missileData = new MissileData(data.Array);
-                        Vector3 position = new Vector3(missileData.Z_0, missileData.Y_0, -missileData.X_0);
+                        Vector3 position = new Vector3(missileData.Y_0, missileData.Z_0, -missileData.X_0);
+                        //Vector3 position = new Vector3(missileData.X_0, missileData.Y_0, missileData.Z_0);
                         aircraftsController.MissileController.UpdateMissilePosition(data.MissileId, data.MissileTargetId,
                             position);
                         break;
@@ -127,27 +128,24 @@ namespace Assets.scripts.Data_Manipulation
         {
             var aircraft = aircraftsController.Aircraft;
             //velocity in X axis (u)
-            //aircraft.Velocity.x = data.Array[0][0];
             var velocityX = data.Array[0][0];
             //velocity in Z axis (w)
-            //aircraft.Velocity.y = data.Array[0][1];
             var velocityY = data.Array[0][1];
             //rotary velocity in y axis (q)
             var q = data.Array[0][2];
-            aircraft.q = q;
 
-            //aircraft.TranslateInLongitudinal(velocityX, velocityY);
             var theta = data.Array[0][3];
             unityShellNotifier.NotifyUnityShell("delta theta: " + (theta-prevTheta).ToString("n2"));
             prevTheta = theta;
             aircraft.RotateInLongitudinal(theta);
+            aircraft.SetupVelocityInLongitudinal(velocityX, velocityY);
         }
         private void handlePositionData(IData data)
         {
             var aircraft = aircraftsController.Aircraft;
             var deltaX = data.Array[0][0];
-            var deltaY = data.Array[0][1];
-            var deltaZ = data.Array[0][2];
+            var deltaY = data.Array[0][2];
+            var deltaZ = data.Array[0][1];
 
             aircraft.TranslateInLongitudinal(deltaX, deltaY);
             aircraft.TranslateInLateral(deltaZ);
@@ -157,7 +155,6 @@ namespace Assets.scripts.Data_Manipulation
         {
             var aircraft = aircraftsController.Aircraft;
             //velocity in Y axis (v)
-            //aircraft.Velocity.z = data.Array[0][0];
             var velocityZ = data.Array[0][0];
             //rotary velocity in X axis (p)
             aircraft.p = data.Array[0][1];
@@ -168,8 +165,8 @@ namespace Assets.scripts.Data_Manipulation
             //psi
             var psi = data.Array[0][4];
 
-            //aircraft.TranslateInLateral(velocityZ);
             aircraft.RotateInLateral(phi, psi);
+            aircraft.SetupVelocityInLateral(velocityZ);
         }
     }
 }

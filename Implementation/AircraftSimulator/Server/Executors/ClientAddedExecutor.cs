@@ -45,7 +45,18 @@ namespace Server.Executors
         protected override void InExecute()
         {
            DispatcherOperation result = dispatcher.BeginInvoke(action);
-           result.Completed += Result_Completed;
+            result.Completed += Result_Completed;
+            //try
+            //{
+
+            //    result.Wait(new TimeSpan(0, 0, 0, 30));
+            //}
+            //catch (Exception)
+            //{
+                
+            //    throw;
+            //}
+            int a = 0;
         }
 
         private void Result_Completed(object sender, EventArgs e)

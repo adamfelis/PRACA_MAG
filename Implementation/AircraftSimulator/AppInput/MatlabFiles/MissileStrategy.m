@@ -6,6 +6,8 @@ classdef MissileStrategy < handle & Strategy
         G
         missilePosition
         timeForPrediction
+        
+        missilePositions = []
     end
     
     methods
@@ -31,6 +33,7 @@ classdef MissileStrategy < handle & Strategy
             [~, Y] = ode45(@(t,x)StateSpace(t,x,obj.F ,obj.G ,u), obj.timeForPrediction, x0);
             obj.missilePosition = Y(2,:);
             deltaPos = obj.missilePosition;
+            obj.missilePositions = [obj.missilePositions; deltaPos];
         end
     end
     

@@ -38,11 +38,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            //return Velocity.z;
-            return new Vector3(
-                aircraftInterpolator.TargetVelocityX,
-                aircraftInterpolator.TargetVelocityY,
-                aircraftInterpolator.TargetVelocityZ);
+            return aircraftInterpolator.CurrentVelocity;
         }
     }
 
@@ -200,7 +196,7 @@ public class Aircraft : IAircraft
         Theta_0 = 9.4f;
         Psi_0 = 0.0f;
         Phi_0 = 0.0f;
-        aircraftInterpolator.SetupInitial(Theta_0, Phi_0, Psi_0);
+        aircraftInterpolator.SetupInitial(Theta_0, Phi_0, Psi_0, Velocity_0);
     }
 
     public void Initialize(SceneController sceneController)
@@ -299,16 +295,28 @@ public class Aircraft : IAircraft
         aircraftInterpolator.TargetPsi = psi;
     }
 
-    public void TranslateInLongitudinal(float velocityX, float velocityY)
+    public void TranslateInLongitudinal(float deltaX, float deltaY)
     {
-        aircraftInterpolator.TargetVelocityX += velocityX;
-        aircraftInterpolator.TargetVelocityY += velocityY;
+        aircraftInterpolator.TargetPositionX += deltaX;
+        aircraftInterpolator.TargetPositionY += deltaY;
     }
 
-    public void TranslateInLateral(float velocityZ)
+    public void TranslateInLateral(float deltaZ)
     {
-        aircraftInterpolator.TargetVelocityZ += velocityZ;
+        aircraftInterpolator.TargetPositionZ += deltaZ;
     }
+
+    public void SetupVelocityInLongitudinal(float velocityX, float velocityY)
+    {
+        aircraftInterpolator.TargetVelocityX = velocityX;
+        aircraftInterpolator.TargetVelocityY = velocityY;
+    }
+
+    public void SetupVelocityInLateral(float velocityZ)
+    {
+        aircraftInterpolator.TargetVelocityZ = velocityZ;
+    }
+
 
     public void RotateSteersJoystick(float deltaAileron, float deltaRudder, float deltaElevator)
     {

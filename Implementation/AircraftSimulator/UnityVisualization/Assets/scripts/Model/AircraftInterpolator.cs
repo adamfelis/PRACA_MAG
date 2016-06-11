@@ -13,9 +13,9 @@ namespace Assets.scripts
         private float targetPhi;
         private float targetPsi;
 
-        private float targetVelocityX;
-        private float targetVelocityY;
-        private float targetVelocityZ;
+        private float targetPositionX;
+        private float targetPositionY;
+        private float targetPositionZ;
 
         private float prevTheta;
         private float prevPhi;
@@ -25,9 +25,16 @@ namespace Assets.scripts
         private float currentPhi;
         private float currentPsi;
 
-        private float prevVelocityX;
-        private float prevVelocityY;
-        private float prevVelocityZ;
+        private float prevPositionX;
+        private float prevPositionY;
+        private float prevPositionZ;
+
+        private float targetVelocityX;
+        private float targetVelocityY;
+        private float targetVelocityZ;
+
+        private Vector3 currentVelocity;
+        private Vector3 previousVelocity;
 
         private float globalIterationCounter;
         private bool interpolationActive = false;
@@ -84,12 +91,47 @@ namespace Assets.scripts
             }
         }
 
+        public float TargetPositionX
+        {
+            get { return targetPositionX; }
+            set
+            {
+                prevPositionX = targetPositionX;
+                targetPositionX = value;
+            }
+        }
+
+        public float TargetPositionY
+        {
+            get { return targetPositionY; }
+            set
+            {
+                prevPositionY = targetPositionY;
+                targetPositionY = value;
+            }
+        }
+
+        public float TargetPositionZ
+        {
+            get { return targetPositionZ; }
+            set
+            {
+                prevPositionZ = targetPositionZ;
+                targetPositionZ = value;
+            }
+        }
+
+        public Vector3 CurrentVelocity
+        {
+            get { return currentVelocity; }
+        }
+
         public float TargetVelocityX
         {
             get { return targetVelocityX; }
             set
             {
-                prevVelocityX = targetVelocityX;
+                previousVelocity.x = targetVelocityX;
                 targetVelocityX = value;
             }
         }
@@ -99,7 +141,7 @@ namespace Assets.scripts
             get { return targetVelocityY; }
             set
             {
-                prevVelocityY = targetVelocityY;
+                previousVelocity.y = targetVelocityY;
                 targetVelocityY = value;
             }
         }
@@ -109,12 +151,12 @@ namespace Assets.scripts
             get { return targetVelocityZ; }
             set
             {
-                prevVelocityZ = targetVelocityZ;
+                previousVelocity.z = targetVelocityZ;
                 targetVelocityZ = value;
             }
         }
 
-        public void SetupInitial(float theta0, float phi0, float psi0)
+        public void SetupInitial(float theta0, float phi0, float psi0, Vector3 V0)
         {
             prevTheta = currentTheta = targetTheta = theta0;
             prevPhi = currentPhi = targetPhi = phi0;
@@ -134,6 +176,12 @@ namespace Assets.scripts
             var rotPhi = new Vector3(0, 0, -(phi0));
             Body.transform.Rotate(rotPhi);
             //
+
+            previousVelocity = V0;
+            targetVelocityX = V0.x;
+            targetVelocityY = V0.y;
+            targetVelocityZ = V0.z;
+
         }
 
 
@@ -168,7 +216,7 @@ namespace Assets.scripts
             //Debug.Log(theta);
             Body.transform.Rotate(theta);
             //
-            interpolateLateralVelocity(t);
+            interpolateLateralPosition(t);
 
             //psi rotation
             var psi = new Vector3(0, targetPsi - currentPsi, 0);
@@ -178,10 +226,10 @@ namespace Assets.scripts
             var phi = new Vector3(0, 0, -(targetPhi - currentPhi));
             Body.transform.Rotate(phi);
             //
-            interpolateLongitudinalVelocity(t);
+            interpolateLongitudinalPosition(t);
+            interpolateVelocity(t);
         }
 
-        private bool coroutineWorking = false;
         public void Interpolate(float singleIterationTime)
         {
             //if new target data are currently being set then wait untill operation completes
@@ -200,12 +248,20 @@ namespace Assets.scripts
             if (sceneController.LateralRotationActive)
                 interpolateLateralRotation(iterations);
             if (sceneController.LateralTranslationActive)
-                interpolateLateralVelocity(t);
+                interpolateLateralPosition(t);
 
             if (sceneController.LongitudinalRotationActive)
                 interpolateLongitudinalRotation(iterations);
             if (sceneController.LongitudinalTranslationActive)
-                interpolateLongitudinalVelocity(t);
+                interpolateLongitudinalPosition(t);
+
+            interpolateVelocity(t);
+        }
+
+        private void interpolateVelocity(float t)
+        {
+            var targetVelocity = new Vector3(targetVelocityX, targetVelocityY, targetVelocityZ);
+            currentVelocity = Vector3.Lerp(previousVelocity, targetVelocity, t);
         }
 
 
@@ -224,7 +280,7 @@ namespace Assets.scripts
             float delta = TargetPhi - prevPhi;
             delta /= iterations;
             currentPhi += delta;
-            var rot = new Vector3(0, 0, -delta);
+            var rot = new Vector3(0, 0, delta);
             Body.transform.Rotate(rot, Space.Self);
 
             delta = TargetPsi - prevPsi;
@@ -234,24 +290,21 @@ namespace Assets.scripts
             Body.transform.Rotate(rot, Space.Self);
         }
 
-        private void interpolateLongitudinalVelocity(float t)
+        private void interpolateLongitudinalPosition(float t)
         {
-            float X = Mathf.Lerp(prevVelocityX, TargetVelocityX, t);
-            float Y = Mathf.Lerp(prevVelocityY, TargetVelocityY, t);
-            var velocity = new Vector3(0, Y, -X);
-            velocity = new Vector3(Body.transform.position.x, Y, -X);
-            Body.transform.position = (velocity);
+            float X = Mathf.Lerp(prevPositionX, targetPositionX, t);
+            float Y = Mathf.Lerp(prevPositionY, targetPositionY, t);
+            var position = new Vector3(Body.transform.position.x, Y, -X);
+            Body.transform.position = (position);
             //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
         }
 
-        private void interpolateLateralVelocity(float t)
+        private void interpolateLateralPosition(float t)
         {
 
-            float Z = Mathf.Lerp(prevVelocityZ, TargetVelocityZ, t);
-            var velocity = new Vector3(Z, 0, 0);
-
-            velocity = new Vector3(Z, Body.transform.position.y, Body.transform.position.z);
-            Body.transform.position = (velocity);
+            float Z = Mathf.Lerp(prevPositionZ, targetPositionZ, t);
+            var position = new Vector3(Z, Body.transform.position.y, Body.transform.position.z);
+            Body.transform.position = (position);
             //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
         }
     }

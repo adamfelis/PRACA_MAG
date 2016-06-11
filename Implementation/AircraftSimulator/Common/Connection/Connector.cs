@@ -88,21 +88,36 @@ namespace Common.Connection
             try
             { 
                 var messageRead = Encoding.ASCII.GetString(readBuffer, totalBytesRead, bytesRead);
-                totalBytesRead += bytesRead;
-                stringBuilder.Append(messageRead);
+
                 //if (stream.DataAvailable)
-                if(messageRead[messageRead.Length - 1] != LineBreak)
+                //if(messageRead[messageRead.Length - 1] != LineBreak)
+                var lineBrakPosition = messageRead.IndexOf(LineBreak);
+                if (lineBrakPosition == -1)
                 {
+                    totalBytesRead += bytesRead;
+                    stringBuilder.Append(messageRead);
                     BeginReading();
                 }
                 else
                 {
-                    messageRead = messageRead.Remove(messageRead.Length - 1);
+                    messageRead = messageRead.Substring(0, lineBrakPosition); //messageRead.Length - 1);
+                    stringBuilder.Append(messageRead);
                     //Message fully completed
                     onMessageReceived(this, stringBuilder.ToString());
+
+                    int sourceIndex = totalBytesRead + lineBrakPosition + 1;
+                    int length = bytesRead - lineBrakPosition - 1;
+                    Array.Copy(readBuffer, sourceIndex, readBuffer, 0, length);
                     //clearing total bytes read and string builder cause we start new message
-                    totalBytesRead = 0;
+                    //totalBytesRead = 0;
+                    totalBytesRead = length;
+                    var m = Encoding.ASCII.GetString(readBuffer, 0, totalBytesRead);
+                    if (length>0)
+                    {
+                       int a = 0;
+                    }
                     stringBuilder = new StringBuilder(maxReadBufferSize);
+                    stringBuilder.Append(m);
                     BeginReading();
                 }
             }

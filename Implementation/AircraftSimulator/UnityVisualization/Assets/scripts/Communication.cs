@@ -22,7 +22,7 @@ public class Communication : MonoBehaviour, ICommunication
 
     public void NotifyUnityShell(string toOutput)
     {
-        Debug.Log(toOutput);
+        //Debug.Log(toOutput);
     }
 
     private void Initialize()
@@ -49,7 +49,7 @@ public class Communication : MonoBehaviour, ICommunication
     private float delta = 0.0f;
     private void dataResponseFromServer()
     {
-        Debug.Log(delta);
+        //Debug.Log(delta);
         delta = 0.0f;
     }
     private void subscribeForClientDisconnection()

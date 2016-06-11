@@ -17,7 +17,7 @@ classdef Aircraft < handle & Shooter
 
         % 
         DEBUG_MODE = false;
-       
+        ERROR_STATE = false;
         aircraftPosition = [0 0 0];
     end
     
@@ -152,7 +152,7 @@ classdef Aircraft < handle & Shooter
         
         function resultsArray = SimulateLaplace(obj, u_longitudinal, u_lateral)
             results = Results();
-            obj.current_simulation_solutions = [];
+            %obj.current_simulation_solutions = [];
             for i = 1 : 1 : length(obj.Strategies)
                 
                 Y_longitudinal = obj.Strategies(i).SimulateLaplaceLongitudinal(u_longitudinal);
@@ -161,11 +161,16 @@ classdef Aircraft < handle & Shooter
                 Y_lateral = obj.Strategies(i).SimulateLaplaceLateral(u_lateral);
                 Y_lateral = real(Y_lateral);
                 
+                if sum(isnan(Y_lateral))
+                    obj.ERROR_STATE = true;
+                end
+                
                 if i == 1
                     movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
                     obj.aircraftPosition = obj.aircraftPosition + movement;
                 end
-                obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
+%                 obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
+                    obj.current_simulation_solutions = [obj.current_simulation_solutions; obj.aircraftPosition];
             end                
             
             results.AddStrategyResult(Y_longitudinal, Y_lateral, movement);
@@ -182,7 +187,7 @@ classdef Aircraft < handle & Shooter
                 end
                for j = 1:1:length(obj.Missiles(i).Strategies)
                    deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition);
-                   missileDeltaPositions = [missileDeltaPositions; deltaPos(1:3)];
+                   missileDeltaPositions = [missileDeltaPositions; deltaPos];
                end
             end
             

@@ -4,10 +4,17 @@
 %% Workspace loader
 %load(strcat('../../AppOutput/', num2str(client_id)));
 aircraft = aircraft_collection.GetAircraft(client_id + 1); %matlab table counter starts with 1, not 0
+% if aircraft.ERROR_STATE
+%         return;
+% end
 %% Calculations
+%save bbb
 result_from_matlab = aircraft.SimulateLaplace( u_longitudinal', u_lateral');
 for i = 1 : 1: length(result_from_matlab)
     result_from_matlab(i) = double(round(result_from_matlab(i), 4));
+%     if aircraft.ERROR_STATE
+%         save aaa
+%     end
 end
 result_from_matlab = double(result_from_matlab);
 %% Workspace saver

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.scripts
 {
@@ -11,6 +12,12 @@ namespace Assets.scripts
         float TargetTheta { get; set; }
         float TargetPhi { get; set; }
         float TargetPsi { get; set; }
+
+        float TargetPositionX { get; set; }
+        float TargetPositionY { get; set; }
+        float TargetPositionZ { get; set; }
+
+        Vector3 CurrentVelocity { get; }
 
         float TargetVelocityX { get; set; }
         float TargetVelocityY { get; set; }
@@ -24,6 +31,6 @@ namespace Assets.scripts
         void LockInterpolation();
         void UnclockInterpolation();
 
-        void SetupInitial(float theta0, float phi0, float psi0);
+        void SetupInitial(float theta0, float phi0, float psi0, Vector3 V0);
     }
 }

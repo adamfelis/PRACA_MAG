@@ -77,6 +77,10 @@ namespace Assets.Scripts
                     networkController.UnlocalPlayers.Add(gameObject);
                 }
             }
+
+
+            //setup missiles sync scripts
+            //Tags.FindGameObjectWithTagInParent(Tags.MisilleLeft1, name).AddComponent<Missiles_SyncP>().Initialize(0);
         }
     }
 }

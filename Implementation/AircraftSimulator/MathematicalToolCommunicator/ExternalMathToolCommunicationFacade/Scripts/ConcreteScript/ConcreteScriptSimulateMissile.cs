@@ -43,19 +43,27 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
                 }
             }
 
+            //var shooterId =((float[]) (parameters.ParametersList[0].Value))[0];
+            //var missileId = ((float[])(parameters.ParametersList[1].Value))[0];
+            //var targetId = ((float[])(parameters.ParametersList[2].Value))[0];
+
+
             int strategiesAmount = res.GetLength(0);
             for (int i = 0; i < strategiesAmount; i++)
             {
                 IData deltaPosResult = new Data()
                 {
-                    Array = new MissileData(0, 0, 0, res[i, 0], res[i, 1], res[i, 2]).GetData(),
+                    Array = new MissileData(res[i, 3], res[i, 4], res[i, 5], res[i, 0], res[i, 1], res[i, 2]).GetData(),
                     InputType = DataType.Vector,
                     MessageType = MessageType.ClientDataResponse,
                     MessageStrategy = MessageStrategy.PositionData,
                     MessageContent = MessageContent.Missile,
                     MessageConcreteType = MessageConcreteType.MissileDataResponse,
                     StrategyNumber = i,
-                };
+                    //MissileTargetId = (int)targetId,
+                    //ShooterId = (int)shooterId,
+                    //MissileId = (int)missileId
+            };
                 result.Add(deltaPosResult);
             }
             return result;

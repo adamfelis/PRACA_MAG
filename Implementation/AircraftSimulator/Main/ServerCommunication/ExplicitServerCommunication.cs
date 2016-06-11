@@ -108,7 +108,10 @@ namespace Main.ServerCommunication
                                 {
                                    MessageContent = MessageContent.Missile,
                                    MessageConcreteType = MessageConcreteType.MissileAddedResponse,
-                                   MessageType = MessageType.ClientDataResponse
+                                   MessageType = MessageType.ClientDataResponse,
+                                   MissileTargetId = dataEventArgs.DataList.DataArray.First().MissileTargetId,
+                                   ShooterId = dataEventArgs.DataList.DataArray.First().ShooterId,
+                                   MissileId = dataEventArgs.DataList.DataArray.First().MissileId
                                 }
                             };
                     }

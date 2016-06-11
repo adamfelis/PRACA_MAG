@@ -62,7 +62,7 @@ namespace DataStorageNamespace
 
         public void ClientRemoved(object sender, DataEventArgs args)
         {
-            ClientRequests.Remove(args.Id);
+            //ClientRequests.Remove(args.Id);
         }
 
         protected override void Initialize()
