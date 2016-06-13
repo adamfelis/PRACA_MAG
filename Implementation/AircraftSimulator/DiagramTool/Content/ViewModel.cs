@@ -118,6 +118,27 @@ namespace DiagramTool.Content
                 if (i >= longitudinalDataPointsForEachStrategy.Count)
                     longitudinalDataPointsForEachStrategy.Add(new List<DataPoint>());
                 longitudinalDataPointsForEachStrategy[i].Add(newDataPoints[i]);
+                //if (longitudinalDataPointsForEachStrategy[i].Count > 0)
+                //    longitudinalDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X + longitudinalDataPointsForEachStrategy[i][longitudinalDataPointsForEachStrategy[i].Count - 1].X,
+                //                newDataPoints[i].Y + longitudinalDataPointsForEachStrategy[i][longitudinalDataPointsForEachStrategy[i].Count - 1].Y
+                //            )
+                //        );
+                //else if (i > 0)
+                //    longitudinalDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X + longitudinalDataPointsForEachStrategy[0][longitudinalDataPointsForEachStrategy[0].Count - 1].X,
+                //                newDataPoints[i].Y + longitudinalDataPointsForEachStrategy[0][longitudinalDataPointsForEachStrategy[0].Count - 1].Y
+                //            )
+                //        );
+                //else // i = 0
+                //    longitudinalDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X,
+                //                newDataPoints[i].Y
+                //            )
+                //        );
             }
             for (int i = longitudinalDataPointsForEachStrategy.Count; i > newDataPoints.Count; i--)
             {
@@ -132,6 +153,27 @@ namespace DiagramTool.Content
                 if (i >= lateralDataPointsForEachStrategy.Count)
                     lateralDataPointsForEachStrategy.Add(new List<DataPoint>());
                 lateralDataPointsForEachStrategy[i].Add(newDataPoints[i]);
+                //if (lateralDataPointsForEachStrategy[i].Count > 0)
+                //    lateralDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X + lateralDataPointsForEachStrategy[i][lateralDataPointsForEachStrategy[i].Count - 1].X,
+                //                newDataPoints[i].Y + lateralDataPointsForEachStrategy[i][lateralDataPointsForEachStrategy[i].Count - 1].Y
+                //            )
+                //        );
+                //else if (i > 0)
+                //    lateralDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X + lateralDataPointsForEachStrategy[0][lateralDataPointsForEachStrategy[0].Count - 1].X,
+                //                newDataPoints[i].Y + lateralDataPointsForEachStrategy[0][lateralDataPointsForEachStrategy[0].Count - 1].Y
+                //            )
+                //        );
+                //else // i = 0
+                //    lateralDataPointsForEachStrategy[i].Add(
+                //            new DataPoint(
+                //                newDataPoints[i].X,
+                //                newDataPoints[i].Y
+                //            )
+                //        );
             }
             for (int i = lateralDataPointsForEachStrategy.Count; i > newDataPoints.Count; i--)
             {

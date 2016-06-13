@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToolsManager.Observator.Observing.ConcreteObserving;
 
 namespace ToolsManager.ToolsManagement
 {
+    using Common.Containers;
+    using Common.Scripts;
+    using ConcreteObserving;
     using System.IO;
     using System.Reflection;
     class ToolsManagement : IToolsManagement
@@ -22,9 +24,9 @@ namespace ToolsManager.ToolsManagement
             }
         }
 
-        internal ToolsManagement(Action<ToolAdapter.Tool.ITool> toolAddedAction)
+        internal ToolsManagement(Action<ToolAdapter.Tool.ITool> toolAddedAction, Func<SpecialScriptType, List<IData>, List<IData>> computeMethod)
         {
-            concreteObservableSubject = new ConcreteObservableSubject();
+            concreteObservableSubject = new ConcreteObservableSubject(computeMethod);
             InitializeTools(toolAddedAction);
         }
 
@@ -47,6 +49,7 @@ namespace ToolsManager.ToolsManagement
                 var toolDLL = DLL.GetType(toolName + "." + toolName);
                 dynamic tool = Activator.CreateInstance(toolDLL, ToolAdapter.Tool.ToolType.Diagrams);
                 this.concreteObservableSubject.Subscribe((tool as ToolAdapter.Tool.ITool).Observer);
+                (tool as ToolAdapter.Tool.ITool).Observer.SetComputationalFactory(this.concreteObservableSubject);
                 toolAddedAction(tool);
             }
         }

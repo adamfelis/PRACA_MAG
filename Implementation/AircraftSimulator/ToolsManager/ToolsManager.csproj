@@ -43,9 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Observator\Observing\ConcreteObserving\ConcreteObservableSubject.cs" />
-    <Compile Include="Observator\Observing\ObservableSubject.cs" />
-    <Compile Include="Observator\Observing\Observer.cs" />
+    <Compile Include="ConcreteObserving\ConcreteObservableSubject.cs" />
     <Compile Include="ToolsManagement\IToolsManagement.cs" />
     <Compile Include="ToolsManagement\ToolsManagement.cs" />
     <Compile Include="ToolsManager.cs" />
@@ -59,6 +57,10 @@
     <ProjectReference Include="..\MathematicalToolCommunicator\MathematicalToolCommunicator.csproj">
       <Project>{57df7af5-9d7e-4c39-9bab-10b1a506644d}</Project>
       <Name>MathematicalToolCommunicator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Patterns\Patterns.csproj">
+      <Project>{4b2f41ba-76b7-4371-8e72-f66250be173b}</Project>
+      <Name>Patterns</Name>
     </ProjectReference>
     <ProjectReference Include="..\ToolAdapter\ToolAdapter.csproj">
       <Project>{df4a78b4-e515-4912-b3d3-f72a61ed1f4f}</Project>

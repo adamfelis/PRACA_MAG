@@ -28,13 +28,21 @@ new_B_lateral = [b_lateral(1,1:2); b_lateral(1,3:4); b_lateral(1,5:6); b_lateral
 if(exist('aircraft_collection', 'var')==0)
         aircraft_collection = AircraftCollection();
 end
-newAircraft = Aircraft(new_A_longitudinal, new_B_longitudinal,...
+
+if client_id + 1 <= length(aircraft_collection.Instances) % aircraft exists
+    aircraft = aircraft_collection.GetAircraft(client_id + 1);
+    aircraft.AddStrategy(new_A_longitudinal, new_B_longitudinal,...
+                                   new_A_lateral, new_B_lateral, aircraft.simulation_step_from_fixed_update);
+else
+    newAircraft = Aircraft(new_A_longitudinal, new_B_longitudinal,...
                      new_A_lateral, new_B_lateral,...
                      simulation_step_from_fixed_update, simulation_time_from_AircraftStrategy_cs);
-aircraft_collection.AddAircraft(newAircraft);
+    aircraft_collection.AddAircraft(newAircraft);
+end
+
 %% Workspace saver
 % clearvars -except aircraft client_id;
 % save(strcat('../../AppOutput/', num2str(client_id)));
 % clear;
 
-clearvars -except aircraft_collection;
+clearvars -except aircraft_collection result_from_matlab global_result; 

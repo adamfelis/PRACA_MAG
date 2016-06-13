@@ -102,15 +102,15 @@ namespace Main.ApplicationDataContext
                 this.strategiesMinimumParameters.Add(-1.0f);
                 this.strategiesMaximumParameters.Add(1.0f);
             }
-            strategiesParameters.CollectionChanged += StrategiesParameters_CollectionChanged;
+            //strategiesParameters.CollectionChanged += StrategiesParameters_CollectionChanged;
             StrategiesCollection.CollectionChanged += StrategiesCollection_CollectionChanged;
             OptionalStrategiesCollection.CollectionChanged += OptionalStrategiesCollection_CollectionChanged;
         }
 
-        private void StrategiesParameters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public void StrategiesParameters_CollectionChanged()// object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-                return;
+            //if (e.Action != System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+              //  return;
             this.MainApplication.AircraftsManagerCommunication.ManagerInstance.RefreshAircraftParameters(
                 new AircraftsManager.Aircraft.Strategy.AircraftParameters()
                 {
@@ -162,14 +162,7 @@ namespace Main.ApplicationDataContext
                     M_dot_tau = StrategiesParameters[42],
                 }
                 );
-            List<IData> parametersToWorkspaceUpdate = this.MainApplication.AircraftsManagerCommunication.ManagerInstance.
-                GetShooterInitalDataForTheSpecifiedStrategy(
-                this.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooter,
-                this.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooterType
-                );
-
-            this.MainApplication.ToolsManagerCommunication.ManagerInstance.Compute(global::Common.Scripts.SpecialScriptType.WorkspaceUpdater, parametersToWorkspaceUpdate);
-        }
+            }
 
         private void OptionalStrategiesCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -276,162 +269,213 @@ namespace Main.ApplicationDataContext
 
         public void UpdateStrategiesParameters(AircraftsManager.Aircraft.Strategy.IAircraftParameters aircraftParameters)
         {
-            this.strategiesParameters.Clear();
+            //this.strategiesParameters.Clear();
 
-            this.strategiesParameters.Add(aircraftParameters.S);
-            this.strategiesParameters.Add(aircraftParameters.p);
-            this.strategiesParameters.Add(aircraftParameters.m);
-            this.strategiesParameters.Add(aircraftParameters.g);
-
-
-            this.strategiesParameters.Add(aircraftParameters.Y_v);
-            this.strategiesParameters.Add(aircraftParameters.L_v);
-            this.strategiesParameters.Add(aircraftParameters.N_v);
-            this.strategiesParameters.Add(aircraftParameters.Y_p);
-            this.strategiesParameters.Add(aircraftParameters.L_p);
-            this.strategiesParameters.Add(aircraftParameters.N_p);
-            this.strategiesParameters.Add(aircraftParameters.Y_r);
-            this.strategiesParameters.Add(aircraftParameters.L_r);
-            this.strategiesParameters.Add(aircraftParameters.N_r);
-            this.strategiesParameters.Add(aircraftParameters.Y_xi);
-            this.strategiesParameters.Add(aircraftParameters.L_xi);
-            this.strategiesParameters.Add(aircraftParameters.N_xi);
-            this.strategiesParameters.Add(aircraftParameters.Y_zeta);
-            this.strategiesParameters.Add(aircraftParameters.L_zeta);
-            this.strategiesParameters.Add(aircraftParameters.N_zeta);
-            this.strategiesParameters.Add(aircraftParameters.b);
-            this.strategiesParameters.Add(aircraftParameters.I_x);
-            this.strategiesParameters.Add(aircraftParameters.I_z);
-            this.strategiesParameters.Add(aircraftParameters.I_xz);
+            //this.strategiesParameters.Add(aircraftParameters.S);
+            //this.strategiesParameters.Add(aircraftParameters.p);
+            //this.strategiesParameters.Add(aircraftParameters.m);
+            //this.strategiesParameters.Add(aircraftParameters.g);
 
 
-
-            this.strategiesParameters.Add(aircraftParameters.c);
-            this.strategiesParameters.Add(aircraftParameters.I_y);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_u);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_u);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_u);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_w);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_w);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_w);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_w_dot);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_w_dot);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_w_dot);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_q);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_q);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_q);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_ni);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_ni);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_ni);
-            this.strategiesParameters.Add(aircraftParameters.X_dot_tau);
-            this.strategiesParameters.Add(aircraftParameters.Z_dot_tau);
-            this.strategiesParameters.Add(aircraftParameters.M_dot_tau);
-
-            this.strategiesMinimumParameters.Clear();
-
-            this.strategiesMinimumParameters.Add(aircraftParameters.S - Math.Abs(aircraftParameters.S)/2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.p - Math.Abs(aircraftParameters.p) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.m - Math.Abs(aircraftParameters.m) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.g - Math.Abs(aircraftParameters.g) / 2.0f);
-
-
-            this.strategiesMinimumParameters.Add(aircraftParameters.Y_v - Math.Abs(aircraftParameters.Y_v) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.L_v - Math.Abs(aircraftParameters.L_v) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.N_v - Math.Abs(aircraftParameters.N_v) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Y_p - Math.Abs(aircraftParameters.Y_p) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.L_p - Math.Abs(aircraftParameters.L_p) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.N_p - Math.Abs(aircraftParameters.N_p) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Y_r - Math.Abs(aircraftParameters.Y_r) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.L_r - Math.Abs(aircraftParameters.L_r) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.N_r - Math.Abs(aircraftParameters.N_r) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Y_xi - Math.Abs(aircraftParameters.Y_xi) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.L_xi - Math.Abs(aircraftParameters.L_xi) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.N_xi - Math.Abs(aircraftParameters.N_xi) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Y_zeta - Math.Abs(aircraftParameters.Y_zeta) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.L_zeta - Math.Abs(aircraftParameters.L_zeta) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.N_zeta - Math.Abs(aircraftParameters.N_zeta) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.b - Math.Abs(aircraftParameters.b) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.I_x - Math.Abs(aircraftParameters.I_x) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.I_z - Math.Abs(aircraftParameters.I_z) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.I_xz - Math.Abs(aircraftParameters.I_xz) / 2.0f);
+            //this.strategiesParameters.Add(aircraftParameters.Y_v);
+            //this.strategiesParameters.Add(aircraftParameters.L_v);
+            //this.strategiesParameters.Add(aircraftParameters.N_v);
+            //this.strategiesParameters.Add(aircraftParameters.Y_p);
+            //this.strategiesParameters.Add(aircraftParameters.L_p);
+            //this.strategiesParameters.Add(aircraftParameters.N_p);
+            //this.strategiesParameters.Add(aircraftParameters.Y_r);
+            //this.strategiesParameters.Add(aircraftParameters.L_r);
+            //this.strategiesParameters.Add(aircraftParameters.N_r);
+            //this.strategiesParameters.Add(aircraftParameters.Y_xi);
+            //this.strategiesParameters.Add(aircraftParameters.L_xi);
+            //this.strategiesParameters.Add(aircraftParameters.N_xi);
+            //this.strategiesParameters.Add(aircraftParameters.Y_zeta);
+            //this.strategiesParameters.Add(aircraftParameters.L_zeta);
+            //this.strategiesParameters.Add(aircraftParameters.N_zeta);
+            //this.strategiesParameters.Add(aircraftParameters.b);
+            //this.strategiesParameters.Add(aircraftParameters.I_x);
+            //this.strategiesParameters.Add(aircraftParameters.I_z);
+            //this.strategiesParameters.Add(aircraftParameters.I_xz);
 
 
 
-            this.strategiesMinimumParameters.Add(aircraftParameters.c - Math.Abs(aircraftParameters.c) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.I_y - Math.Abs(aircraftParameters.I_y) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_u - Math.Abs(aircraftParameters.X_dot_u) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_u - Math.Abs(aircraftParameters.Z_dot_u) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_u - Math.Abs(aircraftParameters.M_dot_u) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_w - Math.Abs(aircraftParameters.X_dot_w) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_w - Math.Abs(aircraftParameters.Z_dot_w) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_w - Math.Abs(aircraftParameters.M_dot_w) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_w_dot - Math.Abs(aircraftParameters.X_dot_w_dot) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_w_dot - Math.Abs(aircraftParameters.Z_dot_w_dot) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_w_dot - Math.Abs(aircraftParameters.M_dot_w_dot) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_q - Math.Abs(aircraftParameters.X_dot_q) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_q - Math.Abs(aircraftParameters.Z_dot_q) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_q - Math.Abs(aircraftParameters.M_dot_q) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_ni - Math.Abs(aircraftParameters.X_dot_ni) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_ni - Math.Abs(aircraftParameters.Z_dot_ni) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_ni - Math.Abs(aircraftParameters.M_dot_ni) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.X_dot_tau - Math.Abs(aircraftParameters.X_dot_tau) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.Z_dot_tau - Math.Abs(aircraftParameters.Z_dot_tau) / 2.0f);
-            this.strategiesMinimumParameters.Add(aircraftParameters.M_dot_tau - Math.Abs(aircraftParameters.M_dot_tau) / 2.0f);
+            //this.strategiesParameters.Add(aircraftParameters.c);
+            //this.strategiesParameters.Add(aircraftParameters.I_y);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_u);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_u);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_u);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_w);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_w);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_w);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_w_dot);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_w_dot);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_w_dot);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_q);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_q);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_q);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_ni);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_ni);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_ni);
+            //this.strategiesParameters.Add(aircraftParameters.X_dot_tau);
+            //this.strategiesParameters.Add(aircraftParameters.Z_dot_tau);
+            //this.strategiesParameters.Add(aircraftParameters.M_dot_tau);
+
+            //this.strategiesParameters.Clear();
+
+            this.strategiesParameters[0] = aircraftParameters.S;
+            this.strategiesParameters[1] = aircraftParameters.p;
+            this.strategiesParameters[2] = aircraftParameters.m;
+            this.strategiesParameters[3] = aircraftParameters.g;
+
+
+            this.strategiesParameters[4] = aircraftParameters.Y_v;
+            this.strategiesParameters[5] = aircraftParameters.L_v;
+            this.strategiesParameters[6] = aircraftParameters.N_v;
+            this.strategiesParameters[7] = aircraftParameters.Y_p;
+            this.strategiesParameters[8] = aircraftParameters.L_p;
+            this.strategiesParameters[9] = aircraftParameters.N_p;
+            this.strategiesParameters[10] = aircraftParameters.Y_r;
+            this.strategiesParameters[11] = aircraftParameters.L_r;
+            this.strategiesParameters[12] = aircraftParameters.N_r;
+            this.strategiesParameters[13] = aircraftParameters.Y_xi;
+            this.strategiesParameters[14] = aircraftParameters.L_xi;
+            this.strategiesParameters[15] = aircraftParameters.N_xi;
+            this.strategiesParameters[16] = aircraftParameters.Y_zeta;
+            this.strategiesParameters[17] = aircraftParameters.L_zeta;
+            this.strategiesParameters[18] = aircraftParameters.N_zeta;
+            this.strategiesParameters[19] = aircraftParameters.b;
+            this.strategiesParameters[20] = aircraftParameters.I_x;
+            this.strategiesParameters[21] = aircraftParameters.I_z;
+            this.strategiesParameters[22] = aircraftParameters.I_xz;
+
+
+
+            this.strategiesParameters[23] = aircraftParameters.c;
+            this.strategiesParameters[24] = aircraftParameters.I_y;
+            this.strategiesParameters[25] = aircraftParameters.X_dot_u;
+            this.strategiesParameters[26] = aircraftParameters.Z_dot_u;
+            this.strategiesParameters[27] = aircraftParameters.M_dot_u;
+            this.strategiesParameters[28] = aircraftParameters.X_dot_w;
+            this.strategiesParameters[29] = aircraftParameters.Z_dot_w;
+            this.strategiesParameters[30] = aircraftParameters.M_dot_w;
+            this.strategiesParameters[31] = aircraftParameters.X_dot_w_dot;
+            this.strategiesParameters[32] = aircraftParameters.Z_dot_w_dot;
+            this.strategiesParameters[33] = aircraftParameters.M_dot_w_dot;
+            this.strategiesParameters[34] = aircraftParameters.X_dot_q;
+            this.strategiesParameters[35] = aircraftParameters.Z_dot_q;
+            this.strategiesParameters[36] = aircraftParameters.M_dot_q;
+            this.strategiesParameters[37] = aircraftParameters.X_dot_ni;
+            this.strategiesParameters[38] = aircraftParameters.Z_dot_ni;
+            this.strategiesParameters[39] = aircraftParameters.M_dot_ni;
+            this.strategiesParameters[40] = aircraftParameters.X_dot_tau;
+            this.strategiesParameters[41] = aircraftParameters.Z_dot_tau;
+            this.strategiesParameters[42] = aircraftParameters.M_dot_tau;
+
+            //this.strategiesMinimumParameters.Clear();
+
+            this.strategiesMinimumParameters[0] = aircraftParameters.S - Math.Abs(aircraftParameters.S)/2.0f;
+            this.strategiesMinimumParameters[1] = aircraftParameters.p - Math.Abs(aircraftParameters.p) / 2.0f;
+            this.strategiesMinimumParameters[2] = aircraftParameters.m - Math.Abs(aircraftParameters.m) / 2.0f;
+            this.strategiesMinimumParameters[3] = aircraftParameters.g - Math.Abs(aircraftParameters.g) / 2.0f;
+
+
+            this.strategiesMinimumParameters[4] = aircraftParameters.Y_v - Math.Abs(aircraftParameters.Y_v) / 2.0f;
+            this.strategiesMinimumParameters[5] = aircraftParameters.L_v - Math.Abs(aircraftParameters.L_v) / 2.0f;
+            this.strategiesMinimumParameters[6] = aircraftParameters.N_v - Math.Abs(aircraftParameters.N_v) / 2.0f;
+            this.strategiesMinimumParameters[7] = aircraftParameters.Y_p - Math.Abs(aircraftParameters.Y_p) / 2.0f;
+            this.strategiesMinimumParameters[8] = aircraftParameters.L_p - Math.Abs(aircraftParameters.L_p) / 2.0f;
+            this.strategiesMinimumParameters[9] = aircraftParameters.N_p - Math.Abs(aircraftParameters.N_p) / 2.0f;
+            this.strategiesMinimumParameters[10] = aircraftParameters.Y_r - Math.Abs(aircraftParameters.Y_r) / 2.0f;
+            this.strategiesMinimumParameters[11] = aircraftParameters.L_r - Math.Abs(aircraftParameters.L_r) / 2.0f;
+            this.strategiesMinimumParameters[12] = aircraftParameters.N_r - Math.Abs(aircraftParameters.N_r) / 2.0f;
+            this.strategiesMinimumParameters[13] = aircraftParameters.Y_xi - Math.Abs(aircraftParameters.Y_xi) / 2.0f;
+            this.strategiesMinimumParameters[14] = aircraftParameters.L_xi - Math.Abs(aircraftParameters.L_xi) / 2.0f;
+            this.strategiesMinimumParameters[15] = aircraftParameters.N_xi - Math.Abs(aircraftParameters.N_xi) / 2.0f;
+            this.strategiesMinimumParameters[16] = aircraftParameters.Y_zeta - Math.Abs(aircraftParameters.Y_zeta) / 2.0f;
+            this.strategiesMinimumParameters[17] = aircraftParameters.L_zeta - Math.Abs(aircraftParameters.L_zeta) / 2.0f;
+            this.strategiesMinimumParameters[18] = aircraftParameters.N_zeta - Math.Abs(aircraftParameters.N_zeta) / 2.0f;
+            this.strategiesMinimumParameters[19] = aircraftParameters.b - Math.Abs(aircraftParameters.b) / 2.0f;
+            this.strategiesMinimumParameters[20] = aircraftParameters.I_x - Math.Abs(aircraftParameters.I_x) / 2.0f;
+            this.strategiesMinimumParameters[21] = aircraftParameters.I_z - Math.Abs(aircraftParameters.I_z) / 2.0f;
+            this.strategiesMinimumParameters[22] = aircraftParameters.I_xz - Math.Abs(aircraftParameters.I_xz) / 2.0f;
+
+
+
+            this.strategiesMinimumParameters[23] = aircraftParameters.c - Math.Abs(aircraftParameters.c) / 2.0f;
+            this.strategiesMinimumParameters[24] = aircraftParameters.I_y - Math.Abs(aircraftParameters.I_y) / 2.0f;
+            this.strategiesMinimumParameters[25] = aircraftParameters.X_dot_u - Math.Abs(aircraftParameters.X_dot_u) / 2.0f;
+            this.strategiesMinimumParameters[26] = aircraftParameters.Z_dot_u - Math.Abs(aircraftParameters.Z_dot_u) / 2.0f;
+            this.strategiesMinimumParameters[27] = aircraftParameters.M_dot_u - Math.Abs(aircraftParameters.M_dot_u) / 2.0f;
+            this.strategiesMinimumParameters[28] = aircraftParameters.X_dot_w - Math.Abs(aircraftParameters.X_dot_w) / 2.0f;
+            this.strategiesMinimumParameters[29] = aircraftParameters.Z_dot_w - Math.Abs(aircraftParameters.Z_dot_w) / 2.0f;
+            this.strategiesMinimumParameters[30] = aircraftParameters.M_dot_w - Math.Abs(aircraftParameters.M_dot_w) / 2.0f;
+            this.strategiesMinimumParameters[31] = aircraftParameters.X_dot_w_dot - Math.Abs(aircraftParameters.X_dot_w_dot) / 2.0f;
+            this.strategiesMinimumParameters[32] = aircraftParameters.Z_dot_w_dot - Math.Abs(aircraftParameters.Z_dot_w_dot) / 2.0f;
+            this.strategiesMinimumParameters[33] = aircraftParameters.M_dot_w_dot - Math.Abs(aircraftParameters.M_dot_w_dot) / 2.0f;
+            this.strategiesMinimumParameters[34] = aircraftParameters.X_dot_q - Math.Abs(aircraftParameters.X_dot_q) / 2.0f;
+            this.strategiesMinimumParameters[35] = aircraftParameters.Z_dot_q - Math.Abs(aircraftParameters.Z_dot_q) / 2.0f;
+            this.strategiesMinimumParameters[36] = aircraftParameters.M_dot_q - Math.Abs(aircraftParameters.M_dot_q) / 2.0f;
+            this.strategiesMinimumParameters[37] = aircraftParameters.X_dot_ni - Math.Abs(aircraftParameters.X_dot_ni) / 2.0f;
+            this.strategiesMinimumParameters[38] = aircraftParameters.Z_dot_ni - Math.Abs(aircraftParameters.Z_dot_ni) / 2.0f;
+            this.strategiesMinimumParameters[39] = aircraftParameters.M_dot_ni - Math.Abs(aircraftParameters.M_dot_ni) / 2.0f;
+            this.strategiesMinimumParameters[40] = aircraftParameters.X_dot_tau - Math.Abs(aircraftParameters.X_dot_tau) / 2.0f;
+            this.strategiesMinimumParameters[41] = aircraftParameters.Z_dot_tau - Math.Abs(aircraftParameters.Z_dot_tau) / 2.0f;
+            this.strategiesMinimumParameters[42] = aircraftParameters.M_dot_tau - Math.Abs(aircraftParameters.M_dot_tau) / 2.0f;
 
             for(int i = 0; i < this.strategiesMinimumParameters.Count; i++)
                 if (this.strategiesMinimumParameters[i] == 0)
                     this.strategiesMinimumParameters[i] = -1;
             
-            this.strategiesMaximumParameters.Clear();
+            //this.strategiesMaximumParameters.Clear();
 
-            this.strategiesMaximumParameters.Add(aircraftParameters.S + Math.Abs(aircraftParameters.S) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.p + Math.Abs(aircraftParameters.p) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.m + Math.Abs(aircraftParameters.m) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.g + Math.Abs(aircraftParameters.g) / 2.0f);
-
-
-            this.strategiesMaximumParameters.Add(aircraftParameters.Y_v + Math.Abs(aircraftParameters.Y_v) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.L_v + Math.Abs(aircraftParameters.L_v) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.N_v + Math.Abs(aircraftParameters.N_v) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Y_p + Math.Abs(aircraftParameters.Y_p) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.L_p + Math.Abs(aircraftParameters.L_p) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.N_p + Math.Abs(aircraftParameters.N_p) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Y_r + Math.Abs(aircraftParameters.Y_r) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.L_r + Math.Abs(aircraftParameters.L_r) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.N_r + Math.Abs(aircraftParameters.N_r) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Y_xi + Math.Abs(aircraftParameters.Y_xi) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.L_xi + Math.Abs(aircraftParameters.L_xi) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.N_xi + Math.Abs(aircraftParameters.N_xi) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Y_zeta + Math.Abs(aircraftParameters.Y_zeta) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.L_zeta + Math.Abs(aircraftParameters.L_zeta) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.N_zeta + Math.Abs(aircraftParameters.N_zeta) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.b + Math.Abs(aircraftParameters.b) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.I_x + Math.Abs(aircraftParameters.I_x) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.I_z + Math.Abs(aircraftParameters.I_z) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.I_xz + Math.Abs(aircraftParameters.I_xz) / 2.0f);
+            this.strategiesMaximumParameters[0] = aircraftParameters.S + Math.Abs(aircraftParameters.S) / 2.0f;
+            this.strategiesMaximumParameters[1] = aircraftParameters.p + Math.Abs(aircraftParameters.p) / 2.0f;
+            this.strategiesMaximumParameters[2] = aircraftParameters.m + Math.Abs(aircraftParameters.m) / 2.0f;
+            this.strategiesMaximumParameters[3] = aircraftParameters.g + Math.Abs(aircraftParameters.g) / 2.0f;
 
 
+            this.strategiesMaximumParameters[4] = aircraftParameters.Y_v + Math.Abs(aircraftParameters.Y_v) / 2.0f;
+            this.strategiesMaximumParameters[5] = aircraftParameters.L_v + Math.Abs(aircraftParameters.L_v) / 2.0f;
+            this.strategiesMaximumParameters[6] = aircraftParameters.N_v + Math.Abs(aircraftParameters.N_v) / 2.0f;
+            this.strategiesMaximumParameters[7] = aircraftParameters.Y_p + Math.Abs(aircraftParameters.Y_p) / 2.0f;
+            this.strategiesMaximumParameters[8] = aircraftParameters.L_p + Math.Abs(aircraftParameters.L_p) / 2.0f;
+            this.strategiesMaximumParameters[9] = aircraftParameters.N_p + Math.Abs(aircraftParameters.N_p) / 2.0f;
+            this.strategiesMaximumParameters[10] = aircraftParameters.Y_r + Math.Abs(aircraftParameters.Y_r) / 2.0f;
+            this.strategiesMaximumParameters[11] = aircraftParameters.L_r + Math.Abs(aircraftParameters.L_r) / 2.0f;
+            this.strategiesMaximumParameters[12] = aircraftParameters.N_r + Math.Abs(aircraftParameters.N_r) / 2.0f;
+            this.strategiesMaximumParameters[13] = aircraftParameters.Y_xi + Math.Abs(aircraftParameters.Y_xi) / 2.0f;
+            this.strategiesMaximumParameters[14] = aircraftParameters.L_xi + Math.Abs(aircraftParameters.L_xi) / 2.0f;
+            this.strategiesMaximumParameters[15] = aircraftParameters.N_xi + Math.Abs(aircraftParameters.N_xi) / 2.0f;
+            this.strategiesMaximumParameters[16] = aircraftParameters.Y_zeta + Math.Abs(aircraftParameters.Y_zeta) / 2.0f;
+            this.strategiesMaximumParameters[17] = aircraftParameters.L_zeta + Math.Abs(aircraftParameters.L_zeta) / 2.0f;
+            this.strategiesMaximumParameters[18] = aircraftParameters.N_zeta + Math.Abs(aircraftParameters.N_zeta) / 2.0f;
+            this.strategiesMaximumParameters[19] = aircraftParameters.b + Math.Abs(aircraftParameters.b) / 2.0f;
+            this.strategiesMaximumParameters[20] = aircraftParameters.I_x + Math.Abs(aircraftParameters.I_x) / 2.0f;
+            this.strategiesMaximumParameters[21] = aircraftParameters.I_z + Math.Abs(aircraftParameters.I_z) / 2.0f;
+            this.strategiesMaximumParameters[22] = aircraftParameters.I_xz + Math.Abs(aircraftParameters.I_xz) / 2.0f;
 
-            this.strategiesMaximumParameters.Add(aircraftParameters.c + Math.Abs(aircraftParameters.c) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.I_y + Math.Abs(aircraftParameters.I_y) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_u + Math.Abs(aircraftParameters.X_dot_u) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_u + Math.Abs(aircraftParameters.Z_dot_u) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_u + Math.Abs(aircraftParameters.M_dot_u) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_w + Math.Abs(aircraftParameters.X_dot_w) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_w + Math.Abs(aircraftParameters.Z_dot_w) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_w + Math.Abs(aircraftParameters.M_dot_w) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_w_dot + Math.Abs(aircraftParameters.X_dot_w_dot) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_w_dot + Math.Abs(aircraftParameters.Z_dot_w_dot) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_w_dot + Math.Abs(aircraftParameters.M_dot_w_dot) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_q + Math.Abs(aircraftParameters.X_dot_q) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_q + Math.Abs(aircraftParameters.Z_dot_q) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_q + Math.Abs(aircraftParameters.M_dot_q) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_ni + Math.Abs(aircraftParameters.X_dot_ni) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_ni + Math.Abs(aircraftParameters.Z_dot_ni) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_ni + Math.Abs(aircraftParameters.M_dot_ni) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.X_dot_tau + Math.Abs(aircraftParameters.X_dot_tau) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.Z_dot_tau + Math.Abs(aircraftParameters.Z_dot_tau) / 2.0f);
-            this.strategiesMaximumParameters.Add(aircraftParameters.M_dot_tau + Math.Abs(aircraftParameters.M_dot_tau) / 2.0f);
+
+
+            this.strategiesMaximumParameters[23] = aircraftParameters.c + Math.Abs(aircraftParameters.c) / 2.0f;
+            this.strategiesMaximumParameters[24] = aircraftParameters.I_y + Math.Abs(aircraftParameters.I_y) / 2.0f;
+            this.strategiesMaximumParameters[25] = aircraftParameters.X_dot_u + Math.Abs(aircraftParameters.X_dot_u) / 2.0f;
+            this.strategiesMaximumParameters[26] = aircraftParameters.Z_dot_u + Math.Abs(aircraftParameters.Z_dot_u) / 2.0f;
+            this.strategiesMaximumParameters[27] = aircraftParameters.M_dot_u + Math.Abs(aircraftParameters.M_dot_u) / 2.0f;
+            this.strategiesMaximumParameters[28] = aircraftParameters.X_dot_w + Math.Abs(aircraftParameters.X_dot_w) / 2.0f;
+            this.strategiesMaximumParameters[29] = aircraftParameters.Z_dot_w + Math.Abs(aircraftParameters.Z_dot_w) / 2.0f;
+            this.strategiesMaximumParameters[30] = aircraftParameters.M_dot_w + Math.Abs(aircraftParameters.M_dot_w) / 2.0f;
+            this.strategiesMaximumParameters[31] = aircraftParameters.X_dot_w_dot + Math.Abs(aircraftParameters.X_dot_w_dot) / 2.0f;
+            this.strategiesMaximumParameters[32] = aircraftParameters.Z_dot_w_dot + Math.Abs(aircraftParameters.Z_dot_w_dot) / 2.0f;
+            this.strategiesMaximumParameters[33] = aircraftParameters.M_dot_w_dot + Math.Abs(aircraftParameters.M_dot_w_dot) / 2.0f;
+            this.strategiesMaximumParameters[34] = aircraftParameters.X_dot_q + Math.Abs(aircraftParameters.X_dot_q) / 2.0f;
+            this.strategiesMaximumParameters[35] = aircraftParameters.Z_dot_q + Math.Abs(aircraftParameters.Z_dot_q) / 2.0f;
+            this.strategiesMaximumParameters[36] = aircraftParameters.M_dot_q + Math.Abs(aircraftParameters.M_dot_q) / 2.0f;
+            this.strategiesMaximumParameters[37] = aircraftParameters.X_dot_ni + Math.Abs(aircraftParameters.X_dot_ni) / 2.0f;
+            this.strategiesMaximumParameters[38] = aircraftParameters.Z_dot_ni + Math.Abs(aircraftParameters.Z_dot_ni) / 2.0f;
+            this.strategiesMaximumParameters[39] = aircraftParameters.M_dot_ni + Math.Abs(aircraftParameters.M_dot_ni) / 2.0f;
+            this.strategiesMaximumParameters[40] = aircraftParameters.X_dot_tau + Math.Abs(aircraftParameters.X_dot_tau) / 2.0f;
+            this.strategiesMaximumParameters[41] = aircraftParameters.Z_dot_tau + Math.Abs(aircraftParameters.Z_dot_tau) / 2.0f;
+            this.strategiesMaximumParameters[42] = aircraftParameters.M_dot_tau + Math.Abs(aircraftParameters.M_dot_tau) / 2.0f;
 
 
             for (int i = 0; i < this.strategiesMaximumParameters.Count; i++)

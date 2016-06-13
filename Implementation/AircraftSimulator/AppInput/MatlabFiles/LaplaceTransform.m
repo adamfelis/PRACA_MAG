@@ -9,7 +9,7 @@ aircraft = aircraft_collection.GetAircraft(client_id + 1); %matlab table counter
 % end
 %% Calculations
 %save bbb
-result_from_matlab = aircraft.Simulate(x0_longitudinal, x0_lateral, u_longitudinal, u_lateral, simulation_index);
+result_from_matlab = aircraft.SimulateLaplace( u_longitudinal', u_lateral');
 for i = 1 : 1: length(result_from_matlab)
     result_from_matlab(i) = double(round(result_from_matlab(i), 4));
 %     if aircraft.ERROR_STATE

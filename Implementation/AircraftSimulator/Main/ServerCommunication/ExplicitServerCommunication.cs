@@ -141,7 +141,7 @@ namespace Main.ServerCommunication
             {
                 this.clientsCollection.Remove(clientsDictionary[dataEventArgs.Id]);
                 this.clientsDictionary.Remove(dataEventArgs.Id);
-                //has to be removed from aircraftsManager
+                //if needed it could be removed from aircraftsManager
             }));
         }
     }

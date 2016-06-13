@@ -1,9 +1,10 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ToolsManager.Observator.Observing.ConcreteObserving;
+using ToolsManager.ConcreteObserving;
 
 namespace ToolsManager.ToolsManagement
 {

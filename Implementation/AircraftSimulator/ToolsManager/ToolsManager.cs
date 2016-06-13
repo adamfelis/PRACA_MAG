@@ -44,7 +44,7 @@ namespace ToolsManager
 
         public void SetActionForToolsAdding(Action<ToolAdapter.Tool.ITool> toolAddedAction)
         {
-            toolsManagement = new ToolsManagement.ToolsManagement(toolAddedAction);
+            toolsManagement = new ToolsManagement.ToolsManagement(toolAddedAction, Compute);
         }
 
         public List<IData> Compute(List<IData> parameters)
@@ -55,6 +55,11 @@ namespace ToolsManager
         public List<IData> Compute(Common.Scripts.SpecialScriptType specialScriptType, List<IData> parameters)
         {
             return mathToolCommunicator.Compute(specialScriptType, parameters);
+        }
+
+        public void ReleaseMathToolLibrary()
+        {
+            mathToolCommunicator.ReleaseMathToolLibrary();
         }
 
     }

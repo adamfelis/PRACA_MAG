@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Executors\Executor.cs" />
     <Compile Include="Executors\IExecutor.cs" />
-    <Compile Include="Observator\Observing\ConcreteObserving\ConcreteObservableSubject.cs" />
+    <Compile Include="Observator\Observing\IObserverCompute.cs" />
     <Compile Include="Observator\Observing\ObservableSubject.cs" />
     <Compile Include="Observator\Observing\Observer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

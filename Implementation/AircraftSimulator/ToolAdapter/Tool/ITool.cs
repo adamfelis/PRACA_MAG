@@ -7,7 +7,7 @@ namespace ToolAdapter.Tool
 {
     public interface ITool
     {
-        IObserver<List<IData>> Observer
+        Patterns.Observator.Observing.Observer Observer
         {
             get;
         }

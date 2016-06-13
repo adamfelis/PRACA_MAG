@@ -46,10 +46,11 @@
             <TabItem Header="Shooter">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.25*"/>
-                        <ColumnDefinition Width="0.25*"/>
-                        <ColumnDefinition Width="0.25*"/>
-                        <ColumnDefinition Width="0.25*"/>
+                        <ColumnDefinition Width="52*"/>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="73*"/>
+                        <ColumnDefinition Width="73*"/>
+                        <ColumnDefinition Width="73*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="0.23*"/>
@@ -60,10 +61,10 @@
                         <RowDefinition Height="0.2*"/>
                         <RowDefinition Height="0.2*"/>
                     </Grid.RowDefinitions>
-                    <GroupBox Name="connected_strategies_groupbox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="1" 
+                    <GroupBox Name="connected_strategies_groupbox" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="1" 
                               Header="Connected Strategies" Margin="10" Visibility="Hidden"/>
                     <!--<TextBlock Name="availableStrategies_textblock" Grid.Column="0" Grid.Row="0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Available Strategies: " VerticalAlignment="Top" Visibility="Hidden"/>-->
-                    <ListBox  Name="AvailableStrategies" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="20,45,20,20"
+                    <ListBox  Name="AvailableStrategies" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Margin="20,45,20,20"
                              ItemsSource="{Binding Path=StrategiesImages}"  HorizontalContentAlignment="Left" Padding="5" 
                              AllowDrop="True" SelectionChanged="AvailableStrategies_SelectionChanged" Visibility="Hidden">
                         <ListBox.ItemsPanel>
@@ -72,7 +73,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                     </ListBox>
-                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0" Grid.RowSpan="8" 
+                    <Controls:Flyout Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="7" 
                                      Header="Shooter Strategies Management" Position="Right" Name="shooter_strategies_flyout"
                                      Background="White" Foreground="Black" BorderBrush="LightBlue" BorderThickness="3" Margin="0" Panel.ZIndex="1">
 
@@ -104,9 +105,9 @@
 
                         </Grid>
                     </Controls:Flyout>
-                    <GroupBox Name="A_lateral_groupbox" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2" Header="Lateral A matrix" Visibility="Hidden"/>
+                    <GroupBox Name="A_lateral_groupbox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="2" Header="Lateral A matrix" Visibility="Hidden"/>
                     <!--<TextBlock Name="A_lateral_textblock" Grid.Column="0" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
-                    <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_A_lateral" Margin="10,10,10,10" AutoGenerateColumns="False"
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" x:Name="dataGrid_A_lateral" Margin="10,10,10,10" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=A_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
@@ -117,9 +118,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <GroupBox Name="B_lateral_groupbox" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2" Header="Lateral B matrix" Visibility="Hidden"/>
+                    <GroupBox Name="B_lateral_groupbox" Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="2" Header="Lateral B matrix" Visibility="Hidden"/>
                     <!--<TextBlock Name="B_lateral_textblock"  Grid.Column="1" Grid.Row="2" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Lateral B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
-                    <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_B_lateral" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
+                    <DataGrid Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="3" x:Name="dataGrid_B_lateral" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=B_lateralMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
@@ -128,9 +129,9 @@
                     </DataGrid>
 
 
-                    <GroupBox Name="A_longitudinal_groupbox" Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal A matrix" Visibility="Hidden"/>
+                    <GroupBox Name="A_longitudinal_groupbox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal A matrix" Visibility="Hidden"/>
                     <!--<TextBlock Name="A_longitudinal_textblock"  Grid.Column="0" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal A matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
-                    <DataGrid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_A_longitudinal" Margin="10,10,10,10" AutoGenerateColumns="False"
+                    <DataGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" x:Name="dataGrid_A_longitudinal" Margin="10,10,10,10" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=A_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
@@ -140,9 +141,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <GroupBox Name="B_longitudinal_groupbox" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal B matrix" Visibility="Hidden"/>
+                    <GroupBox Name="B_longitudinal_groupbox" Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="4" Grid.RowSpan="2" Header="Longitudinal B matrix" Visibility="Hidden"/>
                     <!--<TextBlock Name="B_longitudinal_textblock" Grid.Column="1" Grid.Row="4" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Longitudinal B matrix:" VerticalAlignment="Top" Visibility="Hidden"/>-->
-                    <DataGrid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_B_longitudinal" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
+                    <DataGrid Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="5" x:Name="dataGrid_B_longitudinal" Margin="10,10,10,10" Width="auto" AutoGenerateColumns="False"
                               ItemsSource="{Binding Path=B_longitudinalMatrix}" HeadersVisibility="None" Visibility="Hidden" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=[0]}" MinWidth="60"/>
@@ -150,7 +151,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Controls:Flyout Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="0"  Grid.RowSpan="8" Header="Strategy Properties" Position="Right" Name="shooter_properties_flyout"
+                    <Controls:Flyout Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="0"  Grid.RowSpan="7" Header="Strategy Properties" Position="Right" Name="shooter_properties_flyout"
                                      Background="White" Foreground="Black" BorderBrush="LightBlue" Panel.ZIndex="1">
                         <Grid MinWidth="1000">
                             <Grid.ColumnDefinitions>
@@ -165,6 +166,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
+                                <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -355,6 +357,8 @@
                             <Slider Grid.Row="15" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[34]}" Minimum="{Binding StrategiesMinimumParameters[34]}" Maximum="{Binding StrategiesMaximumParameters[34]}"/>
                             <Slider Grid.Row="16" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[37]}" Minimum="{Binding StrategiesMinimumParameters[37]}" Maximum="{Binding StrategiesMaximumParameters[37]}"/>
                             <Slider Grid.Row="17" Grid.Column="7" Margin="10" Value="{Binding StrategiesParameters[40]}" Minimum="{Binding StrategiesMinimumParameters[40]}" Maximum="{Binding StrategiesMaximumParameters[40]}"/>
+
+                            <Button Grid.Row="19" Grid.Column="4" Margin="10" Content="Apply" Click="Button_Click"/>
                         </Grid>
                     </Controls:Flyout>
 
@@ -362,7 +366,7 @@
                             Content="{StaticResource appbar_app_plus}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesButton_Click"  Visibility="Hidden"/>
                     <Button IsEnabled="False" Name="manageStrategiesPropertiesButton" Grid.Column="0" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="90,0,0,0" Padding="-5"
                             Content="{StaticResource appbar_settings}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesPropertiesButton_Click"  Visibility="Hidden"/>
-                    <Button Name="manageStrategiesHelpButton" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="170,0,0,0" Padding="-5"
+                    <Button Name="manageStrategiesHelpButton" Grid.Column="0" Grid.Row="1" Height="auto" Width="auto" HorizontalAlignment="Left" Margin="170,0,0,0" Padding="-5"
                             Content="{StaticResource appbar_question}" Style="{DynamicResource MetroCircleButtonStyle}" BorderBrush="LightBlue" Click="manageStrategiesHelpButton_Click" Visibility="Hidden"/>
 
 

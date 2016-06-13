@@ -18,9 +18,18 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
         {
             InitializeScripts();
             this.mlApp = new MLApp.MLApp();
-            string mainDirectory = AppDomain.CurrentDomain.BaseDirectory + @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\MatlabFiles\";
+            string mainDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#if !DEBUG
+            mainDirectory += @"..\";
+#endif
+            mainDirectory += @"..\..\PRACA_MAG\Implementation\AircraftSimulator\AppInput\MatlabFiles\";
             this.mlApp.Execute(@"cd " + mainDirectory);
             this.mlApp.Execute(@"clear");
+        }
+
+        internal void ReleaseMathToolLibrary()
+        {
+            this.mlApp.Quit();
         }
 
         internal List<IData> RunScript(ScriptType scriptType, Scripts.Parameters.Parameters parameters)
@@ -84,6 +93,9 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade
                         break;
                     case SpecialScriptType.SimulateMissile:
                         availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptSimulateMissile());
+                        break;
+                    case SpecialScriptType.Backup:
+                        availableSpecialScripts.Add(scriptTypeValue, new Scripts.ConcreteScript.ConcreteScriptBackup());
                         break;
                     default:
                         throw new Scripts.InvalidScriptTypeException();

@@ -7,7 +7,7 @@ namespace Common.Scripts
 {
     public enum ScriptType
     {
-        RungeKutta,
-        LaplaceTransform
+        LaplaceTransform,
+        RungeKutta
     }
 }

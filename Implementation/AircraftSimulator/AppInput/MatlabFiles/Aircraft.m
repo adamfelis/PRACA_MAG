@@ -10,6 +10,7 @@ classdef Aircraft < handle & Shooter
         % total_simulation_time in GetTotalSimulationTime()) - one for each
         % strategy
         current_simulation_solutions
+        current_simulation_solutions_laplace = []
         % stores previous result of computations of lateral and
         % longitudinal versions. Used when simulation is recalculated to
         % obtain x0_lateral and x0_longitudinal
@@ -43,8 +44,11 @@ classdef Aircraft < handle & Shooter
         %
         function ModifyStrategy(obj, strategy_id, new_A_longitudinal, new_B_longitudinal,...
                                         new_A_lateral, new_B_lateral)
+                                    
+           current_aircraft_velocity = obj.Strategies(strategy_id + 1).current_aircraft_velocity;
            obj.Strategies(strategy_id + 1) = AircraftStrategy(new_A_longitudinal, new_B_longitudinal,...
-                                        new_A_lateral, new_B_lateral);                    
+                                        new_A_lateral, new_B_lateral, obj.simulation_step_from_fixed_update); 
+           obj.Strategies(strategy_id + 1).current_aircraft_velocity = current_aircraft_velocity;
         end
         %
         function total_simulation_time = GetTotalSimulationTime(obj)
@@ -165,15 +169,16 @@ classdef Aircraft < handle & Shooter
                     obj.ERROR_STATE = true;
                 end
                 
+                movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
                 if i == 1
-                    movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
                     obj.aircraftPosition = obj.aircraftPosition + movement;
                 end
-%                 obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
-                    obj.current_simulation_solutions = [obj.current_simulation_solutions; obj.aircraftPosition];
+%               obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
+                obj.current_simulation_solutions_laplace = [obj.current_simulation_solutions_laplace; obj.aircraftPosition];
+                    
+                results.AddStrategyResult(Y_longitudinal, Y_lateral, movement);
             end                
             
-            results.AddStrategyResult(Y_longitudinal, Y_lateral, movement);
             obj.previous_result = results;
             resultsArray = results.PresentFinalResults();
         end

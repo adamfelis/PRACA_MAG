@@ -15,11 +15,10 @@ new_A_lateral = [a_lateral(1,1:5);...
         a_lateral(1,21:25)];
 new_B_lateral = [b_lateral(1,1:2); b_lateral(1,3:4); b_lateral(1,5:6); b_lateral(1,7:8); b_lateral(1,9:10)];
 %TODO
-load(strcat('../../AppOutput/', num2str(client_id)));
-    aircraft.ModifyStrategy(strategy_id, new_A_longitudinal, new_B_longitudinal,...
+aircraft = aircraft_collection.GetAircraft(client_id + 1);
+aircraft.ModifyStrategy(strategy_id, new_A_longitudinal, new_B_longitudinal,...
                                     new_A_lateral, new_B_lateral);
                                 
 %% Workspace saver
-clearvars -except aircraft client_id;
-save(strcat('../../AppOutput/', num2str(client_id)));
-clear;
+
+clearvars -except aircraft_collection result_from_matlab global_result; 

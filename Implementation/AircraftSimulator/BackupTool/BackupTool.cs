@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Common.Containers;
+using Patterns.Observator.Observing;
 using ToolAdapter.Tool;
 
 namespace BackupTool
@@ -30,7 +31,7 @@ namespace BackupTool
         }
 
         private ConcreteObserver.ConcreteToolManagerObserver observer;
-        public IObserver<List<IData>> Observer
+        public Observer Observer
         {
             get
             {
@@ -38,17 +39,23 @@ namespace BackupTool
             }
         }
 
+        private Content.ViewModel viewModel;
         public BackupTool(ToolType toolType)
         {
             this.toolType = toolType;
             this.tabItem = new TabItem();
             this.observer = new ConcreteObserver.ConcreteToolManagerObserver();
+
+            this.viewModel = new Content.ViewModel(Observer);
             Initialize();
         }
 
         protected override void Initialize()
         {
             this.tabItem.Header = "Backup";
+
+            this.tabItem.DataContext = this.viewModel;
+            this.tabItem.Content = new Content.TabContent();
         }
     }
 }

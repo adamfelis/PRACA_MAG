@@ -62,6 +62,9 @@ namespace MathematicalToolCommunicator.CommunicationBridge.Methods
                 case Common.Scripts.SpecialScriptType.SimulateMissile:
                     result = new ConcreteMethods.ConcreteMethodImplementorSimulateMissile();
                     break;
+                case Common.Scripts.SpecialScriptType.Backup:
+                    result = new ConcreteMethods.ConcreteMethodImplementorBackup();
+                    break;
                 default:
                     throw new ExternalMathToolCommunicationFacade.Scripts.InvalidScriptTypeException();
             }

@@ -41,5 +41,10 @@ namespace MathematicalToolCommunicator.CommunicationBridge
         {
             this.methodImplementor = Methods.MethodImplementor.PrepareConcreteMethodImplementor(scriptType);
         }
+
+        public void ReleaseMathToolLibrary()
+        {
+            MathToolFacade.ReleaseMathToolLibrary();
+        }
     }
 }

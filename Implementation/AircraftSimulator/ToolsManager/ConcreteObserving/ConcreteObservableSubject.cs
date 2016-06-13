@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Containers;
+using Common.Scripts;
+using Patterns.Observator.Observing;
 
-namespace ToolsManager.Observator.Observing.ConcreteObserving
+namespace ToolsManager.ConcreteObserving
 {
     public sealed class ConcreteObservableSubject : ObservableSubject
     {
-        public ConcreteObservableSubject()
+        private Func<SpecialScriptType, List<IData>, List<IData>> computeMethod;
+
+        public ConcreteObservableSubject(Func<SpecialScriptType, List<IData>, List<IData>> computeMethod)
         {
+            this.computeMethod = computeMethod;
             this.observers = new Dictionary<int, IObserver<List<IData>>>();
         }
 
@@ -26,22 +31,27 @@ namespace ToolsManager.Observator.Observing.ConcreteObserving
         }
         public void NotifySubscribersOnCompleted()
         {
-            foreach (IObserver<List<IData>> observer in observers.Values)
+            foreach (IObserver<Observer> observer in observers.Values)
             {
-                observer.OnCompleted();
+                (observer as Observer).OnCompleted();
             }
         }
         public void NotifySubscribersOnError()
         {
-            foreach (IObserver<List<IData>> observer in observers.Values)
+            foreach (IObserver<Observer> observer in observers.Values)
             {
-                observer.OnError(new Exception());
+                (observer as Observer).OnError(new Exception());
             }
         }
 
         public List<IObserver<List<IData>>> GetSubscribers()
         {
             return this.observers.Values.ToList<IObserver<List<IData>>>();
+        }
+
+        public override List<IData> Compute(SpecialScriptType specialScriptType, List<IData> parameters)
+        {
+            return computeMethod(specialScriptType, parameters);
         }
     }
 }

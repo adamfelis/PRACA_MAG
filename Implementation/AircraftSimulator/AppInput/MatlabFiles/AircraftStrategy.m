@@ -154,7 +154,7 @@ classdef AircraftStrategy < handle & Strategy
            Q = p * (C' * C);
            K = lqr(new_A_longitudinal,new_B_longitudinal,Q,R);
            Nbar = 1000;
-           
+           %K = zeros(2,4);
            obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
            obj.B_longitudinal = Nbar * obj.B_longitudinal;
            
@@ -163,12 +163,14 @@ classdef AircraftStrategy < handle & Strategy
            p = 10000;
            Q = p * (C' * C);
            K = lqr(new_A_lateral,new_B_lateral,Q,R);
+           %K = zeros(2,5);
            Nbar = 200;
-           
+           %Nbar = 1;
            obj.A_lateral = obj.A_lateral - obj.B_lateral * K;
            obj.B_lateral = Nbar * obj.B_lateral;
-           
+           %tic
            obj.PrepareTransferFunctions();
+           %toc
         end
         %
         function PrepareTransferFunctions(obj)
@@ -233,8 +235,8 @@ classdef AircraftStrategy < handle & Strategy
            obj.N_q_eta = s * (a * s^2 + b * s + c);
            obj.N_theta_eta = a * s^2 + b * s + c;
            
-           U_e = 178;
-           obj.N_a_z_eta = -s * (obj.N_w_eta - U_e * obj.N_theta_eta);
+           %U_e = 178;
+           %obj.N_a_z_eta = -s * (obj.N_w_eta - U_e * obj.N_theta_eta);
            
            a = x_tau;
            b = m_tau * x_q - x_tau * (m_q + z_w) + z_tau * x_w;
@@ -256,7 +258,7 @@ classdef AircraftStrategy < handle & Strategy
            obj.N_q_tau = s * (a * s^2 + b * s + c);
            obj.N_theta_tau = a * s^2 + b * s + c;
            
-           obj.N_a_z_tau = -s * (obj.N_w_tau - U_e * obj.N_theta_tau);
+           %obj.N_a_z_tau = -s * (obj.N_w_tau - U_e * obj.N_theta_tau);
            
            
            syms ni tau;
@@ -271,7 +273,7 @@ classdef AircraftStrategy < handle & Strategy
            obj.w_tau_s = vpa(tau/s * obj.N_w_tau / obj.delta_s, precision);
            obj.q_tau_s = vpa(tau/s * obj.N_q_tau / obj.delta_s, precision);
            obj.theta_tau_s = vpa(tau/s * obj.N_theta_tau / obj.delta_s, precision);
-           obj.a_z_tau_s = vpa(tau/s * obj.N_a_z_tau / obj.delta_s, precision);
+           %obj.a_z_tau_s = vpa(tau/s * obj.N_a_z_tau / obj.delta_s, precision);
            
 %            K_p = 0.00693;
 %            K_i = 1.21e-05;
@@ -279,34 +281,41 @@ classdef AircraftStrategy < handle & Strategy
 %            
 %            pid_s = K_p + K_i / s + K_d * s;
            
-           obj.u_t = vpa(simplify(ilaplace(obj.u_eta_s + obj.u_tau_s)), precision);
-           obj.w_t = vpa(simplify(ilaplace(obj.w_eta_s + obj.w_tau_s)), precision);
-           obj.q_t = vpa(simplify(ilaplace(obj.q_eta_s + obj.q_tau_s)), precision);
-           obj.theta_t = vpa(simplify(ilaplace(obj.theta_eta_s) + ilaplace(obj.theta_tau_s)), precision);
-           obj.a_z_t = vpa(simplify(ilaplace(obj.a_z_eta_s + obj.a_z_tau_s)), precision);
+%            obj.u_t = vpa(simplify(ilaplace(4.4622e+03 * obj.u_eta_s + obj.u_tau_s)), precision);
+%            obj.w_t = vpa(simplify(ilaplace(-1.1778e+03 * obj.w_eta_s + obj.w_tau_s)), precision);
+%            obj.q_t = vpa(simplify(ilaplace(4145.619 * obj.q_eta_s + obj.q_tau_s)), precision);
+%            obj.theta_t = vpa(simplify(ilaplace(83.239 * obj.theta_eta_s) + ilaplace(obj.theta_tau_s)), precision);
+%            obj.a_z_t = vpa(simplify(ilaplace(obj.a_z_eta_s + obj.a_z_tau_s)), precision);
+%            
+           obj.u_t = ilaplace(obj.u_eta_s + obj.u_tau_s);
+           obj.w_t = ilaplace(obj.w_eta_s + obj.w_tau_s);
+           obj.q_t = ilaplace(obj.q_eta_s + obj.q_tau_s);
+           obj.theta_t = ilaplace(obj.theta_eta_s) + ilaplace(obj.theta_tau_s);
+           %obj.a_z_t = vpa(simplify(ilaplace(obj.a_z_eta_s + obj.a_z_tau_s)), precision);
             
            obj.u_t_fun = matlabFunction(obj.u_t);
            obj.w_t_fun = matlabFunction(obj.w_t);
            obj.q_t_fun = matlabFunction(obj.q_t);
            obj.theta_t_fun = matlabFunction(obj.theta_t);
-           obj.a_z_t_fun = matlabFunction(obj.a_z_t);
+           %obj.a_z_t_fun = matlabFunction(obj.a_z_t);
            
            obj.u_fun = @(ni,t, tau) (obj.u_t_fun(ni, t) - obj.u_t_fun(ni, obj.simulation_step_from_fixed_update));
            obj.w_fun = @(ni,t, tau) (obj.w_t_fun(ni, t) - obj.w_t_fun(ni, obj.simulation_step_from_fixed_update));
            obj.q_fun = @(ni,t, tau) (obj.q_t_fun(ni, t) - obj.q_t_fun(ni, obj.simulation_step_from_fixed_update));
            obj.theta_fun = @(ni,t, tau) (obj.theta_t_fun(ni, t) - obj.theta_t_fun(ni, obj.simulation_step_from_fixed_update));
            
-            syms t;
+            %syms t;
 %                 
-            obj.factor_of_reference_longitudinal = [round(double(limit(obj.u_fun(0.1,t,0),t,Inf)),3) / 0.1,...
-                    round(double(limit(obj.w_fun(0.1,t,0),t,Inf)),3)/0.1,...
-                    round(double(limit(obj.q_fun(0.1,t,0),t,Inf)),3)/0.1,...
-                    round(double(limit(obj.theta_fun(0.1,t,0),t,Inf)),3)/0.1;...
+           precision = 5;
+            obj.factor_of_reference_longitudinal = [round(double(limit(obj.u_fun(0.1,s,0),s,Inf)),precision) / 0.1,...
+                    round(double(limit(obj.w_fun(0.1,s,0),s,Inf)),precision)/0.1,...
+                    round(double(limit(obj.q_fun(0.1,s,0),s,Inf)),precision)/0.1,...
+                    round(double(limit(obj.theta_fun(0.1,s,0),s,Inf)),precision)/0.1;...
                     ...
-                    round(double(limit(obj.u_fun(0,t,0.1),t,Inf)),3) / 0.1,...
-                    round(double(limit(obj.w_fun(0,t,0.1),t,Inf)),3)/0.1,...
-                    round(double(limit(obj.q_fun(0,t,0.1),t,Inf)),3)/0.1,...
-                    round(double(limit(obj.theta_fun(0,t,0.1),t,Inf)),3)/0.1];
+                    round(double(limit(obj.u_fun(0,s,0.1),s,Inf)),precision) / 0.1,...
+                    round(double(limit(obj.w_fun(0,s,0.1),s,Inf)),precision)/0.1,...
+                    round(double(limit(obj.q_fun(0,s,0.1),s,Inf)),precision)/0.1,...
+                    round(double(limit(obj.theta_fun(0,s,0.1),s,Inf)),precision)/0.1];
             %lateral
             
            y_v = obj.A_lateral(1,1);
@@ -401,24 +410,32 @@ classdef AircraftStrategy < handle & Strategy
            obj.N_r_zeta = s * (a * s^3 + b * s^2 + c * s + d);
            obj.N_psi_zeta = a * s^3 + b * s^2 + c * s + d;
         
-           syms xi zeta;
-           obj.v_xi_s = vpa(xi/s * obj.N_v_xi / obj.delta_s_lateral, precision);
-           obj.p_xi_s = vpa(xi/s * obj.N_p_xi / obj.delta_s_lateral, precision);
-           obj.r_xi_s = vpa(xi/s * obj.N_r_xi / obj.delta_s_lateral, precision);
-           obj.phi_xi_s = vpa(xi/s * obj.N_phi_xi / obj.delta_s_lateral, precision);
-           obj.psi_xi_s = vpa(xi/s * obj.N_psi_xi / obj.delta_s_lateral, precision);
+           %syms xi zeta; using ni tau
            
-           obj.v_zeta_s = vpa(zeta/s * obj.N_v_zeta / obj.delta_s_lateral, precision);
-           obj.p_zeta_s = vpa(zeta/s * obj.N_p_zeta / obj.delta_s_lateral, precision);
-           obj.r_zeta_s = vpa(zeta/s * obj.N_r_zeta / obj.delta_s_lateral, precision);
-           obj.phi_zeta_s = vpa(zeta/s * obj.N_phi_zeta / obj.delta_s_lateral, precision);
-           obj.psi_zeta_s = vpa(zeta/s * obj.N_psi_zeta / obj.delta_s_lateral, precision);
+           precision = 4;
+           obj.v_xi_s = vpa(ni/s * obj.N_v_xi / obj.delta_s_lateral, precision);
+           obj.p_xi_s = vpa(ni/s * obj.N_p_xi / obj.delta_s_lateral, precision);
+           obj.r_xi_s = vpa(ni/s * obj.N_r_xi / obj.delta_s_lateral, precision);
+           obj.phi_xi_s = vpa(ni/s * obj.N_phi_xi / obj.delta_s_lateral, precision);
+           obj.psi_xi_s = vpa(ni/s * obj.N_psi_xi / obj.delta_s_lateral, precision);
+           
+           obj.v_zeta_s = vpa(tau/s * obj.N_v_zeta / obj.delta_s_lateral, precision);
+           obj.p_zeta_s = vpa(tau/s * obj.N_p_zeta / obj.delta_s_lateral, precision);
+           obj.r_zeta_s = vpa(tau/s * obj.N_r_zeta / obj.delta_s_lateral, precision);
+           obj.phi_zeta_s = vpa(tau/s * obj.N_phi_zeta / obj.delta_s_lateral, precision);
+           obj.psi_zeta_s = vpa(tau/s * obj.N_psi_zeta / obj.delta_s_lateral, precision);
 
-           obj.v_t = vpa(simplify(ilaplace(obj.v_xi_s + obj.v_zeta_s)), precision);
-           obj.p_t = vpa(simplify(ilaplace(obj.p_xi_s + obj.p_zeta_s)), precision);
-           obj.r_t = vpa(simplify(ilaplace(obj.r_xi_s + obj.r_zeta_s)), precision);
-           obj.phi_t = vpa(simplify(ilaplace(obj.phi_xi_s) + ilaplace(obj.phi_zeta_s)), precision);
-           obj.psi_t = vpa(simplify(ilaplace(obj.psi_xi_s + obj.psi_zeta_s)), precision);
+%            obj.v_t = vpa(simplify(ilaplace(obj.v_xi_s + obj.v_zeta_s)), precision);
+%            obj.p_t = vpa(simplify(ilaplace(obj.p_xi_s + obj.p_zeta_s)), precision);
+%            obj.r_t = vpa(simplify(ilaplace(obj.r_xi_s + obj.r_zeta_s)), precision);
+%            obj.phi_t = vpa(simplify(ilaplace(obj.phi_xi_s) + ilaplace(obj.phi_zeta_s)), precision);
+%            obj.psi_t = vpa(simplify(ilaplace(obj.psi_xi_s + obj.psi_zeta_s)), precision);
+
+           obj.v_t = ilaplace(obj.v_xi_s + obj.v_zeta_s);
+           obj.p_t = ilaplace(obj.p_xi_s + obj.p_zeta_s);
+           obj.r_t = ilaplace(obj.r_xi_s + obj.r_zeta_s);
+           obj.phi_t = ilaplace(obj.phi_xi_s) + ilaplace(obj.phi_zeta_s);
+           obj.psi_t = ilaplace(obj.psi_xi_s + obj.psi_zeta_s);
             
            obj.v_t_fun = matlabFunction(obj.v_t);
            obj.p_t_fun = matlabFunction(obj.p_t);
@@ -426,24 +443,27 @@ classdef AircraftStrategy < handle & Strategy
            obj.phi_t_fun = matlabFunction(obj.phi_t);
            obj.psi_t_fun = matlabFunction(obj.psi_t);
            
-           obj.v_fun = @(xi,t, zeta) (obj.v_t_fun(t,xi, zeta) - obj.v_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
-           obj.p_fun = @(xi,t, zeta) (obj.p_t_fun(t,xi, zeta) - obj.p_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
-           obj.r_fun = @(xi,t, zeta) (obj.r_t_fun(t,xi, zeta) - obj.r_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
-           obj.phi_fun = @(xi,t, zeta) (obj.phi_t_fun(t,xi, zeta) - obj.phi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
-           obj.psi_fun = @(xi,t, zeta) (obj.psi_t_fun(t,xi, zeta) - obj.psi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta));
+           obj.v_fun = @(ni,t, tau) (obj.v_t_fun(ni, t, tau) - obj.v_t_fun(ni, obj.simulation_step_from_fixed_update, tau));
+           obj.p_fun = @(ni,t, tau) (obj.p_t_fun(ni, t, tau) - obj.p_t_fun(ni, obj.simulation_step_from_fixed_update, tau));
+           obj.r_fun = @(ni,t, tau) (obj.r_t_fun(ni, t, tau) - obj.r_t_fun(ni, obj.simulation_step_from_fixed_update, tau));
+           obj.phi_fun = @(ni,t, tau) (obj.phi_t_fun(ni, t, tau) - obj.phi_t_fun(ni, obj.simulation_step_from_fixed_update, tau));
+           obj.psi_fun = @(ni,t, tau) (obj.psi_t_fun(ni, t, tau) - obj.psi_t_fun(ni, obj.simulation_step_from_fixed_update, tau));
            
            precision = 5;
-           obj.factor_of_reference_lateral = [round(double(limit(obj.v_fun(0.1,t,0),t,Inf)), precision) / 0.1,...
-                    round(double(limit(obj.p_fun(0.1,t,0),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.r_fun(0.1,t,0),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.phi_fun(0.1,t,0),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.psi_fun(0.1,t,0),t,Inf)), precision)/0.1;...
+           obj.factor_of_reference_lateral = [round(double(limit(obj.v_fun(0.1,s,0),s,Inf)), precision) / 0.1,...
+                    round(double(limit(obj.p_fun(0.1,s,0),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.r_fun(0.1,s,0),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.phi_fun(0.1,s,0),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.psi_fun(0.1,s,0),s,Inf)), precision)/0.1;...
                     ...
-                    round(double(limit(obj.v_fun(0,t,0.1),t,Inf)), precision) / 0.1,...
-                    round(double(limit(obj.p_fun(0,t,0.1),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.r_fun(0,t,0.1),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.phi_fun(0,t,0.1),t,Inf)), precision)/0.1,...
-                    round(double(limit(obj.psi_fun(0,t,0.1),t,Inf)), precision)/0.1];
+                    round(double(limit(obj.v_fun(0,s,0.1),s,Inf)), precision) / 0.1,...
+                    round(double(limit(obj.p_fun(0,s,0.1),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.r_fun(0,s,0.1),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.phi_fun(0,s,0.1),s,Inf)), precision)/0.1,...
+                    round(double(limit(obj.psi_fun(0,s,0.1),s,Inf)), precision)/0.1];
+                
+%            obj.phi_fun = @(xi,t, zeta) (mod(obj.phi_t_fun(t,xi, zeta) - obj.phi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta), 2 * pi));
+%            obj.psi_fun = @(xi,t, zeta) (mod(obj.psi_t_fun(t,xi, zeta) - obj.psi_t_fun(obj.simulation_step_from_fixed_update,xi, zeta), 2 * pi));
             
         end
         %        
@@ -679,6 +699,9 @@ classdef AircraftStrategy < handle & Strategy
             obj.previous_zeta_lateral_result = zeta_lateral_result;
             obj.simulation_counter_lateral_xi = obj.simulation_counter_lateral_xi + 1;
             obj.simulation_counter_lateral_zeta = obj.simulation_counter_lateral_zeta + 1;
+            
+%             lateral_result(4) = mod(lateral_result(4), 2 * pi);
+%             lateral_result(5) = mod(lateral_result(5), 2 * pi);
         end
         
 %         function lateralUpdate = CalculateLateralUpdate(obj, xi, zeta, t)

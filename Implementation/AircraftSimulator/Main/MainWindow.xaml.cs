@@ -50,6 +50,8 @@ namespace Main
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
             this.applicationDataContext.MainApplication.ServerCommunication.ServerInstance.StopServer();
+            this.applicationDataContext.MainApplication.ToolsManagerCommunication.ManagerInstance.ToolsManagement.ConcreteObservableSubject.NotifySubscribersOnError();
+            this.applicationDataContext.MainApplication.ToolsManagerCommunication.ManagerInstance.ReleaseMathToolLibrary();
         }
 
         private void clientsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -82,11 +84,9 @@ namespace Main
 
         private void AvailableStrategies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Shooters.ShooterType? activeShooterType = null;
-            
-            if (e.AddedItems.Count > 0)
+
+            if (this.AvailableStrategies.Items.Count == 1 && e.AddedItems.Count > 0)
             {
-                activeShooterType = (Shooters.ShooterType)(e.AddedItems[0] as Image).Tag;
                 //this.A_lateral_textblock.Visibility = Visibility.Visible;
                 this.A_lateral_groupbox.Visibility = Visibility.Visible;
                 //this.A_longitudinal_textblock.Visibility = Visibility.Visible;
@@ -101,17 +101,18 @@ namespace Main
                 this.dataGrid_B_longitudinal.Visibility = Visibility.Visible;
 
                 this.manageStrategiesPropertiesButton.IsEnabled = true;
-
+            }
+            if (e.AddedItems.Count > 0)
+            {
+                Shooters.ShooterType? activeShooterType = null;
+                activeShooterType = (Shooters.ShooterType)(e.AddedItems[0] as Image).Tag;
                 if (activeShooterType.HasValue)
                 {
                     this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooterType = activeShooterType.Value;
                     this.applicationDataContext.UpdateStrategiesParameters(this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.GetAircraftParameters());
                 }
+                applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.SetActiveStrategy(activeShooterType);
             }
-
-            
-
-            applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.SetActiveStrategy(activeShooterType);
         }
 
         private void manageStrategiesPropertiesButton_Click(object sender, RoutedEventArgs e)
@@ -144,6 +145,20 @@ namespace Main
                     MainApplication.Instance.AircraftsManagerCommunication.ManagerInstance.GetShooterInitalData(client_id,
                     additionalInformation));
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.applicationDataContext.StrategiesParameters_CollectionChanged();
+
+            List<IData> parametersToWorkspaceUpdate = this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.
+                GetShooterInitalDataForTheSpecifiedStrategy(
+                this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooter,
+                this.applicationDataContext.MainApplication.AircraftsManagerCommunication.ManagerInstance.ActiveShooterType
+                );
+
+            this.applicationDataContext.MainApplication.ToolsManagerCommunication.ManagerInstance.Compute(global::Common.Scripts.SpecialScriptType.WorkspaceUpdater, parametersToWorkspaceUpdate);
+
         }
     }
 }

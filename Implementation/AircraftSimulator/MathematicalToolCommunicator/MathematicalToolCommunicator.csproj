@@ -45,6 +45,7 @@
     <Compile Include="CommunicationBridge\MathToolCommunicator.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorInverse.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorLaplaceTransform.cs" />
+    <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorBackup.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorMissileAdder.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorRungeKutta.cs" />
     <Compile Include="CommunicationBridge\Methods\ConcreteMethods\ConcreteMethodImplementorGetState.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptInverse.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptLaplaceTransform.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptGetState.cs" />
+    <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptBackup.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptMissileAdder.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptRungeKutta.cs" />
     <Compile Include="ExternalMathToolCommunicationFacade\Scripts\ConcreteScript\ConcreteScriptSimulateMissile.cs" />

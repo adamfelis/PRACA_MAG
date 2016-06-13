@@ -13,6 +13,7 @@ namespace Common.Scripts
         GetState,
         WorkspaceUpdater,
         MissileAdder,
-        SimulateMissile
+        SimulateMissile,
+        Backup
     }
 }

@@ -30,7 +30,7 @@ namespace DiagramTool
         }
 
         private ConcreteObserver.ConcreteToolManagerObserver observer;
-        public IObserver<List<IData>> Observer
+        public Patterns.Observator.Observing.Observer Observer
         {
             get
             {
