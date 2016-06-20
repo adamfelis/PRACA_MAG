@@ -64,40 +64,13 @@ namespace DataStorageNamespace
 
         public void ClientRemoved(object sender, DataEventArgs args)
         {
-            //ClientRequests.Remove(args.Id);
+            if (ClientRequests.ContainsKey(args.Id))
+                ClientRequests.Remove(args.Id);
         }
 
         protected override void Initialize()
         {
             _dataParser = new DataParser<DataList>();
-            //TOREMOVE
-            //var a = _dataParser.Serialize(new DataList()
-            //{
-            //    DataArray = new []
-            //    {
-            //        new Data()
-            //        {
-            //            Array = new float[][]
-            //            {
-            //                new float[3]
-            //                {
-            //                    1, 2, 3
-            //                },
-            //                new float[3]
-            //                {
-            //                    4, 5, 6
-            //                }
-            //            }
-            //        }
-            //    }
-            //});
-            //var k = _dataParser.Deserialize(a);
-            //var b = _dataParser.Deserialize(a).DataArray.First();
-            //var n = b.N;
-            //var m = b.M;
-            //var d = b.Get2DimArray();
-            //b.Set2DimArray(d);
-            //var c = false;
         }
     }
 }

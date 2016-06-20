@@ -20,7 +20,7 @@ public class Aircraft : IAircraft
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private const float angle = 40;
+    private const float angle = 20;
 
     private float theta_prev, psi_prev, phi_prev;
 
@@ -64,8 +64,9 @@ public class Aircraft : IAircraft
                 );
         }
     }
-    #endregion  
+    #endregion
 
+    private float prev = 0.0f;
     #region Steering
     /// <summary>
     /// Elevator rotation
@@ -76,6 +77,10 @@ public class Aircraft : IAircraft
         {
             var collider = ElevatorRight.GetComponent<ColliderHandler>();
             //return (float)Math.Round(collider.RotationOffset, 2);
+            //if (Mathf.Abs(prev - collider.RotationOffset * Mathf.Rad2Deg) > 2)
+            //    Debug.Log("fuckup");
+            ////Debug.Log(collider.RotationOffset * Mathf.Rad2Deg);
+            //prev = collider.RotationOffset * Mathf.Rad2Deg;
             return collider.RotationOffset;
         }
     }
@@ -104,10 +109,7 @@ public class Aircraft : IAircraft
         }
     }
 
-    public float Tau
-    {
-        get { return 0; }
-    }
+    public float Tau { get; set; }
     #endregion
 
     #region aircraft rotations
