@@ -48,14 +48,13 @@ public class InputController : MonoBehaviour {
     private const float throttleMinRange = 0.1f;
     private const float throttleMaxRange = 1f;
     private const float throttleLength = throttleMaxRange - throttleMinRange;
-
+    public static float rangeHalfRange = 40;
     private void testJoystick()
     {
         float horizontal;
         float vertical;
         float throttle;
         float z;
-        float rangeHalfRange = 20;
         float horizontalRange = rangeHalfRange;
         float verticalRange = rangeHalfRange;
         float throttleRange = rangeHalfRange;

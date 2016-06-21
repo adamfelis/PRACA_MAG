@@ -75,83 +75,110 @@ public class ColliderHandler : MonoBehaviour
     private float previousToRet = 0.0f;
     private float beginOffset = 0.0f;
 
+    private const bool DEBUG = false;
+
     private float refinedRotationOffset()
     {
         float toRet = 0.0f;
-        //if (tag == Tags.ElevatorRight)
-        //    Debug.Log("111111111MINOffset: " + refinedRotationMinOffset +
-        //              " MAXOffset: " + refinedRotationMaxOffset +
-        //              " rotationOffset: " + rotationOffset +
-        //              " beginOffset: " + beginOffset +
-        //              " previousIncreasing: " + previousIncreasing);
         bool sentinel = false;
-        bool increasing = false || rotationOffset > refinedRotationPrevious;
-        if (increasing != previousIncreasing && Math.Abs(rotationOffset) > 1.0f)
+        bool increasing = false;
+        bool equal = rotationOffset == refinedRotationPrevious;
+        if (!equal)
         {
-            if (rotationOffset < 0)
-                beginOffset = refinedRotationMinOffset;
-            else
-            {
-                beginOffset = refinedRotationMaxOffset;
-            }
-            //if (previousIncreasing)
-            //{
-            //    beginOffset = refinedRotationMaxOffset;
-            //}
-            //else
-            //{
-            //    beginOffset = refinedRotationMinOffset;
-            //}
+            increasing = false || rotationOffset > refinedRotationPrevious;
         }
 
-        //if (tag == Tags.ElevatorRight)
-        //    Debug.Log("22222222MINOffset: " + refinedRotationMinOffset +
-        //              " MAXOffset: " + refinedRotationMaxOffset +
-        //              " rotationOffset: " + rotationOffset +
-        //              " beginOffset: " + beginOffset);
+        if (DEBUG && tag == Tags.ElevatorRight)
+            Debug.Log("111111111MINOffset: " + refinedRotationMinOffset +
+                      " MAXOffset: " + refinedRotationMaxOffset +
+                      " rotationOffset: " + rotationOffset +
+                      " refinedRotationPREV: " + refinedRotationPrevious +
+                      " equal: " + equal +
+                      " beginOffset: " + beginOffset +
+                      " increasing: " + increasing +
+                      " previousIncreasing: " + previousIncreasing);
 
-        if (increasing)
+        if (equal)
         {
-            if (rotationOffset < 0)
-            {
-                //if (tag == Tags.ElevatorRight)
-                //    Debug.Log("a: " + refinedRotationMinOffset);
-                toRet = refinedRotationMinOffset;
-            }
-            else if (rotationOffset > 0.0f)
-            {
-                toRet = scale(0, rotationMaxOffset, rotationOffset, beginOffset, rotationMaxOffset);
-                refinedRotationMaxOffset = toRet;
-                //if (tag == Tags.ElevatorRight)
-                //    Debug.Log("b: " + toRet);
-            }
+            toRet = previousToRet;
+            sentinel = true;
+            if (DEBUG && tag == Tags.ElevatorRight)
+                Debug.Log("g: " + toRet);
         }
         else
         {
-            if (rotationOffset > 0)
+            if (increasing != previousIncreasing && Math.Abs(rotationOffset) > 1.0f)
             {
-                //if (tag == Tags.ElevatorRight)
-                //    Debug.Log("c: " + refinedRotationMaxOffset);
-                toRet = refinedRotationMaxOffset;
+                //if (rotationOffset < 0)
+                //    beginOffset = refinedRotationMinOffset;
+                //else
+                //{
+                //    beginOffset = refinedRotationMaxOffset;
+                //}
+                if (previousIncreasing)
+                {
+                    beginOffset = refinedRotationMaxOffset;
+                }
+                else
+                {
+                    beginOffset = refinedRotationMinOffset;
+                }
             }
-            else if (rotationOffset < 0.0f)
+
+            if (DEBUG && tag == Tags.ElevatorRight)
+                Debug.Log("22222222MINOffset: " + refinedRotationMinOffset +
+                          " MAXOffset: " + refinedRotationMaxOffset +
+                          " rotationOffset: " + rotationOffset +
+                          " beginOffset: " + beginOffset);
+            if (increasing)
             {
-                toRet = scale(0, -rotationMaxOffset, rotationOffset, beginOffset,-rotationMaxOffset);
-                refinedRotationMinOffset = toRet;
-                //if (tag == Tags.ElevatorRight)
-                //    Debug.Log("d: " + toRet);
+                if (rotationOffset < 0)
+                {
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("a: " + refinedRotationMinOffset);
+                    toRet = refinedRotationMinOffset;
+                }
+                else if (rotationOffset > 0.0f)
+                {
+                    toRet = scale(0, rotationMaxOffset, rotationOffset, beginOffset, rotationMaxOffset);
+                    refinedRotationMaxOffset = toRet;
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("b: " + toRet);
+                }
+                else
+                {
+                    toRet = previousToRet;
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("e: " + toRet);
+                }
             }
             else
             {
-                toRet = previousToRet;
-                sentinel = true;
-                //if (tag == Tags.ElevatorRight)
-                //    Debug.Log("e: " + toRet);
+                if (rotationOffset > 0)
+                {
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("c: " + refinedRotationMaxOffset);
+                    toRet = refinedRotationMaxOffset;
+                }
+                else if (rotationOffset < 0.0f)
+                {
+                    toRet = scale(0, -rotationMaxOffset, rotationOffset, beginOffset, -rotationMaxOffset);
+                    refinedRotationMinOffset = toRet;
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("d: " + toRet);
+                }
+                else
+                {
+                    toRet = previousToRet;
+                    if (DEBUG && tag == Tags.ElevatorRight)
+                        Debug.Log("f: " + toRet);
+                }
             }
+            previousIncreasing = increasing;
         }
-        if (!sentinel)
-            previousToRet = toRet;
-        previousIncreasing = increasing;
+        //if (!sentinel)
+        //    previousToRet = toRet;
+        previousToRet = toRet;
         refinedRotationPrevious = rotationOffset;
         return toRet;
     }

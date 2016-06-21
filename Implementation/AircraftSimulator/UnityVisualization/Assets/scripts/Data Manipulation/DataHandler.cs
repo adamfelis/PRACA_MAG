@@ -134,8 +134,9 @@ namespace Assets.scripts.Data_Manipulation
             //rotary velocity in y axis (q)
             var q = data.Array[0][2];
 
+            ///NOTE MINUS
             var theta = data.Array[0][3];
-            unityShellNotifier.NotifyUnityShell("delta theta: " + (theta-prevTheta).ToString("n2"));
+            //unityShellNotifier.NotifyUnityShell("delta theta: " + (theta-prevTheta).ToString("n2"));
             prevTheta = theta;
             aircraft.RotateInLongitudinal(theta);
             aircraft.SetupVelocityInLongitudinal(velocityX, velocityY);

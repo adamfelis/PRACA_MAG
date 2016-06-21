@@ -17,6 +17,10 @@ namespace Assets.scripts
         private float targetPositionY;
         private float targetPositionZ;
 
+        private float currentPositionX;
+        private float currentPositionY;
+        private float currentPositionZ;
+
         private float prevTheta;
         private float prevPhi;
         private float prevPsi;
@@ -97,6 +101,7 @@ namespace Assets.scripts
             set
             {
                 prevPositionX = targetPositionX;
+                currentPositionX = targetPositionX;
                 targetPositionX = value;
             }
         }
@@ -107,6 +112,7 @@ namespace Assets.scripts
             set
             {
                 prevPositionY = targetPositionY;
+                currentPositionY = targetPositionY;
                 targetPositionY = value;
             }
         }
@@ -117,6 +123,7 @@ namespace Assets.scripts
             set
             {
                 prevPositionZ = targetPositionZ;
+                currentPositionZ = targetPositionZ;
                 targetPositionZ = value;
             }
         }
@@ -216,8 +223,9 @@ namespace Assets.scripts
             //Debug.Log(theta);
             Body.transform.Rotate(theta);
             //
-            interpolateLateralPosition(t);
-
+            //interpolateLateralPosition(t);
+            Body.transform.Translate(new Vector3(targetPositionZ - currentPositionZ, 0, 0), Space.Self);
+            
             //psi rotation
             var psi = new Vector3(0, targetPsi - currentPsi, 0);
             Body.transform.Rotate(psi);
@@ -226,7 +234,9 @@ namespace Assets.scripts
             var phi = new Vector3(0, 0, -(targetPhi - currentPhi));
             Body.transform.Rotate(phi);
             //
-            interpolateLongitudinalPosition(t);
+            //interpolateLongitudinalPosition(t);
+            Body.transform.Translate(new Vector3(0, targetPositionY - currentPositionY, 0), Space.Self);
+            Body.transform.Translate(new Vector3(0, 0, targetPositionX - currentPositionX), Space.Self);
             interpolateVelocity(t);
         }
 
@@ -248,12 +258,12 @@ namespace Assets.scripts
             if (sceneController.LateralRotationActive)
                 interpolateLateralRotation(iterations);
             if (sceneController.LateralTranslationActive)
-                interpolateLateralPosition(t);
+                interpolateLateralPosition(t, iterations);
 
             if (sceneController.LongitudinalRotationActive)
                 interpolateLongitudinalRotation(iterations);
             if (sceneController.LongitudinalTranslationActive)
-                interpolateLongitudinalPosition(t);
+                interpolateLongitudinalPosition(t, iterations);
 
             interpolateVelocity(t);
         }
@@ -290,22 +300,42 @@ namespace Assets.scripts
             Body.transform.Rotate(rot, Space.Self);
         }
 
-        private void interpolateLongitudinalPosition(float t)
+        private void interpolateLongitudinalPosition(float t, float iterations)
         {
-            float X = Mathf.Lerp(prevPositionX, targetPositionX, t);
-            float Y = Mathf.Lerp(prevPositionY, targetPositionY, t);
-            var position = new Vector3(Body.transform.position.x, Y, -X);
-            Body.transform.position = (position);
+            //float X = Mathf.Lerp(prevPositionX, targetPositionX, t);
+            //float Y = Mathf.Lerp(prevPositionY, targetPositionY, t);
+            //var position = new Vector3(Body.transform.position.x, Y, -X);
+            //Body.transform.position = (position);
+
+
             //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
+
+            float delta = targetPositionX - prevPositionX;
+            delta /= iterations;
+            currentPositionX += delta;
+            //WE PUT MINUS ON PURPOSE, because of model local coordinate system
+            Body.transform.Translate(new Vector3(0, 0, -delta), Space.Self);
+
+            delta = targetPositionY - prevPositionY;
+            delta /= iterations;
+            currentPositionY += delta;
+            Body.transform.Translate(new Vector3(0, delta, 0), Space.Self);
         }
 
-        private void interpolateLateralPosition(float t)
+        private void interpolateLateralPosition(float t, float iterations)
         {
 
-            float Z = Mathf.Lerp(prevPositionZ, targetPositionZ, t);
-            var position = new Vector3(Z, Body.transform.position.y, Body.transform.position.z);
-            Body.transform.position = (position);
+            //float Z = Mathf.Lerp(prevPositionZ, targetPositionZ, t);
+            //var position = new Vector3(Z, Body.transform.position.y, Body.transform.position.z);
+            //Body.transform.position = (position);
+
             //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
+
+
+            float delta = targetPositionZ - prevPositionZ;
+            delta /= iterations;
+            currentPositionZ += delta;
+            Body.transform.Translate(new Vector3(delta, 0, 0), Space.Self);
         }
     }
 }

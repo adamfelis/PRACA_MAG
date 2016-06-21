@@ -20,7 +20,7 @@ public class Aircraft : IAircraft
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private const float angle = 20;
+    private float angle = InputController.rangeHalfRange;
 
     private float theta_prev, psi_prev, phi_prev;
 
@@ -79,9 +79,10 @@ public class Aircraft : IAircraft
             //return (float)Math.Round(collider.RotationOffset, 2);
             //if (Mathf.Abs(prev - collider.RotationOffset * Mathf.Rad2Deg) > 2)
             //    Debug.Log("fuckup");
-            ////Debug.Log(collider.RotationOffset * Mathf.Rad2Deg);
+            var toRet = collider.RotationOffset;
+            Debug.Log(toRet * Mathf.Rad2Deg);
             //prev = collider.RotationOffset * Mathf.Rad2Deg;
-            return collider.RotationOffset;
+            return toRet;
         }
     }
     /// <summary>
