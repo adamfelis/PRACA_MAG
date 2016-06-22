@@ -31,16 +31,16 @@ namespace ToolsManager.ConcreteObserving
         }
         public void NotifySubscribersOnCompleted()
         {
-            foreach (IObserver<Observer> observer in observers.Values)
+            foreach (IObserver<List<IData>> observer in observers.Values)
             {
-                (observer as Observer).OnCompleted();
+                (observer).OnCompleted();
             }
         }
         public void NotifySubscribersOnError()
         {
-            foreach (IObserver<Observer> observer in observers.Values)
+            foreach (IObserver<List<IData>> observer in observers.Values)
             {
-                (observer as Observer).OnError(new Exception());
+                (observer).OnError(new Exception());
             }
         }
 

@@ -77,7 +77,14 @@ namespace Server.Executors
                     }
                 }
             };
-            client.SendMessage(dataStorage.PrepareDataForClient(client.Id, response));
+            try
+            {
+                client.SendMessage(dataStorage.PrepareDataForClient(client.Id, response));
+            }
+            catch (MessageIgnoreException e)
+            {
+                
+            }
         }
     }
 }

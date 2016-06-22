@@ -46,4 +46,7 @@
   <X_dot_tau>0</X_dot_tau>
   <Z_dot_tau>0</Z_dot_tau>
   <M_dot_tau>0</M_dot_tau>
+  <!--<X_dot_tau>6.18</X_dot_tau>
+  <Z_dot_tau>-0.08</Z_dot_tau>
+  <M_dot_tau>0.27</M_dot_tau>-->
 </AircraftParameters>

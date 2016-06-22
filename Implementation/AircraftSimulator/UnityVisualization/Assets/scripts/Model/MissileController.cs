@@ -28,6 +28,9 @@ namespace Assets.scripts.Model
         }
         private Vector3 targetPos;
         private Vector3 prevPos;
+        public ParticleRenderer ParticleRenderer { get; set; }
+        public MeshRenderer MeshRenderer { get; set; }
+        public Light PointLight { get; set; }
         public int TargetId { get; set; }
         public Vector3 offset { get; set; }
         public bool RequestPosition { get; set; }
@@ -59,10 +62,15 @@ namespace Assets.scripts.Model
             missiles.Add(1, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleLeft2, name) });
             missiles.Add(2, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleRight1, name) });
             missiles.Add(3, new MissileComponents() { Body = Tags.FindGameObjectWithTagInParent(Tags.MisilleRight2, name) });
-            missiles[0].offset = missiles[0].Body.transform.localPosition;
-            missiles[1].offset = missiles[1].Body.transform.localPosition;
-            missiles[2].offset = missiles[2].Body.transform.localPosition;
-            missiles[3].offset = missiles[3].Body.transform.localPosition;
+
+            foreach (var missileComponentse in missiles.Values)
+            {
+                missileComponentse.offset = missileComponentse.Body.transform.localPosition;
+                //missileComponentse.ParticleRenderer = missileComponentse.Body.transform.FindChild("Engine").GetComponent<ParticleRenderer>();
+                missileComponentse.PointLight = missileComponentse.Body.GetComponent<Light>();
+                missileComponentse.MeshRenderer = missileComponentse.Body.transform.FindChild("Sphere").GetComponent<MeshRenderer>();
+            }
+
             onStock = missiles.Values.ToList();
             missilesSyncPosition = gameObject.GetComponent<Missiles_SyncPosition>();
             missilesSyncPosition.Initialize();
@@ -113,6 +121,9 @@ namespace Assets.scripts.Model
                 Debug.Log("AIRCRAFT HIT");
                 //Destroy(missiles[missileId].Body.transform.FindChild("Sphere"));
                 missiles[missileId].IsTriggered = false;
+                missiles[missileId].PointLight.enabled = false;
+                missiles[missileId].MeshRenderer.enabled = false;
+                //missiles[missileId].ParticleRenderer.enabled = false;
                 missilesSyncPosition.TransmitMissileHit(missileId);
             }
             else
@@ -219,6 +230,9 @@ namespace Assets.scripts.Model
                         if (missileComponent.Body == firedMissile.Body)
                         {
                             missileComponent.TargetId = target.ServerAssignedId;
+                            //missileComponent.ParticleRenderer.enabled = true;
+                            missileComponent.PointLight.enabled = true;
+                            missileComponent.MeshRenderer.enabled = true;
                             //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                             //sphere.transform.s = Vector3.one*10;
                             //sphere.transform.SetParent(missileComponent.Body.transform);

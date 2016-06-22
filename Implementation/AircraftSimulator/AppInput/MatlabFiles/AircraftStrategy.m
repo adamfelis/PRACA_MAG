@@ -2,6 +2,10 @@ classdef AircraftStrategy < handle & Strategy
     %Describes one strategy of the aircraft
     
     properties
+        A_longitudinal_without_regulation;
+        B_longitudinal_without_regulation;
+        A_lateral_without_regulation;
+        B_lateral_without_regulation;
         A_longitudinal;
         B_longitudinal;
         A_lateral;
@@ -141,6 +145,13 @@ classdef AircraftStrategy < handle & Strategy
         % Constructor
         function obj = AircraftStrategy(new_A_longitudinal, new_B_longitudinal,...
                                         new_A_lateral, new_B_lateral, simulation_step)
+                                    
+           obj.A_longitudinal_without_regulation = new_A_longitudinal;
+           obj.B_longitudinal_without_regulation = new_B_longitudinal;
+           
+           obj.A_lateral_without_regulation = new_A_lateral;
+           obj.B_lateral_without_regulation = new_B_lateral;
+           
            obj.A_longitudinal = new_A_longitudinal;
            obj.B_longitudinal = new_B_longitudinal;
            obj.A_lateral = new_A_lateral;
@@ -728,8 +739,10 @@ classdef AircraftStrategy < handle & Strategy
             temp_velocity = obj.initial_aircraft_velocity + [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
             obj.current_aircraft_velocity = temp_velocity;
             
-            longitudinal_derivatives = obj.A_longitudinal * longitudinal_solution + obj.B_longitudinal * u_longitudinal;
-            lateral_derivatives = obj.A_lateral * lateral_solution + obj.B_lateral * u_lateral;
+            longitudinal_derivatives = obj.A_longitudinal_without_regulation * longitudinal_solution + obj.B_longitudinal_without_regulation * u_longitudinal;
+            lateral_derivatives = obj.A_lateral_without_regulation * lateral_solution + obj.B_lateral_without_regulation * u_lateral;
+%             longitudinal_derivatives = obj.A_longitudinal * longitudinal_solution + obj.B_longitudinal * u_longitudinal;
+%             lateral_derivatives = obj.A_lateral * lateral_solution + obj.B_lateral * u_lateral;
             
             acceleration_vector = [longitudinal_derivatives(2); lateral_derivatives(1) ; longitudinal_derivatives(1)];%w v u
             
