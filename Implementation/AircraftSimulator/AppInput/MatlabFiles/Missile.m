@@ -8,14 +8,14 @@ classdef Missile < handle & Shooter
     
     methods
         % Constructor
-        function obj = Missile(s_id, m_id, missilePos)
+        function obj = Missile(s_id, m_id, missilePos, simulation_step)
             obj.shooter_id = s_id;
             obj.missile_id = m_id;
-            AddStrategy(obj, missilePos);
+            AddStrategy(obj, missilePos, simulation_step);
         end
         % Add extra strategy
-        function AddStrategy(obj, missilePos)
-           obj.Strategies = [obj.Strategies, MissileStrategy(missilePos)];  
+        function AddStrategy(obj, missilePos, simulation_step)
+           obj.Strategies = [obj.Strategies, MissileStrategy(missilePos, simulation_step)];  
         end
     end
     

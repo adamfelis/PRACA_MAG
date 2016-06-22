@@ -7,11 +7,11 @@ Q = p * (C' * C);
 R = eye(3);
 K = lqr(F,G,Q,R);
 
-domain = 0:0.1:25;
-aircraftPosition = [domain', exp(domain)'];%300 * sin(0.2 *domain)'];
+domain = 0:0.1:15;
+aircraftPosition = [domain', sin(domain)'];%300 * sin(0.2 *domain)'];
 
-x0 = [-20 33 0 0 0 0]';
-time = 0:0.2:10;
+x0 = [-50 -23 0 0 0 0]';
+time = 0:0.2:20;
 solution = [];
 Nbar = 3.125;
 for i = 1:1:length(domain)
@@ -26,7 +26,9 @@ hold on;
 for i = 1:1:length(TIME)
 %     clf;
 %     hold on;
-    plot(aircraftPosition(i,1), aircraftPosition(i,2), 'bo');
-    plot(solution(i,1), solution(i,2), 'ro');
-    pause(0.2);
+%     plot(aircraftPosition(i,1), aircraftPosition(i,2), 'bo');
+%     plot(solution(i,1), solution(i,2), 'ro');
+    plot(i * 0.2, aircraftPosition(i,1), 'bo');
+    plot(i * 0.2, solution(i,1), 'ro');
+    %pause(0.2);
 end

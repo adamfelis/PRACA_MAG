@@ -7,8 +7,8 @@ classdef AircraftStrategy < handle & Strategy
         A_lateral;
         B_lateral
         
-        current_aircraft_velocity = [0 0 10]; %w v u
-        
+        initial_aircraft_velocity = [0 0 200]; %w v u
+        current_aircraft_velocity
         simulation_step_from_fixed_update
         simulation_counter_eta = 1;
         
@@ -146,6 +146,8 @@ classdef AircraftStrategy < handle & Strategy
            obj.A_lateral = new_A_lateral;
            obj.B_lateral = new_B_lateral;
            
+           obj.current_aircraft_velocity = obj.initial_aircraft_velocity;
+           
            obj.simulation_step_from_fixed_update = simulation_step;
            
            C = eye(4);
@@ -154,6 +156,7 @@ classdef AircraftStrategy < handle & Strategy
            Q = p * (C' * C);
            K = lqr(new_A_longitudinal,new_B_longitudinal,Q,R);
            Nbar = 1000;
+           %Nbar = 1;
            %K = zeros(2,4);
            obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
            obj.B_longitudinal = Nbar * obj.B_longitudinal;
@@ -722,7 +725,8 @@ classdef AircraftStrategy < handle & Strategy
         
         function movementVector = MoveAircraft(obj, longitudinal_solution, lateral_solution, u_longitudinal, u_lateral)
                         
-            temp_velocity = obj.current_aircraft_velocity + [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
+            temp_velocity = obj.initial_aircraft_velocity + [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
+            obj.current_aircraft_velocity = temp_velocity;
             
             longitudinal_derivatives = obj.A_longitudinal * longitudinal_solution + obj.B_longitudinal * u_longitudinal;
             lateral_derivatives = obj.A_lateral * lateral_solution + obj.B_lateral * u_lateral;
