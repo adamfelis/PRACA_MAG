@@ -169,8 +169,8 @@ classdef AircraftStrategy < handle & Strategy
            Nbar = 1000;
            %Nbar = 1;
            %K = zeros(2,4);
-           obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
-           obj.B_longitudinal = Nbar * obj.B_longitudinal;
+           %obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
+           %obj.B_longitudinal = Nbar * obj.B_longitudinal;
            
            C = eye(5);
            R = eye(2);
@@ -180,8 +180,8 @@ classdef AircraftStrategy < handle & Strategy
            %K = zeros(2,5);
            Nbar = 200;
            %Nbar = 1;
-           obj.A_lateral = obj.A_lateral - obj.B_lateral * K;
-           obj.B_lateral = Nbar * obj.B_lateral;
+           %obj.A_lateral = obj.A_lateral - obj.B_lateral * K;
+           %obj.B_lateral = Nbar * obj.B_lateral;
            %tic
            obj.PrepareTransferFunctions();
            %toc

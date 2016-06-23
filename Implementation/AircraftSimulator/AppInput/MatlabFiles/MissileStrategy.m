@@ -4,6 +4,7 @@ classdef MissileStrategy < handle & Strategy
     properties
         F
         G
+        K
         missileState
         timeForPrediction
         simulation_step_from_fixed_update
@@ -24,8 +25,8 @@ classdef MissileStrategy < handle & Strategy
             p = 10;
             Q = p * (C' * C);
             R = eye(3);
-            K = lqr(obj.F,obj.G,Q,R);
-            Nbar = 3.125;
+            obj.K = lqr(obj.F,obj.G,Q,R);
+            Nbar = 1;%3.125;
             
             obj.F = obj.F - obj.G * K;
             obj.G = obj.G * Nbar;
@@ -47,11 +48,13 @@ classdef MissileStrategy < handle & Strategy
             minVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)];
             
             obj.missileState(4) = min(obj.missileState(4), maxVelocity(1));
-            obj.missileState(4) = max(obj.missileState(4), minVelocity(1));
+            %obj.missileState(4) = max(obj.missileState(4), minVelocity(1));
             obj.missileState(5) = min(obj.missileState(5), maxVelocity(2));
-            obj.missileState(5) = max(obj.missileState(5), minVelocity(2));
+            %obj.missileState(5) = max(obj.missileState(5), minVelocity(2));
             obj.missileState(6) = min(obj.missileState(6), maxVelocity(3));
-            obj.missileState(6) = max(obj.missileState(6), minVelocity(3));
+            %obj.missileState(6) = max(obj.missileState(6), minVelocity(3));
+            
+            obj.missileState = obj.K * obj.missileState';
             
             deltaPos = obj.missileState;
             obj.missileStates = [obj.missileStates; deltaPos];
