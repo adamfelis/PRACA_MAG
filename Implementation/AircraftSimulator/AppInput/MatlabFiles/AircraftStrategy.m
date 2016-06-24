@@ -11,7 +11,7 @@ classdef AircraftStrategy < handle & Strategy
         A_lateral;
         B_lateral
         
-        initial_aircraft_velocity = [0 0 200]; %w v u
+        initial_aircraft_velocity = [0 0 50]; %w v u
         current_aircraft_velocity
         simulation_step_from_fixed_update
         simulation_counter_eta = 1;

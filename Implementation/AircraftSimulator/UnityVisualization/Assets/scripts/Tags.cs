@@ -66,7 +66,7 @@ public static class Tags
 
     public static string Aim = "Aim";
     public static string Canvas = "Canvas";
-
+    public static string BattleMap = "BattleMap";
     #endregion
 
     #region  inspector-main scene
@@ -77,6 +77,7 @@ public static class Tags
     public static string Player = "Player";
     public static string NetworkManager = "NetworkManager";
     public static string Missiles = "Missiles";
+    public static string TrailMarker = "TrailMarker";
 
     #endregion
 

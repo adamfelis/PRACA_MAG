@@ -28,7 +28,7 @@ classdef MissileStrategy < handle & Strategy
             obj.K = lqr(obj.F,obj.G,Q,R);
             Nbar = 1;%3.125;
             
-            obj.F = obj.F - obj.G * K;
+            obj.F = obj.F - obj.G * obj.K;
             obj.G = obj.G * Nbar;
         end
         
@@ -43,21 +43,24 @@ classdef MissileStrategy < handle & Strategy
             [~, Y] = ode45(@(t,x)StateSpace(t,x,obj.F ,obj.G ,u), obj.timeForPrediction, x0);
             obj.missileState = Y(2,:);
             
-            factor = 4;
-            maxVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)] * factor;
-            minVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)];
+%             factor = 4;
+%             maxVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)] * factor;
+%             minVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)];
+%             
+%             obj.missileState(4) = min(obj.missileState(4), maxVelocity(1));
+%             %obj.missileState(4) = max(obj.missileState(4), minVelocity(1));
+%             obj.missileState(5) = min(obj.missileState(5), maxVelocity(2));
+%             %obj.missileState(5) = max(obj.missileState(5), minVelocity(2));
+%             obj.missileState(6) = min(obj.missileState(6), maxVelocity(3));
+%             %obj.missileState(6) = max(obj.missileState(6), minVelocity(3));
             
-            obj.missileState(4) = min(obj.missileState(4), maxVelocity(1));
-            %obj.missileState(4) = max(obj.missileState(4), minVelocity(1));
-            obj.missileState(5) = min(obj.missileState(5), maxVelocity(2));
-            %obj.missileState(5) = max(obj.missileState(5), minVelocity(2));
-            obj.missileState(6) = min(obj.missileState(6), maxVelocity(3));
-            %obj.missileState(6) = max(obj.missileState(6), minVelocity(3));
+%             copy_of_missile_state = obj.missileState;
             
-            obj.missileState = obj.K * obj.missileState';
+%             obj.missileState = obj.K * obj.missileState';
             
+            obj.missileState = [(obj.K * obj.missileState')', obj.missileState(4), obj.missileState(5), obj.missileState(6)];
             deltaPos = obj.missileState;
-            obj.missileStates = [obj.missileStates; deltaPos];
+            obj.missileStates = [obj.missileStates; deltaPos, predictedAircraftPosition(1), aircraftPosition(1)];
         end
     end
     

@@ -38,14 +38,25 @@ public class AircraftsController : NetworkBehaviour
         MissileController.Initialize();
         if (isLocalPlayer)
         {
+            Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
             body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
+            var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
+            trailerRenderer.material = Resources.Load("trail_my", typeof (Material)) as Material;
             //MissileController = body.AddComponent<MissileController>();
             //MissileController.Initialize();
             var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
             applicationManager.GetComponent<InputController>().Initialize(this);
             applicationManager.GetComponent<Communication>().enabled = true;
         }
-	}
+        else
+        {
+            Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
+            var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
+            trailerRenderer.material = Resources.Load("trail_enemy", typeof(Material)) as Material;
+        }
+        Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().enabled = true;
+
+    }
 
     void Update()
     {

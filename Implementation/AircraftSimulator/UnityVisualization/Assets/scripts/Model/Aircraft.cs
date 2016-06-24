@@ -80,7 +80,7 @@ public class Aircraft : IAircraft
             //if (Mathf.Abs(prev - collider.RotationOffset * Mathf.Rad2Deg) > 2)
             //    Debug.Log("fuckup");
             var toRet = collider.RotationOffset;
-            Debug.Log(toRet * Mathf.Rad2Deg);
+            //Debug.Log(toRet * Mathf.Rad2Deg);
             //prev = collider.RotationOffset * Mathf.Rad2Deg;
             return toRet;
         }

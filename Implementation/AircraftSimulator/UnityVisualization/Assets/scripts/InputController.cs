@@ -13,6 +13,7 @@ public class InputController : MonoBehaviour {
     private Aircraft aircraft;
     private CameraSmoothFollow cameraSmoothFollow;
     private MissileController missileController;
+    private RawImage battleMap;
 
     private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
     private bool readKeyboardInput;
@@ -22,6 +23,7 @@ public class InputController : MonoBehaviour {
         this.aircraft = aircraftsController.Aircraft;
         this.missileController = aircraftsController.MissileController;
         this.cameraSmoothFollow = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, aircraftsController.name).GetComponent<CameraSmoothFollow>();
+        this.battleMap = GameObject.FindGameObjectWithTag(Tags.BattleMap).GetComponent<RawImage>();
         enabled = true;
     }
 
@@ -38,11 +40,15 @@ public class InputController : MonoBehaviour {
     void Update()
     {
         readKeyboardInput = false;
-        testKeyboard();
-        testCameraInput();
-        testWheel();
-        if (!readKeyboardInput && isJoystickConnected)
-            testJoystick();
+        testBattleMap();
+        if (!battleMap.enabled)
+        {
+            testKeyboard();
+            testCameraInput();
+            testWheel();
+            if (!readKeyboardInput && isJoystickConnected)
+                testJoystick();
+        }
     }
 
     private const float throttleMinRange = 0.1f;
@@ -76,6 +82,14 @@ public class InputController : MonoBehaviour {
 
         aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, deltaElevator);
         aircraft.Tau = throttle;
+    }
+
+    private void testBattleMap()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            battleMap.enabled = !battleMap.enabled;
+        }
     }
 
     private void testWheel()
