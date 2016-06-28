@@ -19,7 +19,7 @@ public class ColliderHandler : MonoBehaviour
     {
         get
         {
-            //return rotationOffset * Mathf.Deg2Rad;
+            return rotationOffset * Mathf.Deg2Rad;
             return refinedRotationOffset() * Mathf.Deg2Rad;
         }
     }
@@ -264,9 +264,9 @@ public class ColliderHandler : MonoBehaviour
     private void rotateJoystick(float delta, bool checkRequired = true)
     {
         float eps = 0.0001f;
-        float minFraction = 0.02f;
+        float minFraction = 0.1f;
         float maxFraction = 0.5f;
-        float fractionInterpolatationTime = 3.0f;
+        float fractionInterpolatationTime = 50.0f;
         if (checkRequired)
         {
 

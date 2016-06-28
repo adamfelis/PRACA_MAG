@@ -20,7 +20,7 @@ public class Aircraft : IAircraft
     public IDictionary<GameObject, bool> partsInitialized;
 
     private Vector3 rotationMaxOffset;
-    private float angle = InputController.rangeHalfRange;
+    //private float angle = InputController.rangeHalfRange;
 
     private float theta_prev, psi_prev, phi_prev;
 
@@ -194,7 +194,9 @@ public class Aircraft : IAircraft
 
     private void initializeFlightConditions()
     {
-        rotationMaxOffset = new Vector3(angle, angle, angle);
+        rotationMaxOffset = new Vector3(InputController.rangeHalfRangeAileron,
+            InputController.rangeHalfRangeRudder, 
+            InputController.rangeHalfRangeElevator);
         Velocity_0 = new Vector3(0, 0, 178);
         Theta_0 = 9.4f;
         Psi_0 = 0.0f;
@@ -231,8 +233,8 @@ public class Aircraft : IAircraft
         AileronRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
         RudderLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.y);
         RudderRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.y);
-        ElevatorLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
-        ElevatorRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.x);
+        ElevatorLeft.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.z);
+        ElevatorRight.GetComponent<ColliderHandler>().Initialize(rotationMaxOffset.z);
     }
 
 

@@ -68,5 +68,6 @@ vpa(A);
 B = M^(-1) * B_prim
 vpa(B);
 
+A(2,3) = - A(2,3);
 end
 

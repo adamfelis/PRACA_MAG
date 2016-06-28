@@ -8,7 +8,7 @@ R = eye(3);
 K = lqr(F,G,Q,R);
 
 domain = 0:0.1:15;
-aircraftPosition = [domain', sin(domain)'];%300 * sin(0.2 *domain)'];
+aircraftPosition = [domain', 1000 * sin(domain)' + 1000];%300 * sin(0.2 *domain)'];
 
 x0 = [-5 -5 0 0 0 0]';
 time = 0:0.2:20;

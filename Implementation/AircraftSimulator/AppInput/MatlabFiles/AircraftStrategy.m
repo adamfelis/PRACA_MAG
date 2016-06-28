@@ -167,8 +167,8 @@ classdef AircraftStrategy < handle & Strategy
            Q = p * (C' * C);
            K = lqr(new_A_longitudinal,new_B_longitudinal,Q,R);
            Nbar = 1000;
-           %Nbar = 1;
-           %K = zeros(2,4);
+           Nbar = 1;
+           K = zeros(2,4);
            %obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
            %obj.B_longitudinal = Nbar * obj.B_longitudinal;
            
@@ -177,13 +177,13 @@ classdef AircraftStrategy < handle & Strategy
            p = 10000;
            Q = p * (C' * C);
            K = lqr(new_A_lateral,new_B_lateral,Q,R);
-           %K = zeros(2,5);
+           K = zeros(2,5);
            Nbar = 200;
-           %Nbar = 1;
+           Nbar = 1;
            %obj.A_lateral = obj.A_lateral - obj.B_lateral * K;
            %obj.B_lateral = Nbar * obj.B_lateral;
            %tic
-           obj.PrepareTransferFunctions();
+           %obj.PrepareTransferFunctions();
            %toc
         end
         %
@@ -765,7 +765,8 @@ classdef AircraftStrategy < handle & Strategy
             rotation_matrix = R_z * R_y * R_x;
             
             acceleration_vector_after_rotation = rotation_matrix * acceleration_vector;
-            gravity_vector = [-9.81; 0; 0];
+            %gravity_vector = [-9.81; 0; 0];
+            gravity_vector = [0; 0; 0];
             acceleration_vector_after_rotation_including_gravity = acceleration_vector_after_rotation + gravity_vector;
             
             tmpMovementVector = ...
