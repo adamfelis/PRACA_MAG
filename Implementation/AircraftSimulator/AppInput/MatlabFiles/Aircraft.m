@@ -11,7 +11,7 @@ classdef Aircraft < handle & Shooter
         % strategy
         current_simulation_solutions
         current_simulation_solutions_laplace = []
-        % stores previous result of computations of lateral and
+        % stores previous result of comput ations of lateral and
         % longitudinal versions. Used when simulation is recalculated to
         % obtain x0_lateral and x0_longitudinal
         previous_result
@@ -75,16 +75,23 @@ classdef Aircraft < handle & Shooter
             
             results = Results();
             if simulation_index > 1
-                interval = [(simulation_index - 1) * obj.simulation_step_from_fixed_update, simulation_index * obj.simulation_step_from_fixed_update];
+%                 interval = [(simulation_index - 1) * obj.simulation_step_from_fixed_update, simulation_index * obj.simulation_step_from_fixed_update];
                 for i = 1 : 1 : length(obj.current_simulation_solutions)
-                    newPosition = Position(0,0,0);
-                    if(obj.DEBUG_MODE)
-                        newPosition = obj.UpdatePosition(interval, i);                    
+%                     newPosition = Position(0,0,0);
+%                     if(obj.DEBUG_MODE)
+%                         newPosition = obj.UpdatePosition(interval, i);                    
+%                     end
+                    Y_longitudinal = obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:);
+                    Y_lateral = obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:);
+                    movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal', u_lateral');
+                    if i == 1
+                        obj.aircraftPosition = obj.aircraftPosition + movement;
                     end
                     results.AddStrategyResult(...
-                        obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:),...
-                        obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:),...
-                        newPosition.value)
+                        Y_longitudinal,...
+                        Y_lateral,...
+                        movement);
+                        %newPosition.value)
                 end
             else
                 obj.current_simulation_solutions = [];
@@ -107,11 +114,16 @@ classdef Aircraft < handle & Shooter
                             );
                     obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
                    
-                    newPosition = Position(0,0,0);
-                    if(obj.DEBUG_MODE)
-                        newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
+                    movement = obj.Strategies(i).MoveAircraft(Y_longitudinal(simulation_index + 1,:)', Y_lateral(simulation_index + 1,:)', u_longitudinal', u_lateral');
+                    if i == 1
+                        obj.aircraftPosition = obj.aircraftPosition + movement;
                     end
-                    results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), newPosition.value)
+                
+%                     newPosition = Position(0,0,0);
+%                     if(obj.DEBUG_MODE)
+%                         newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
+%                     end
+                    results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), movement);%newPosition.value)
                 end
             end
             obj.previous_result = results;

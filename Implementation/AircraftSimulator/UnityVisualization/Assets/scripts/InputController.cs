@@ -54,17 +54,20 @@ public class InputController : MonoBehaviour {
     private const float throttleMinRange = 0.1f;
     private const float throttleMaxRange = 1f;
     private const float throttleLength = throttleMaxRange - throttleMinRange;
-    public static float rangeHalfRange = 40;
+    public static float rangeHalfRangeElevator = 10;
+    public static float rangeHalfRangeRudder = 2;
+    public static float rangeHalfRangeAileron = 2;
+    public static float rangeHalfRangeThrottle = 10;
     private void testJoystick()
     {
         float horizontal;
         float vertical;
         float throttle;
         float z;
-        float horizontalRange = rangeHalfRange;
-        float verticalRange = rangeHalfRange;
-        float throttleRange = rangeHalfRange;
-        float zRange = rangeHalfRange;
+        float horizontalRange = rangeHalfRangeAileron;
+        float verticalRange = rangeHalfRangeElevator;
+        float throttleRange = rangeHalfRangeThrottle;
+        float zRange = rangeHalfRangeRudder;
         horizontal = horizontalRange * Input.GetAxis("horizontal");
         vertical = verticalRange * Input.GetAxis("vertical");
         throttle = ((1f + Input.GetAxis("Throttle")) / 2f ) * throttleLength + throttleMinRange;
@@ -80,7 +83,7 @@ public class InputController : MonoBehaviour {
         deltaAileron = horizontal;
         deltaRudder = z;
 
-        aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, deltaElevator);
+        aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, -deltaElevator);
         aircraft.Tau = throttle;
     }
 
