@@ -26,7 +26,7 @@ namespace Assets.scripts
         bool InterpolationPending { get; }
 
         void Interpolate(float singleIterationTime);
-        //when this metho is called neither of rotation or translastion will be performed
+        //when this method is called neither of rotation or translastion will be performed
         //untill 'UnlockInterpolation' is called
         void LockInterpolation();
         void UnclockInterpolation();

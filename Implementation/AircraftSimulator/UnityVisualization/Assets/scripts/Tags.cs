@@ -67,6 +67,8 @@ public static class Tags
     public static string Aim = "Aim";
     public static string Canvas = "Canvas";
     public static string BattleMap = "BattleMap";
+    public static string PullUp = "PullUp";
+    public static string PullDown = "PullDown";
     #endregion
 
     #region  inspector-main scene

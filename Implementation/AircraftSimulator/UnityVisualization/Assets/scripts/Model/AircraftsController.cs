@@ -4,6 +4,7 @@ using Assets.scripts;
 using Assets.scripts.Model;
 using Assets.scripts.UI;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public enum AircraftType
 {
@@ -15,6 +16,8 @@ public class AircraftsController : NetworkBehaviour
 {
     public Aircraft Aircraft;
     public event NotifierHandler Initialized;
+
+    private GameObject pullUp, pullDown;
 
     public MissileController MissileController;
     // Use this for initialization
@@ -38,6 +41,8 @@ public class AircraftsController : NetworkBehaviour
         MissileController.Initialize();
         if (isLocalPlayer)
         {
+            pullDown = GameObject.FindGameObjectWithTag(Tags.PullDown);
+            pullUp = GameObject.FindGameObjectWithTag(Tags.PullUp);
             Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
             body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
             var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
@@ -62,5 +67,38 @@ public class AircraftsController : NetworkBehaviour
     {
         if (isLocalPlayer)
             Aircraft.aircraftInterpolator.Interpolate(Time.deltaTime);
+    }
+
+    void FixedUpdate()
+    {
+        checkFlightConditions();
+    }
+
+    private float maxAngle = 60;
+    void checkFlightConditions()
+    {
+        if (Aircraft.Theta*Mathf.Rad2Deg > maxAngle)
+        {
+            toggleWarning(pullDown, true);
+        }
+        else
+        {
+            toggleWarning(pullDown, false);
+        }
+
+        if (Aircraft.Theta * Mathf.Rad2Deg < -maxAngle)
+        {
+            toggleWarning(pullUp, true);
+        }
+        else
+        {
+            toggleWarning(pullUp, false);
+        }
+    }
+
+    void toggleWarning(GameObject panel, bool active)
+    {
+        panel.GetComponentInChildren<Text>().enabled = active;
+        panel.GetComponentInChildren<RawImage>().enabled = active;
     }
 }
