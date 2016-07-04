@@ -1,5 +1,5 @@
 clear;clc;
-global_simulation_time = 30;
+global_simulation_time = 20.2;
 
 % V0 = 178;% ZMIANA sqrt(U_e * U_e + W_e * W_e);
 % theta_e = 9.4 * (2*pi)/360;%Dodano
@@ -7,7 +7,7 @@ global_simulation_time = 30;
 % W_e = V0*sin(theta_e);%DODANO
 % Q_e = 0;
 
-u = [0;1 * 2 * pi / 360];
+u = [-0.1;0.3];
 
 simulation_step = 0.2;
 global_simulation_step_amount = (1 / simulation_step) * global_simulation_time;
@@ -87,29 +87,41 @@ end
 figure(3);
 
 
-subplot(4,1,1);
-plot(time , V, 'g');
+subplot(6,1,1);
+plot(time , V, 'b');
 hold on;
 plot(time(1) , V(1), 'or');
 legend('V');
 
-subplot(4,1,2);
-plot(time , phi, 'g');
+subplot(6,1,2);
+plot(time , P, 'b');
+hold on;
+plot(time(1) , P(1), 'or');
+legend('P');
+
+subplot(6,1,3);
+plot(time , R, 'b');
+hold on
+plot(time(1) , R(1), 'or');
+legend('R');
+
+subplot(6,1,4);
+plot(time , phi, 'b');
 hold on;
 plot(time(1) , phi(1), 'or');
 %plot(time(500) , phi(500), 'or');
-legend('phi');
+legend('\phi');
 
-subplot(4,1,3);
+subplot(6,1,5);
 plot(time , psi, 'b');
 hold on;
 plot(time(1) , psi(1), 'or');
-legend('psi');
+legend('\psi');
 
-subplot(4,1,4);
-plot(time , S_x(1:length(time)), 'g');
+subplot(6,1,6);
+plot(time , 1/178 * V, 'b');
 hold on;
-plot(time(1) , S_x(1), 'or');
-legend('pos');
+plot(time(1) , 1/178 * V(1), 'or');
+legend('\beta');
 %clear;
 
