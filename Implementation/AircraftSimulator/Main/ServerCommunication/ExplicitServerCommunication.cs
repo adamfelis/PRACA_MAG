@@ -8,6 +8,7 @@ using System.Linq;
 using Main.ToolsManagerCommunication;
 using Main.AircraftsManagerCommunication;
 using AircraftsManager.Shooter;
+using Common.AircraftData;
 using Common.Containers;
 using Patterns.Executors;
 using Server.Executors;
@@ -79,10 +80,18 @@ namespace Main.ServerCommunication
                 {
                     if (dataEventArgs.DataList.DataArray.First().MessageConcreteType == MessageConcreteType.MissileDataRequest)
                     {
+                        List<IData> parameters = aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication
+                            .ManagerInstance.GetMissileData(
+                                dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId);
+                        MissileData missileData = new MissileData(dataEventArgs.DataList.DataArray.First().Array);
+                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.ShooterX, missileData.ShooterY, missileData.ShooterZ } }, Sender = "shooter_position" });
+                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.TargetX, missileData.TargetY, missileData.TargetZ } }, Sender = "target_position" });
+
+
+
                         List<IData> result = this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                            global::Common.Scripts.SpecialScriptType.SimulateMissile,
-                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(
-                                dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                            global::Common.Scripts.SpecialScriptType.SimulateMissile, parameters
+                            );
                         foreach (var data in result)
                         {
                             data.MissileTargetId = dataEventArgs.DataList.DataArray.First().MissileTargetId;
@@ -99,9 +108,16 @@ namespace Main.ServerCommunication
                             dataEventArgs.DataList.DataArray.First().MissileId,
                             dataEventArgs.DataList.DataArray.First().MissileTargetId
                             );
+                        List<IData> parameters = aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance
+                            .GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId);
+
+                        MissileData missileData = new MissileData(dataEventArgs.DataList.DataArray.First().Array); 
+                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.ShooterX, missileData.ShooterY, missileData.ShooterZ} }, Sender = "shooter_position" });
+                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.TargetX, missileData.TargetY, missileData.TargetZ } }, Sender = "target_position" });
+
                         this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(
-                            global::Common.Scripts.SpecialScriptType.MissileAdder,
-                            aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance.GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId));
+                            global::Common.Scripts.SpecialScriptType.MissileAdder, parameters
+                            );
                         return new List<IData>()
                             {
                                 new Data()

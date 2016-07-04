@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Common.AircraftData;
 using Common.Containers;
 
 namespace Assets.scripts.Data_Manipulation
@@ -10,8 +11,8 @@ namespace Assets.scripts.Data_Manipulation
     {
         void SendJoinMessage(string localIPAddress);
         void SendAircraftRequestToServer();
-        void SendMissileRequestToServer(int shooterId, int targetId, int missileId);
-        void SendMissileFiredToServer(int shooterId, int targetId, int missileId);
+        void SendMissileRequestToServer(MissileData missileData);
+        void SendMissileFiredToServer(MissileData missileData);
         void DisconnectFromServer();
     }
 }

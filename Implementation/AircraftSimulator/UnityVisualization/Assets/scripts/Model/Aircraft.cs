@@ -44,7 +44,7 @@ public class Aircraft : IAircraft
 
     public float V_0
     {
-        get { return Velocity_0.z; }
+        get { return Velocity_0.x; }
     }
     public float V_e
     {
@@ -59,8 +59,8 @@ public class Aircraft : IAircraft
         {
             return new Vector3(
                 -Body.transform.position.z,
-                Body.transform.position.y,
-                Body.transform.position.x
+                Body.transform.position.x,
+                Body.transform.position.y
                 );
         }
     }
@@ -197,7 +197,7 @@ public class Aircraft : IAircraft
         rotationMaxOffset = new Vector3(InputController.rangeHalfRangeAileron,
             InputController.rangeHalfRangeRudder, 
             InputController.rangeHalfRangeElevator);
-        Velocity_0 = new Vector3(0, 0, 178);
+        Velocity_0 = new Vector3(178, 0, 0);
         Theta_0 = 9.4f;
         Psi_0 = 0.0f;
         Phi_0 = 0.0f;
@@ -311,15 +311,15 @@ public class Aircraft : IAircraft
         aircraftInterpolator.TargetPositionZ += deltaZ;
     }
 
-    public void SetupVelocityInLongitudinal(float velocityX, float velocityY)
+    public void SetupVelocityInLongitudinal(float velocityZ, float velocityY)
     {
-        aircraftInterpolator.TargetVelocityX = velocityX;
+        aircraftInterpolator.TargetVelocityZ = velocityZ;
         aircraftInterpolator.TargetVelocityY = velocityY;
     }
 
-    public void SetupVelocityInLateral(float velocityZ)
+    public void SetupVelocityInLateral(float velocityX)
     {
-        aircraftInterpolator.TargetVelocityZ = velocityZ;
+        aircraftInterpolator.TargetVelocityX = velocityX;
     }
 
 

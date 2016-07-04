@@ -147,6 +147,8 @@ public class MapCanvasController : MonoBehaviour
 
 	void Update () 
     {
+        if (AircraftsController.Aircraft.Body == null)
+            return;
         if (rotateMap)
         {
             mapRect.rotation = Quaternion.Euler(new Vector3(0, 0, AircraftsController.Aircraft.Body.transform.eulerAngles.y));

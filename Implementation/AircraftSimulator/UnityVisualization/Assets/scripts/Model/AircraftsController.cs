@@ -17,7 +17,10 @@ public class AircraftsController : NetworkBehaviour
     public Aircraft Aircraft;
     public event NotifierHandler Initialized;
 
-    private GameObject pullUp, pullDown;
+    public bool IsDestroying { get; set; }
+    private GameObject pullUp, pullDown, lostSteering;
+
+    public bool FirstResponseReceived { get; set; }
 
     public MissileController MissileController;
     // Use this for initialization
@@ -43,6 +46,7 @@ public class AircraftsController : NetworkBehaviour
         {
             pullDown = GameObject.FindGameObjectWithTag(Tags.PullDown);
             pullUp = GameObject.FindGameObjectWithTag(Tags.PullUp);
+            lostSteering = GameObject.FindGameObjectWithTag(Tags.WarningLostSteering);
             Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
             body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
             var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
@@ -60,8 +64,7 @@ public class AircraftsController : NetworkBehaviour
             trailerRenderer.material = Resources.Load("trail_enemy", typeof(Material)) as Material;
         }
         Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().enabled = true;
-
-    }
+	}
 
     void Update()
     {
@@ -71,13 +74,14 @@ public class AircraftsController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        checkFlightConditions();
+        if (FirstResponseReceived && isLocalPlayer && !IsDestroying)
+            checkFlightConditions();
     }
 
-    private float maxAngle = 60;
+    private float minVelocity = 50;
     void checkFlightConditions()
     {
-        if (Aircraft.Theta*Mathf.Rad2Deg > maxAngle)
+        if (Aircraft.Velocity.x < minVelocity)
         {
             toggleWarning(pullDown, true);
         }
@@ -85,20 +89,42 @@ public class AircraftsController : NetworkBehaviour
         {
             toggleWarning(pullDown, false);
         }
+        if (Aircraft.Velocity.x < 0)
+        {
+            toggleWarning(lostSteering, true);
+            toggleWarning(pullDown, false);
+            StartCoroutine(closeGame());
+        }
+        //if (Aircraft.Theta * Mathf.Rad2Deg > maxAngle)
+        //{
+        //    toggleWarning(pullDown, true);
+        //}
+        //else
+        //{
+        //    toggleWarning(pullDown, false);
+        //}
 
-        if (Aircraft.Theta * Mathf.Rad2Deg < -maxAngle)
-        {
-            toggleWarning(pullUp, true);
-        }
-        else
-        {
-            toggleWarning(pullUp, false);
-        }
+            //if (Aircraft.Theta * Mathf.Rad2Deg < -maxAngle)
+            //{
+            //    toggleWarning(pullUp, true);
+            //}
+            //else
+            //{
+            //    toggleWarning(pullUp, false);
+            //}
     }
 
     void toggleWarning(GameObject panel, bool active)
     {
-        panel.GetComponentInChildren<Text>().enabled = active;
-        panel.GetComponentInChildren<RawImage>().enabled = active;
+
+            panel.GetComponentInChildren<Text>().enabled = active;
+            panel.GetComponentInChildren<RawImage>().enabled = active;
+    }
+
+    IEnumerator closeGame()
+    {
+        yield return new WaitForSeconds(3);
+        GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<CustomNetworkManager>().DisconnectFromServer();
+        //GameObject.FindGameObjectWithTag(Tags.ApplicationManager).GetComponent<Communication>().Disconnect();
     }
 }

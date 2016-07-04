@@ -22,6 +22,10 @@ namespace MathematicalToolCommunicator.ExternalMathToolCommunicationFacade.Scrip
         internal override List<IData> RunScript(MLApp.MLApp mlApp, Parameters.Parameters parameters)
         {
             base.RunScript(mlApp, parameters);
+            if (((float[]) parameters.ParametersList[0].Value)[0] == 2)
+            {
+                int a = 1;
+            }
 
             List<IData> result = new List<IData>();
             mlApp.Execute(ScriptName);

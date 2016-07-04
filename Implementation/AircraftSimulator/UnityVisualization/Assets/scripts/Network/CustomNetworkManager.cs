@@ -138,7 +138,7 @@ public class CustomNetworkManager : NetworkManager
     void Start()
     {
         sceneController = GetComponent<SceneController>();
-        StartCoroutine(refreshMatchList());
+        //StartCoroutine(refreshMatchList());
     }
 
     public void OnLevelWasLoaded(int level)
@@ -164,7 +164,13 @@ public class CustomNetworkManager : NetworkManager
 
     public void DisconnectFromServer()
     {
-        StartCoroutine(waitForEndOfFrameAndStopServer());
+        var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
+        applicationManager.GetComponent<InputController>().enabled = false;
+        ClientDisconnected.Invoke();
+        //yield return new WaitForEndOfFrame();
+        //yield return new WaitForFixedUpdate();
+        NetworkManager.singleton.StopHost();
+        //StartCoroutine(waitForEndOfFrameAndStopServer());
     }
 
     IEnumerator waitForEndOfFrameAndStopServer()

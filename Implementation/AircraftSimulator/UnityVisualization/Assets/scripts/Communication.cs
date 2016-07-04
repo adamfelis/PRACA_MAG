@@ -22,7 +22,7 @@ public class Communication : MonoBehaviour, ICommunication
 
     public void NotifyUnityShell(string toOutput)
     {
-        Debug.Log(toOutput);
+        //Debug.Log(toOutput);
     }
 
     private void Initialize()

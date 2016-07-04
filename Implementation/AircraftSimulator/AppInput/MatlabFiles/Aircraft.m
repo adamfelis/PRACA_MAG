@@ -20,6 +20,12 @@ classdef Aircraft < handle & Shooter
         DEBUG_MODE = false;
         ERROR_STATE = false;
         aircraftPosition = [0 0 0];
+        
+        actual_velocity = [0 0 0];
+        roll_angle = 0;
+        pitch_angle = 0;
+        yaw_angle = 0;
+        
     end
     
     methods
@@ -56,8 +62,8 @@ classdef Aircraft < handle & Shooter
         end
         
         % Add missiles
-        function AddMissile(obj, missilePos, shooter_id, missile_id)
-            obj.Missiles = [obj.Missiles, Missile(shooter_id, missile_id, missilePos, obj.simulation_step_from_fixed_update)];
+        function AddMissile(obj, missilePos, shooter_id, missile_id, targetPosition)
+            obj.Missiles = [obj.Missiles, Missile(shooter_id, missile_id, missilePos, obj.simulation_step_from_fixed_update, targetPosition)];
         end
         % Returns concrete missile strategy
         function MissileStrategy = GetMissileStrategy(obj, missile_index, strategy_index)
@@ -84,14 +90,20 @@ classdef Aircraft < handle & Shooter
                     Y_longitudinal = obj.current_simulation_solutions(i).Y_longitudinal(simulation_index + 1,:);
                     Y_lateral = obj.current_simulation_solutions(i).Y_lateral(simulation_index + 1,:);
                     movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal', u_lateral');
-                    if i == 1
-                        obj.aircraftPosition = obj.aircraftPosition + movement;
-                    end
+%                     if i == 1
+%                         obj.aircraftPosition = obj.aircraftPosition + movement;
+%                     end
                     results.AddStrategyResult(...
                         Y_longitudinal,...
                         Y_lateral,...
                         movement);
                         %newPosition.value)
+                        if i == 1
+                            obj.roll_angle = Y_lateral(4);
+                            obj.pitch_angle = Y_longitudinal(4);
+                            obj.yaw_angle = Y_lateral(5);
+                            obj.actual_velocity = [Y_longitudinal(1), Y_lateral(1), Y_longitudinal(2)];
+                        end
                 end
             else
                 obj.current_simulation_solutions = [];
@@ -115,15 +127,28 @@ classdef Aircraft < handle & Shooter
                     obj.current_simulation_solutions = [obj.current_simulation_solutions, SimulationSolution(Y_longitudinal, Y_lateral)];
                    
                     movement = obj.Strategies(i).MoveAircraft(Y_longitudinal(simulation_index + 1,:)', Y_lateral(simulation_index + 1,:)', u_longitudinal', u_lateral');
-                    if i == 1
-                        obj.aircraftPosition = obj.aircraftPosition + movement;
-                    end
+%                     if i == 1
+%                         obj.aircraftPosition = obj.aircraftPosition + movement;
+%                     end
                 
 %                     newPosition = Position(0,0,0);
 %                     if(obj.DEBUG_MODE)
 %                         newPosition = obj.UpdatePosition([0, obj.simulation_step_from_fixed_update], i); 
 %                     end
                     results.AddStrategyResult(Y_longitudinal(simulation_index + 1,:), Y_lateral(simulation_index + 1,:), movement);%newPosition.value)
+                    
+                        if i == 1
+                            
+                            obj.roll_angle = Y_lateral(simulation_index + 1,4);
+                            obj.pitch_angle = Y_longitudinal(simulation_index + 1,4);
+                            obj.yaw_angle = Y_lateral(simulation_index + 1,5);
+                            
+                            obj.actual_velocity = [...
+                                Y_longitudinal(simulation_index + 1,1),...
+                                Y_lateral(simulation_index + 1,1),...
+                                Y_longitudinal(simulation_index + 1,2)...
+                                ];
+                        end
                 end
             end
             obj.previous_result = results;
@@ -181,7 +206,7 @@ classdef Aircraft < handle & Shooter
                     obj.ERROR_STATE = true;
                 end
                 
-                movement = obj.Strategies(i).MoveAircraft(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
+                movement = obj.Strategies(i).MoveAircraftLaplace(Y_longitudinal', Y_lateral', u_longitudinal, u_lateral);
                 if i == 1
                     obj.aircraftPosition = obj.aircraftPosition + movement;
                 end
@@ -195,7 +220,21 @@ classdef Aircraft < handle & Shooter
             resultsArray = results.PresentFinalResults();
         end
         
-        function missileDeltaPositions = SimulateMissile(obj, shooter_id, missile_id)            
+        function missileDeltaPositions = SimulateMissile(obj, shooter_id, missile_id, shooterPosition)            
+            R_x = [1 0 0;...
+                0 cos(-obj.roll_angle) -sin(-obj.roll_angle);...
+                0 sin(-obj.roll_angle) cos(-obj.roll_angle)];
+            
+            R_y = [cos(-obj.pitch_angle) 0 sin(-obj.pitch_angle);...
+                0 1 0;...
+                -sin(-obj.pitch_angle) 0 cos(-obj.pitch_angle)];
+            
+            R_z = [cos(-obj.yaw_angle) -sin(-obj.yaw_angle) 0;...
+                sin(-obj.yaw_angle) cos(-obj.yaw_angle) 0;...
+                0 0 1];
+            
+            rotation_matrix = R_z * R_y * R_x;
+            velocity = rotation_matrix * obj.actual_velocity';
             
             missileDeltaPositions = [];
             for i = 1:1:length(obj.Missiles)
@@ -203,7 +242,7 @@ classdef Aircraft < handle & Shooter
                     continue;
                 end
                for j = 1:1:length(obj.Missiles(i).Strategies)
-                   deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition, obj.Strategies(1).current_aircraft_velocity);
+                   deltaPos = obj.Missiles(i).Strategies(j).SimulateMissileFlight(obj.aircraftPosition, [velocity(2), velocity(3), -velocity(1)], shooterPosition);% obj.Strategies(1).current_aircraft_velocity);
                    missileDeltaPositions = [missileDeltaPositions; deltaPos];
                end
             end

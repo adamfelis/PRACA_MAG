@@ -25,7 +25,7 @@ namespace Assets.scripts
     }
     public class CameraSmoothFollow : MonoBehaviour
     {
-        private Transform backCamera, frontCamera, leftCamera, rightCamera, mainCamera;
+        private Transform backCamera, frontCamera, leftCamera, rightCamera, mainCamera, radarCamera;
         private bool animationPending = false;
         private bool animationOnInterrupted = false;
         private InterpolationType type = InterpolationType.Normal;
@@ -54,12 +54,18 @@ namespace Assets.scripts
             leftCamera = transform.FindChild("LeftCamera");
             rightCamera = transform.FindChild("RightCamera");
             mainCamera = transform.FindChild("MainCamera");
-            //mainCamera.GetComponent<AudioListener>().enabled = true;
+            radarCamera = transform.FindChild("RadarCamera");
+            mainCamera.GetComponent<AudioListener>().enabled = true;
         }
 
         public Camera MainCamera
         {
             get { return mainCamera.GetComponent<Camera>(); }
+        }
+
+        public Camera RadarCamera
+        {
+            get { return radarCamera.GetComponent<Camera>(); }
         }
 
         public bool IsBackCameraOnItsPlace()

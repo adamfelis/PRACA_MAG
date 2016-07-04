@@ -736,6 +736,47 @@ classdef AircraftStrategy < handle & Strategy
         
         function movementVector = MoveAircraft(obj, longitudinal_solution, lateral_solution, u_longitudinal, u_lateral)
                         
+            temp_velocity = [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
+            obj.current_aircraft_velocity = temp_velocity;
+            
+            longitudinal_derivatives = obj.A_longitudinal_without_regulation * longitudinal_solution + obj.B_longitudinal_without_regulation * u_longitudinal;
+            lateral_derivatives = obj.A_lateral_without_regulation * lateral_solution + obj.B_lateral_without_regulation * u_lateral;
+%             longitudinal_derivatives = obj.A_longitudinal * longitudinal_solution + obj.B_longitudinal * u_longitudinal;
+%             lateral_derivatives = obj.A_lateral * lateral_solution + obj.B_lateral * u_lateral;
+            
+            acceleration_vector = [longitudinal_derivatives(2); lateral_derivatives(1) ; longitudinal_derivatives(1)];%w v u
+            
+            pitch_angle = longitudinal_solution(4);
+            roll_angle = lateral_solution(4);
+            yaw_angle = lateral_solution(5); 
+            
+            R_x = [1 0 0;...
+                0 cos(roll_angle) -sin(roll_angle);...
+                0 sin(roll_angle) cos(roll_angle)];
+            
+            R_y = [cos(pitch_angle) 0 sin(pitch_angle);...
+                0 1 0;...
+                -sin(pitch_angle) 0 cos(pitch_angle)];
+            
+            R_z = [cos(yaw_angle) -sin(yaw_angle) 0;...
+                sin(yaw_angle) cos(yaw_angle) 0;...
+                0 0 1];
+            
+            rotation_matrix = R_z * R_y * R_x;
+            
+            acceleration_vector_after_rotation = rotation_matrix * acceleration_vector;
+            %gravity_vector = [-9.81; 0; 0];
+            gravity_vector = [0; 0; 0];
+            acceleration_vector_after_rotation_including_gravity = acceleration_vector_after_rotation + gravity_vector;
+            
+            tmpMovementVector = ...
+                rotation_matrix * temp_velocity' * obj.simulation_step_from_fixed_update + ... %vt
+                acceleration_vector_after_rotation_including_gravity * ...
+                obj.simulation_step_from_fixed_update * obj.simulation_step_from_fixed_update / 2;%at^2/2
+            movementVector = [tmpMovementVector(3), tmpMovementVector(2), tmpMovementVector(1)];
+        end
+        function movementVector = MoveAircraftLaplace(obj, longitudinal_solution, lateral_solution, u_longitudinal, u_lateral)
+                        
             temp_velocity = obj.initial_aircraft_velocity + [longitudinal_solution(2), lateral_solution(1), longitudinal_solution(1)];
             obj.current_aircraft_velocity = temp_velocity;
             

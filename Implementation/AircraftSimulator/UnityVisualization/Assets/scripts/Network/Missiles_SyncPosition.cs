@@ -33,6 +33,8 @@ public class Missiles_SyncPosition : NetworkBehaviour
     [SyncVar(hook = "OnPosMissileRight2Hit")]
     private bool missileRight2Hit;
 
+    [SyncVar(hook = "OnHitTargetIdChanged")]
+    private int hitTargetId;
 
 
     private Vector3 lastPos;
@@ -43,8 +45,10 @@ public class Missiles_SyncPosition : NetworkBehaviour
     private MissileController missileController;
     private Transform weapons;
     private bool isInitialized = false;
+    private Player_ID playerId;
     public void Initialize()
     {
+        playerId = GetComponent<Player_ID>();
         missileController = GetComponent<MissileController>();
         weapons = missileController.missiles[0].Body.transform.parent;
         isInitialized = true;
@@ -90,9 +94,27 @@ public class Missiles_SyncPosition : NetworkBehaviour
             globalIterationCounter = 0.0f;
     }
 
+    private void addMissileTrail(GameObject gameObject)
+    {
+        //var trailRenderer = gameObject.AddComponent<TrailRenderer>();
+        //trailRenderer.startWidth = 400;
+        //trailRenderer.endWidth = 400;
+        //trailRenderer.time = 10000;
+        //trailRenderer.material = Resources.Load("trail_missile", typeof(Material)) as Material;
+
+        var trailRenderer = (GameObject)GameObject.Instantiate(Resources.Load("TrailRenderer"));
+        trailRenderer.name = "TrailRenderer";
+        trailRenderer.transform.parent = gameObject.transform;
+        trailRenderer.transform.localPosition = Vector3.zero;
+    }
+
 
     private void OnPosMissileLeft1Changed(Vector3 pos)
     {
+        if (missileController.missiles[0].Body.transform.FindChild("TrailRenderer") == null)
+        {
+            addMissileTrail(missileController.missiles[0].Body);
+        }
         if (!isLocalPlayer)
         {
             if (missileController.missiles[0].Body.transform.parent != null)
@@ -113,7 +135,11 @@ public class Missiles_SyncPosition : NetworkBehaviour
 
     private void OnPosMissileLeft2Changed(Vector3 pos)
     {
-        if (!isLocalPlayer)
+        if (missileController.missiles[1].Body.transform.FindChild("TrailRenderer") == null)
+        {
+            addMissileTrail(missileController.missiles[1].Body);
+        }
+            if (!isLocalPlayer)
         {
             if (missileController.missiles[1].Body.transform.parent != null)
                 missileController.missiles[1].Body.transform.parent = null;
@@ -132,6 +158,10 @@ public class Missiles_SyncPosition : NetworkBehaviour
 
     private void OnPosMissileRight1Changed(Vector3 pos)
     {
+        if (missileController.missiles[2].Body.transform.FindChild("TrailRenderer") == null)
+        {
+            addMissileTrail(missileController.missiles[2].Body);
+        }
         if (!isLocalPlayer)
         {
             if (missileController.missiles[2].Body.transform.parent != null)
@@ -151,6 +181,10 @@ public class Missiles_SyncPosition : NetworkBehaviour
 
     private void OnPosMissileRight2Changed(Vector3 pos)
     {
+        if (missileController.missiles[3].Body.transform.FindChild("TrailRenderer") == null)
+        {
+            addMissileTrail(missileController.missiles[3].Body);
+        }
         if (!isLocalPlayer)
         {
             if (missileController.missiles[3].Body.transform.parent != null)
@@ -168,11 +202,57 @@ public class Missiles_SyncPosition : NetworkBehaviour
         }
     }
 
+
+    private void OnHitTargetIdChanged(int targetId)
+    {
+        playerId.GetLocalPlayer().GetComponent<AircraftsController>().IsDestroying = true;
+        GameObject pullDown = GameObject.FindGameObjectWithTag(Tags.PullDown);
+        GameObject pullUp = GameObject.FindGameObjectWithTag(Tags.PullUp);
+        toggleWarning(pullDown, false);
+        toggleWarning(pullUp, false);
+
+        var trailRenderer = playerId.GetPlayerById(targetId).transform.FindChild("Trail");
+        trailRenderer.parent = null;
+
+        if (targetId == playerId.GetLocalPlayer().GetComponent<Player_ID>().Id)
+        {
+            GameObject warningDestroyed = GameObject.FindGameObjectWithTag(Tags.WarningDestroyed);
+            toggleWarning(warningDestroyed, true);
+            StartCoroutine(closeGame());
+        }
+        else
+        {
+            StartCoroutine(unlockChecking());
+        }
+    }
+
     private void restartMissile(int missileId)
     {
+        var trailRenderer = missileController.missiles[missileId].Body.transform.FindChild("TrailRenderer");
+        trailRenderer.parent = null;
         missileController.missiles[missileId].Body.transform.SetParent(weapons);
         missileController.missiles[missileId].IsTriggered = false;
         missileController.missiles[missileId].Body.transform.localPosition = missileController.missiles[missileId].offset;
+        missileController.missiles[missileId].Body.transform.localRotation = missileController.missiles[missileId].rotation;
+    }
+
+    void toggleWarning(GameObject panel, bool active)
+    {
+        panel.GetComponentInChildren<Text>().enabled = active;
+        panel.GetComponentInChildren<RawImage>().enabled = active;
+    }
+
+    IEnumerator unlockChecking()
+    {
+        yield return new WaitForSeconds(3);
+        playerId.GetLocalPlayer().GetComponent<AircraftsController>().IsDestroying = false;
+    }
+
+    IEnumerator closeGame()
+    {
+        yield return new WaitForSeconds(3);
+        GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<CustomNetworkManager>().DisconnectFromServer();
+        //GameObject.FindGameObjectWithTag(Tags.ApplicationManager).GetComponent<Communication>().Disconnect();
     }
 
     [Command]
@@ -216,12 +296,20 @@ public class Missiles_SyncPosition : NetworkBehaviour
         }
     }
 
+    [Command]
+    private void CmdProvideTargetIdHit(int targetId)
+    {
+        hitTargetId = targetId;
+    }
+
+
     [ClientCallback]
-    public void TransmitMissileHit(int missileId)
+    public void TransmitMissileHit(int missileId, int targetId)
     {
         if (isLocalPlayer)
         {
             CmdProvideMissileHit(missileId);
+            CmdProvideTargetIdHit(targetId);
         }
     }
 

@@ -15,7 +15,7 @@ namespace Assets.scripts.Model
         private CameraSmoothFollow cameraSmoothFollow;
         private bool isObjectVisible = false;
         private bool sentInformation = false;
-        private Camera mainCamera;
+        private Camera radarCamera;
         public Collider anObjCollider;
         private Plane[] planes;
         private bool initialized = false;
@@ -23,7 +23,7 @@ namespace Assets.scripts.Model
         public void Initialize(CameraSmoothFollow cameraSmoothFollow)
         {
             this.cameraSmoothFollow = cameraSmoothFollow;
-            mainCamera = cameraSmoothFollow.MainCamera;
+            radarCamera = cameraSmoothFollow.RadarCamera;
             anObjCollider = transform.root.GetComponent<BoxCollider>();
             initialized = true;
         }
@@ -58,7 +58,7 @@ namespace Assets.scripts.Model
 
         bool testObjectVisiblity()
         {
-            planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+            planes = GeometryUtility.CalculateFrustumPlanes(radarCamera);
             if (GeometryUtility.TestPlanesAABB(planes, anObjCollider.bounds))
                 return true;
             else

@@ -55,6 +55,9 @@ namespace Assets.Scripts
                 var mainCamera = Tags.FindGameObjectWithTagInParent(Tags.MainCamera, name);
                 mainCamera.GetComponent<Camera>().enabled = true;
 
+                var radarCamera = Tags.FindGameObjectWithTagInParent(Tags.RadarCamera, name);
+                radarCamera.GetComponent<Camera>().enabled = true;
+
                 var miniMap = GameObject.FindGameObjectWithTag(Tags.MiniMap);
                 miniMap.GetComponent<MapCanvasController>().AircraftsController = aircraftsController;
                 miniMap.GetComponent<MapCanvasController>().enabled = true;

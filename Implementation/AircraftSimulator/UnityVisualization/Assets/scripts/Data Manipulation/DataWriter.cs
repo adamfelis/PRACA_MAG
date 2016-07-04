@@ -74,7 +74,7 @@ namespace Assets.scripts
             });
         }
 
-        public void SendMissileRequestToServer(int shooterId, int targetId, int missileId)
+        public void SendMissileRequestToServer(MissileData missileData)
         {
             communicator.ClientInputPriveleges.SendDataRequest(
             new DataList()
@@ -83,21 +83,22 @@ namespace Assets.scripts
                 {
                     new Data()
                     {
-                        MissileTargetId = targetId,
-                        MissileId = missileId,
-                        ShooterId = shooterId,
+                        MissileTargetId = missileData.TargetId,
+                        MissileId = missileData.MissileId,
+                        ShooterId = missileData.ShooterId,
                         MessageType = MessageType.ClientDataRequest,
                         MessageContent = MessageContent.Missile,
                         MessageConcreteType = MessageConcreteType.MissileDataRequest,
                         InputType = DataType.Matrix,
                         OutputType = DataType.Vector,//???????????????????????????
-                        Response = ActionType.ResponseRequired
+                        Response = ActionType.ResponseRequired,
+                        Array = missileData.GetData()
                     }
                 }
             });
         }
 
-        public void SendMissileFiredToServer(int shooterId, int targetId, int missileId)
+        public void SendMissileFiredToServer(MissileData missileData)
         {
             var aircraft = aircraftsController.Aircraft;
             communicator.ClientInputPriveleges.SendDataRequest(
@@ -107,22 +108,23 @@ namespace Assets.scripts
                 {
                     new Data()
                     {
-                        Array = new MissileData(
-                            aircraft.Velocity.x,
-                            aircraft.Velocity.z,
-                            aircraft.Velocity.y,
-                            aircraft.Position.x,
-                            aircraft.Position.y,
-                            aircraft.Position.z).GetData(),
-                        MissileTargetId = targetId,
-                        MissileId = missileId,
-                        ShooterId = shooterId,
+                        //Array = new MissileData(
+                        //    aircraft.Velocity.x,
+                        //    aircraft.Velocity.z,
+                        //    aircraft.Velocity.y,
+                        //    aircraft.Position.x,
+                        //    aircraft.Position.y,
+                        //    aircraft.Position.z).GetData(),
+                        MissileTargetId = missileData.TargetId,
+                        MissileId = missileData.MissileId,
+                        ShooterId = missileData.ShooterId,
                         MessageType = MessageType.ClientDataRequest,
                         MessageContent = MessageContent.Missile,
                         MessageConcreteType = MessageConcreteType.MissileAddedRequest,
                         InputType = DataType.Matrix,
                         OutputType = DataType.Vector,//???????????????????????????
-                        Response = ActionType.ResponseRequired
+                        Response = ActionType.ResponseRequired,
+                        Array = missileData.GetData()
                     }
                 }
             });

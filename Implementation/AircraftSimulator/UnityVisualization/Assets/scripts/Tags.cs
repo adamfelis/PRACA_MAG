@@ -69,12 +69,16 @@ public static class Tags
     public static string BattleMap = "BattleMap";
     public static string PullUp = "PullUp";
     public static string PullDown = "PullDown";
+    public static string WarningDestroyed = "WarningDestroyed";
+    public static string WarningHit = "WarningHit";
+    public static string WarningLostSteering = "WarningLostSteering";
     #endregion
 
     #region  inspector-main scene
     public static string ApplicationManager = "ApplicationManager";
     public static string CameraManager = "CameraManager";
     public static string MainCamera = "MainCamera";
+    public static string RadarCamera = "RadarCamera";
     public static string EnvironmentCreator = "EnvironmentCreator";
     public static string Player = "Player";
     public static string NetworkManager = "NetworkManager";

@@ -47,6 +47,63 @@ namespace Common.AircraftData
         }
         #endregion
 
+
+        public int ShooterId
+        {
+            get { return (int)(missileData[0][0]); }
+        }
+
+        public int TargetId
+        {
+            get { return (int)(missileData[0][1]); }
+        }
+
+        public int MissileId
+        {
+            get { return (int)(missileData[0][2]); }
+        }
+
+        //target position
+        #region
+        public float TargetX
+        {
+            get { return missileData[1][0]; }
+        }
+        public float TargetY
+        {
+            get
+            {
+                return missileData[1][1];
+            }
+        }
+        public float TargetZ
+        {
+            get { return missileData[1][2]; }
+        }
+        #endregion
+
+        //shooter position
+        #region
+        public float ShooterX
+        {
+            get { return missileData[2][0]; }
+        }
+        public float ShooterY
+        {
+            get
+            {
+                return missileData[2][1];
+            }
+        }
+        public float ShooterZ
+        {
+            get { return missileData[2][2]; }
+        }
+        #endregion
+
+
+
+
         public MissileData(float[][] missileData)
         {
             this.missileData = missileData;
@@ -58,6 +115,18 @@ namespace Common.AircraftData
             {
                 new float[] { U_0, V_0, W_0 },
                 new float[] { X_0, Y_0, Z_0 }
+            };
+        }
+
+        public MissileData(int shooterId, int targetId, int missileId,
+                            float targetX, float targetY, float targetZ,
+                           float shooterX, float shooterY, float shooterZ)
+        {
+            this.missileData = new float[][]
+            {
+                new float[] {shooterId, targetId, missileId},
+                new float[] { targetX, targetY, targetZ },
+                new float[] { shooterX, shooterY, shooterZ }
             };
         }
 

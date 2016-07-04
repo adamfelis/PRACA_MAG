@@ -83,7 +83,6 @@ namespace Server.Executors
             }
             catch (MessageIgnoreException e)
             {
-                
             }
         }
     }
