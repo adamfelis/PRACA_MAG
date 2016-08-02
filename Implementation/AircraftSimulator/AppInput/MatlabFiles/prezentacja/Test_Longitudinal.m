@@ -1,49 +1,59 @@
-clear;clc;
-global_simulation_time = 400.2;
+clearvars -except values_u;
+global_simulation_time = 1000.2;
 
 V0 = 178;% ZMIANA sqrt(U_e * U_e + W_e * W_e);
 theta_e = 9.4 * (2*pi)/360;%Dodano
 U_e = V0*cos(theta_e);%DODANO
 W_e = V0*sin(theta_e);%DODANO
-Q_e = 0;
+Q_e = 0.07;% ????
 
-initial_U = U_e;
+initial_U = U_e;    
 initial_W = W_e;
 initial_V = 0;
 
 
-u = [10 * 2 * pi / 360; 0];
-%u = [0.1 0 ]';
+%u = [10 * 2 * pi / 360; 0];
+u = [3 * 2 * pi  /360 0.5 ]';
 simulation_step = 0.2;
 global_simulation_step_amount = (1 / simulation_step) * global_simulation_time;
 simulation_time = 2;
 interval = 0 : simulation_step : simulation_time;
 
-U =[];
-W =[];
-Q =[];
-theta =[];
-time =[];
+U =[U_e];
+W =[W_e];
+Q =[Q_e];
+theta =[theta_e];
+time =[0];
 
 counter = 0;
 %[A, B] = CreateAB(U_e, W_e, theta_e);
 [A, B] = CreateAB2(U_e, W_e,sqrt(U_e * U_e + W_e * W_e), theta_e);
 %[A_lat, B_lat] = CreateABLateral(
-
+B(:,2) = 2 * B(:,1);
 ni_changed = false;
 solution_index = 2;
 %figure(1);
 %hold on;
 %TIME = 0
+C = zeros(4);
 C = eye(4);
+%C(2,2) = 1;
+%C(4,4) = 1;
 R = eye(2);
-p = 10;
+% p = 1e-6;%U
+% p = 1e-10;%W
+% p = 0.4;%theta
+p = 1;
 Q_k = p * (C' * C);
 K = lqr(A,B,Q_k,R);
-Nbar = 1000;
+% Nbar = 1.5280;%U
+% Nbar = 1.0001;%W
+% Nbar = 789.0058;%theta
 
-% A = A - B*K;
-% B = B*Nbar;
+Nbar = 1.1549e+03;%3.6491e+03;
+%Nbar = 1;
+%  A = A - B*K;
+%  B = B*Nbar;
 initial_x0 = [U_e; W_e; Q_e; theta_e];
 while(global_simulation_step_amount > 0)
     global_simulation_step_amount = global_simulation_step_amount - 1;
@@ -68,12 +78,12 @@ while(global_simulation_step_amount > 0)
     time = [time; simulation_step * counter];
     counter = counter + 1;
     solution_index = solution_index + 1;
-    if( counter>500 && mod(counter,10) == 0)
-    %if counter == 250 
-       u(1) = max(u(1) - 1 * 2 * pi / 360, 5 * 2 * pi / 360);
-       %u(1) = 0;
-       ni_changed = true;
-    end
+%     if( counter>500 && mod(counter,10) == 0)
+%     %if counter == 250 
+%        u(1) = max(u(1) - 1 * 2 * pi / 360, 5 * 2 * pi / 360);
+%        %u(1) = 0;
+%        ni_changed = true;
+%     end
 end
 
 % current_position = [0 0 0];
@@ -108,18 +118,19 @@ end
 
 W = -W;
 
-figure(5);
+figure(6);
 
+color = 'b';
 
 subplot(6,1,1);
-plot(time , U, 'b');
+plot(time , U, color);
 hold on;
 plot(time(1) , U(1), 'or');
 legend('U');
 grid on;
 
 subplot(6,1,2);
-plot(time , W, 'b');
+plot(time , W, color);
 hold on;
 plot(time(1) , W(1), 'or');
 legend('W');
@@ -127,28 +138,28 @@ grid on;
 
 
 subplot(6,1,3);
-plot(time , Q, 'b');
+plot(time , Q, color);
 hold on;
 plot(time(1) , Q(1), 'or');
 legend('q');
 grid on;
 
 subplot(6,1,4);
-plot(time , theta, 'b');
+plot(time , theta, color);
 hold on;
 plot(time(1) , theta(1), 'or');
 legend('\theta');
 grid on;
 
 subplot(6,1,5);
-plot(time , 1/178 * W, 'b');
+plot(time , 1/178 * W, color);
 hold on;
 plot(time(1) , 1/178 * W(1), 'or');
 legend('\alpha');
 grid on;
 
 subplot(6,1,6);
-plot(time, theta - 1 / 178 * W, 'b');
+plot(time, theta - 1 / 178 * W, color);
 hold on;
 plot(time(1), theta(1) - 1 / 178 * W(1), 'or');
 legend('\gamma');

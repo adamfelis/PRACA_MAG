@@ -36,7 +36,7 @@ classdef MissileStrategy < handle & Strategy
             
             %normalisedAircraftVelocity = aircraftVelocity ./ norm(aircraftVelocity);
             
-            predictedAircraftPosition = aircraftPosition + [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)] * obj.simulation_step_from_fixed_update;
+            predictedAircraftPosition = aircraftPosition;% + [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)] * obj.simulation_step_from_fixed_update;
             
             u = [predictedAircraftPosition(1) predictedAircraftPosition(2) predictedAircraftPosition(3)]';
             x0 = obj.missileState';
@@ -47,7 +47,7 @@ classdef MissileStrategy < handle & Strategy
 %             maxVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)] * factor;
 %             minVelocity = [aircraftVelocity(3), aircraftVelocity(2), aircraftVelocity(1)];
 %             
-%             obj.missileState(4) = min(obj.missileState(4), maxVelocity(1));
+%             obj.missileState( 4) = min(obj.missileState(4), maxVelocity(1));
 %             %obj.missileState(4) = max(obj.missileState(4), minVelocity(1));
 %             obj.missileState(5) = min(obj.missileState(5), maxVelocity(2));
 %             %obj.missileState(5) = max(obj.missileState(5), minVelocity(2));
