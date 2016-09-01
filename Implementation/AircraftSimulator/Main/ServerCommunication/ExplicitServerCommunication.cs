@@ -82,7 +82,7 @@ namespace Main.ServerCommunication
                     {
                         List<IData> parameters = aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication
                             .ManagerInstance.GetMissileData(
-                                dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId);
+                                dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId, dataEventArgs.DataList.DataArray.First().Velocity);
                         MissileData missileData = new MissileData(dataEventArgs.DataList.DataArray.First().Array);
                         parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.ShooterX, missileData.ShooterY, missileData.ShooterZ } }, Sender = "shooter_position" });
                         parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.TargetX, missileData.TargetY, missileData.TargetZ } }, Sender = "target_position" });
@@ -109,10 +109,10 @@ namespace Main.ServerCommunication
                             dataEventArgs.DataList.DataArray.First().MissileTargetId
                             );
                         List<IData> parameters = aircraftsManagerCommunicationImplementor.AircraftsManagerCommunication.ManagerInstance
-                            .GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId);
+                            .GetMissileData(dataEventArgs.Id, dataEventArgs.DataList.DataArray.First().MissileId, dataEventArgs.DataList.DataArray.First().Velocity);
 
-                        MissileData missileData = new MissileData(dataEventArgs.DataList.DataArray.First().Array); 
-                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.ShooterX, missileData.ShooterY, missileData.ShooterZ} }, Sender = "shooter_position" });
+                        MissileData missileData = new MissileData(dataEventArgs.DataList.DataArray.First().Array);
+                        parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.ShooterX, missileData.ShooterY, missileData.ShooterZ } }, Sender = "shooter_position" });
                         parameters.Add(new Data() { InputType = DataType.Vector, Array = new float[1][] { new float[3] { missileData.TargetX, missileData.TargetY, missileData.TargetZ } }, Sender = "target_position" });
 
                         this.toolsManagerCommunicationImplementor.ToolsManagerCommunication.ManagerInstance.Compute(

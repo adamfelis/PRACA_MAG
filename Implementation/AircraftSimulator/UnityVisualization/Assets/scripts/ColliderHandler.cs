@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Assets.scripts;
+using Assets.scripts.Data_Manipulation;
 
 
 public delegate void OnInitializeHandler(GameObject gameObject);
@@ -14,7 +15,10 @@ public class ColliderHandler : MonoBehaviour
     private float rotationOffset = 0;
     private float rotationMaxOffset;
     public OnInitializeHandler OnInitializeHandler { get; set; }
-
+    private FileWriter fileWriter = new FileWriter();
+    private string elevatorName = "elevator.txt";
+    private string aileronName = "aileron.txt";
+    private string rudderName = "rudder.txt";
     public float RotationOffset
     {
         get
@@ -46,6 +50,18 @@ public class ColliderHandler : MonoBehaviour
 
     public void Initialize(float rotationMaxOffset)
     {
+        if (tag == Tags.ElevatorRight)
+        {
+            fileWriter.CreateFile(elevatorName);
+        }
+        if (tag == Tags.AileronLeft)
+        {
+            fileWriter.CreateFile(aileronName);
+        }
+        if (tag == Tags.RudderLeft)
+        {
+            fileWriter.CreateFile(rudderName);
+        }
         this.rotationMaxOffset = rotationMaxOffset;
     }
 
@@ -261,6 +277,7 @@ public class ColliderHandler : MonoBehaviour
 
     private float timeFromLastChange = 0.0f;
     private float prevDelta = 0.0f;
+    private float timeCounter = 0.0f;
     private void rotateJoystick(float delta, bool checkRequired = true)
     {
         float eps = 0.0001f;
@@ -269,6 +286,31 @@ public class ColliderHandler : MonoBehaviour
         float fractionInterpolatationTime = 50.0f;
         if (checkRequired)
         {
+
+            //float a = 0.0f;
+            //timeCounter += Time.deltaTime;
+            //if (timeCounter > Time.fixedDeltaTime)
+            //{
+            //    a = 1.0f;
+            //    timeCounter = 0.0f;
+            //}
+            //string content = delta + " " + rotationOffset.ToString() + " " + a;
+            //if (tag == Tags.ElevatorRight)
+            //{
+            //    Debug.Log(content);
+            //    fileWriter.Write(elevatorName, content);
+            //}
+            //if (tag == Tags.AileronLeft)
+            //{
+            //    Debug.Log(content);
+            //    fileWriter.Write(aileronName, content);
+            //}
+            //if (tag == Tags.RudderLeft)
+            //{
+            //    Debug.Log(content);
+            //    fileWriter.Write(rudderName, content);
+            //}
+
 
             if (Mathf.Abs(delta - prevDelta) < eps)
                 timeFromLastChange += Time.deltaTime;
@@ -282,6 +324,7 @@ public class ColliderHandler : MonoBehaviour
             rotationOffset = Mathf.Lerp(rotationOffset, delta, fraction);
             rotationOffset = Mathf.Clamp(rotationOffset, -rotationMaxOffset, rotationMaxOffset);
             delta = rotationOffset - oldRotationOffset;
+
         }
         if (Mathf.Abs(delta) > eps)
             transform.RotateAround(CenterOfRotation, RelativeAxis, delta);

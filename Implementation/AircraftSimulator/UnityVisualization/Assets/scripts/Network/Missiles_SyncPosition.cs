@@ -2,6 +2,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Assets.scripts;
 using Assets.scripts.Model;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -9,34 +11,6 @@ using UnityEngine.UI;
 [NetworkSettings(channel = 1, sendInterval = 0.033f)]
 public class Missiles_SyncPosition : NetworkBehaviour
 {
-    [SyncVar(hook = "OnPosMissileLeft1Changed")]
-    public Vector3 missileLeft1;
-
-    [SyncVar(hook = "OnPosMissileLeft1Hit")]
-    private bool missileLeft1Hit;
-
-    [SyncVar(hook = "OnPosMissileLeft2Changed")]
-    public Vector3 missileLeft2;
-
-    [SyncVar(hook = "OnPosMissileLeft2Hit")]
-    private bool missileLeft2Hit;
-
-    [SyncVar(hook = "OnPosMissileRight1Changed")]
-    public Vector3 missileRight1;
-
-    [SyncVar(hook = "OnPosMissileRight1Hit")]
-    private bool missileRight1Hit;
-
-    [SyncVar(hook = "OnPosMissileRight2Changed")]
-    public Vector3 missileRight2;
-
-    [SyncVar(hook = "OnPosMissileRight2Hit")]
-    private bool missileRight2Hit;
-
-    [SyncVar(hook = "OnHitTargetIdChanged")]
-    private int hitTargetId;
-
-
     private Vector3 lastPos;
     private float threshold = 5f;
     private Text latencyText;
@@ -49,6 +23,9 @@ public class Missiles_SyncPosition : NetworkBehaviour
     public void Initialize()
     {
         playerId = GetComponent<Player_ID>();
+        visibleTargets = new Dictionary<Transform, KeyValuePair<GameObject, GameObject>>();
+        mainCamera = Tags.FindGameObjectWithTagInParent(Tags.MainCamera, transform.root.name).GetComponent<Camera>();
+        canvas = GameObject.FindGameObjectWithTag(Tags.Canvas).GetComponent<RectTransform>();
         missileController = GetComponent<MissileController>();
         weapons = missileController.missiles[0].Body.transform.parent;
         isInitialized = true;
@@ -58,182 +35,149 @@ public class Missiles_SyncPosition : NetworkBehaviour
 	{
         if (!isInitialized)
             return;
-	    if (!isLocalPlayer)
-	    {
-	        LerpPosition();
-	    }
+        LerpPosition();
+	    UpdateMissileIconsPosiions();
+    }
 
-	}
+    private void UpdateMissileIconsPosiions()
+    {
+        foreach (var visibleTarget in visibleTargets)
+        {
+            Transform target = visibleTarget.Key.transform;
+            Vector3 screenPosition = mainCamera.WorldToScreenPoint(target.position);
+            var reference = canvas.rect.size;
+            float sw = Screen.width;
+            float sh = Screen.height;
+            reference = new Vector2(reference.x/sw, reference.y/sh);
+            var icon = visibleTarget.Value.Key.GetComponent<RectTransform>();
+            icon.anchoredPosition = new Vector2(screenPosition.x*reference.x - icon.rect.width/2,
+                screenPosition.y*reference.y - icon.rect.height/2);
+            icon.localScale = Vector3.one;
+            var missile = visibleTarget.Value.Value.GetComponent<RectTransform>();
+            missile.anchoredPosition = icon.anchoredPosition + new Vector2(-93f, 103.1f);
+            missile.localScale = Vector3.one;
+        }
+    }
 
     void FixedUpdate()
     {
         if (!isInitialized)
             return;
-        TransmitPosition();
     }
 
-    /// <summary>
-    /// We want to lerp only other characters to limit network traffic. Our own position remains unchanged.
-    /// </summary>
     void LerpPosition()
     {
         float singleIterationTime = Time.deltaTime;
         float wholeInterpolationTime = Time.fixedDeltaTime;
         globalIterationCounter += singleIterationTime;
         float t = globalIterationCounter / wholeInterpolationTime;
-        foreach (var missileComponentse in missileController.missiles.Values)
+        foreach (var missileComponent in missileController.missiles.Values)
         {
-            if (missileComponentse.IsTriggered)
+            if (missileComponent.IsTriggered)
             {
-                missileComponentse.Body.transform.position =
-                    Vector3.Lerp(missileComponentse.PrevPos, missileComponentse.TargetPos, t);
-                //Debug.Log(missileComponentse.Body.transform.position);
+                missileComponent.Body.transform.position =
+                    Vector3.Lerp(missileComponent.PrevPos, missileComponent.TargetPos, t);
+                //Debug.Log(missileComponent.Body.transform.position);
             }
         }
-        if (t > 1)
-            globalIterationCounter = 0.0f;
     }
 
     private void addMissileTrail(GameObject gameObject)
     {
-        //var trailRenderer = gameObject.AddComponent<TrailRenderer>();
-        //trailRenderer.startWidth = 400;
-        //trailRenderer.endWidth = 400;
-        //trailRenderer.time = 10000;
-        //trailRenderer.material = Resources.Load("trail_missile", typeof(Material)) as Material;
 
         var trailRenderer = (GameObject)GameObject.Instantiate(Resources.Load("TrailRenderer"));
+        var tr = trailRenderer.GetComponent<TrailRenderer>();
+        //tr.material = Resources.Load("trail_missile", typeof(Material)) as Material;
+        tr.material = Resources.Load("missile", typeof(Material)) as Material;
+        tr.startWidth = tr.endWidth = 15;
         trailRenderer.name = "TrailRenderer";
         trailRenderer.transform.parent = gameObject.transform;
         trailRenderer.transform.localPosition = Vector3.zero;
     }
 
-
-    private void OnPosMissileLeft1Changed(Vector3 pos)
+    private void enableMissileIcon(MissileComponents missileComponents)
     {
-        if (missileController.missiles[0].Body.transform.FindChild("TrailRenderer") == null)
+        StartCoroutine(updateMissileTimer(missileComponents));
+
+        var missile = missileComponents.Body;
+        if (isLocalPlayer)
         {
-            addMissileTrail(missileController.missiles[0].Body);
+            var rendererMissileIcon = missile.AddComponent<RendererMissileIcon>();
+            var cameraSmoothFollow = Tags.FindGameObjectWithTagInParent(Tags.CameraManager, name).GetComponent<CameraSmoothFollow>();
+            rendererMissileIcon.Initialize(cameraSmoothFollow);
+            rendererMissileIcon.MissileBecameVisible += OnMissileBecameVisible;
+            rendererMissileIcon.MissileBecameInvisible += OnMissileBecameInvisible;
         }
-        if (!isLocalPlayer)
+    }
+    private RectTransform canvas;
+    private IDictionary<Transform, KeyValuePair<GameObject, GameObject>> visibleTargets;
+    private Camera mainCamera;
+
+    public void OnMissileBecameVisible(Transform missileTransform)
+    {
+        if (playerId == null)
+            return;
+        GameObject missileIcon = (GameObject)Instantiate(Resources.Load("MissileIcon"));
+        GameObject missileInfo = (GameObject)Instantiate(Resources.Load("MissileInfo"));
+        missileIcon.name = "missile" + playerId.Id;
+        missileIcon.transform.SetParent(canvas.transform);
+        missileInfo.name = "missileInfo" + playerId.Id;
+        missileInfo.transform.SetParent(canvas.transform);
+        visibleTargets.Add(new KeyValuePair<Transform, KeyValuePair<GameObject, GameObject>>
+            (missileTransform, new KeyValuePair<GameObject, GameObject>(missileIcon, missileInfo)));
+    }
+
+    public void OnMissileBecameInvisible(Transform missileTransform)
+    {
+        if (visibleTargets.ContainsKey(missileTransform))
         {
-            if (missileController.missiles[0].Body.transform.parent != null)
-                missileController.missiles[0].Body.transform.parent = null;
-            missileController.missiles[0].IsTriggered = true;
-            missileController.missiles[0].TargetPos = pos;
-            //Debug.Log(pos);
+            Destroy(visibleTargets[missileTransform].Key);
+            Destroy(visibleTargets[missileTransform].Value);
+            visibleTargets.Remove(missileTransform);
         }
     }
 
-    private void OnPosMissileLeft1Hit(bool hit)
+    private IEnumerator updateMissileTimer(MissileComponents missileComponents)
     {
-        if (hit)
-        {
-            restartMissile(0);
-        }
-    }
+        float actualTimer = 0.0f;
+        float timeToDestroyMissile = 30.0f;
+        var shooter = gameObject;
+        var target = playerId.GetPlayerByRemoteAssignedId(missileComponents.TargetId);
+        var missile = missileComponents.Body;
 
-    private void OnPosMissileLeft2Changed(Vector3 pos)
-    {
-        if (missileController.missiles[1].Body.transform.FindChild("TrailRenderer") == null)
+        while (true)
         {
-            addMissileTrail(missileController.missiles[1].Body);
-        }
-            if (!isLocalPlayer)
-        {
-            if (missileController.missiles[1].Body.transform.parent != null)
-                missileController.missiles[1].Body.transform.parent = null;
-            missileController.missiles[1].IsTriggered = true;
-            missileController.missiles[1].TargetPos = pos;
-        }
-    }
+            actualTimer += Time.deltaTime;
+            timeToDestroyMissile -= Time.deltaTime;
+            string format = "n2";
+            var targetPos = target.transform.position;
+            var missilePosition = missile.transform.position;
 
-    private void OnPosMissileLeft2Hit(bool hit)
-    {
-        if (hit)
-        {
-            restartMissile(1);
-        }
-    }
+            if (visibleTargets.ContainsKey(missile.transform))
+            {
+                var missileInfo = visibleTargets[missile.transform].Value;
+                var textComponents = missileInfo.GetComponentsInChildren<Text>();
+                var distanceText = textComponents.First(x => x.name == "Distance");
+                var timeText = textComponents.First(x => x.name == "Time");
 
-    private void OnPosMissileRight1Changed(Vector3 pos)
-    {
-        if (missileController.missiles[2].Body.transform.FindChild("TrailRenderer") == null)
-        {
-            addMissileTrail(missileController.missiles[2].Body);
-        }
-        if (!isLocalPlayer)
-        {
-            if (missileController.missiles[2].Body.transform.parent != null)
-                missileController.missiles[2].Body.transform.parent = null;
-            missileController.missiles[2].IsTriggered = true;
-            missileController.missiles[2].TargetPos = pos;
-        }
-    }
+                //timeText.text = "Missile flight time: " + actualTimer.ToString(format) + "s.";
+                timeText.text = "Remaining time: " + timeToDestroyMissile.ToString(format) + "s.";
+                if (timeToDestroyMissile <= 0f)
+                {
+                    restartMissile(missileComponents.MissileId);
+                    break;
+                }
 
-    private void OnPosMissileRight1Hit(bool hit)
-    {
-        if (hit)
-        {
-            restartMissile(2);
+                if (gameObject == shooter)
+                    distanceText.text = "Distance to target: " +
+                                        Vector3.Distance(targetPos, missilePosition).ToString(format);
+                else
+                    distanceText.text = "Distance to approaching missile: " +
+                                        Vector3.Distance(targetPos, missilePosition).ToString(format);
+            }
+            yield return 0;
+
         }
-    }
-
-    private void OnPosMissileRight2Changed(Vector3 pos)
-    {
-        if (missileController.missiles[3].Body.transform.FindChild("TrailRenderer") == null)
-        {
-            addMissileTrail(missileController.missiles[3].Body);
-        }
-        if (!isLocalPlayer)
-        {
-            if (missileController.missiles[3].Body.transform.parent != null)
-                missileController.missiles[3].Body.transform.parent = null;
-            missileController.missiles[3].IsTriggered = true;
-            missileController.missiles[3].TargetPos = pos;
-        }
-    }
-
-    private void OnPosMissileRight2Hit(bool hit)
-    {
-        if (hit)
-        {
-            restartMissile(3);
-        }
-    }
-
-
-    private void OnHitTargetIdChanged(int targetId)
-    {
-        playerId.GetLocalPlayer().GetComponent<AircraftsController>().IsDestroying = true;
-        GameObject pullDown = GameObject.FindGameObjectWithTag(Tags.PullDown);
-        GameObject pullUp = GameObject.FindGameObjectWithTag(Tags.PullUp);
-        toggleWarning(pullDown, false);
-        toggleWarning(pullUp, false);
-
-        var trailRenderer = playerId.GetPlayerById(targetId).transform.FindChild("Trail");
-        trailRenderer.parent = null;
-
-        if (targetId == playerId.GetLocalPlayer().GetComponent<Player_ID>().Id)
-        {
-            GameObject warningDestroyed = GameObject.FindGameObjectWithTag(Tags.WarningDestroyed);
-            toggleWarning(warningDestroyed, true);
-            StartCoroutine(closeGame());
-        }
-        else
-        {
-            StartCoroutine(unlockChecking());
-        }
-    }
-
-    private void restartMissile(int missileId)
-    {
-        var trailRenderer = missileController.missiles[missileId].Body.transform.FindChild("TrailRenderer");
-        trailRenderer.parent = null;
-        missileController.missiles[missileId].Body.transform.SetParent(weapons);
-        missileController.missiles[missileId].IsTriggered = false;
-        missileController.missiles[missileId].Body.transform.localPosition = missileController.missiles[missileId].offset;
-        missileController.missiles[missileId].Body.transform.localRotation = missileController.missiles[missileId].rotation;
     }
 
     void toggleWarning(GameObject panel, bool active)
@@ -256,81 +200,143 @@ public class Missiles_SyncPosition : NetworkBehaviour
     }
 
     [Command]
-    void CmdProvideMissilePositionToServer(Vector3 value, int missileId)
+    void CmdMissileHit(int shooterId, int targetId, int missileId)
     {
-        switch (missileId)
+        RpcMissileHit(shooterId, targetId, missileId);
+    }
+
+    /// <summary>
+    /// invoked by shooter
+    /// </summary>
+    private void restartMissile(int missileId)
+    {
+        var shooter = gameObject;
+        var missileComponents = missileController.missiles[missileId];
+        var trailRenderer = missileComponents.Body.transform.FindChild("TrailRenderer");
+        if (trailRenderer != null)
+            trailRenderer.parent = null;
+        missileComponents.Body.transform.SetParent(weapons);
+        missileComponents.IsTriggered = false;
+        missileComponents.RequestPosition = false;
+        missileComponents.PointLight.enabled = false;
+        missileComponents.MeshRenderer.enabled = false;
+        missileComponents.Body.transform.localPosition = missileController.missiles[missileId].offset;
+        missileComponents.Body.transform.localRotation = missileController.missiles[missileId].rotation;
+        shooter.GetComponent<MissileController>().onStock.Add(missileComponents);
+
+        if (isLocalPlayer)
         {
-            case 0:
-                missileLeft1 = value;
-                break;
-            case 1:
-                missileLeft2 = value;
-                break;
-            case 2:
-                missileRight1 = value;
-                break;
-            case 3:
-                missileRight2 = value;
-                break;
+            OnMissileBecameInvisible(missileComponents.Body.transform);
+            Destroy(missileComponents.Body.GetComponent<RendererMissileIcon>());
+        }
+    }
+
+    [ClientRpc]
+    private void RpcMissileHit(int shooterId, int targetId, int missileId)
+    {
+        if (playerId.ServerAssignedId == shooterId)
+        {
+            Debug.Log("I am a shooter, HIT, is local: " + playerId.isLocalPlayer);
+
+        }
+        else if (playerId.ServerAssignedId == targetId)
+        {
+            Debug.Log("I am a target, HIT, is local: " + playerId.isLocalPlayer);
+        }
+        StopAllCoroutines();
+        
+        restartMissile(missileId);
+
+        //saving trail renderer
+        var target = playerId.GetPlayerByRemoteAssignedId(targetId);
+        var trailRendererTarget = target.transform.FindChild("Trail");
+        trailRendererTarget.parent = null;
+
+        if (playerId.GetLocalPlayer().GetComponent<Player_ID>().ServerAssignedId == targetId)
+        {
+            target.GetComponent<AircraftsController>().IsDestroying = true;
+            GameObject pullDown = GameObject.FindGameObjectWithTag(Tags.PullDown);
+            GameObject pullUp = GameObject.FindGameObjectWithTag(Tags.PullUp);
+            toggleWarning(pullDown, false);
+            toggleWarning(pullUp, false);
+
+            GameObject warningDestroyed = GameObject.FindGameObjectWithTag(Tags.WarningDestroyed);
+            toggleWarning(warningDestroyed, true);
+            StartCoroutine(closeGame());
         }
     }
 
     [Command]
-    void CmdProvideMissileHit(int missileId)
+    public void CmdBroadcastMissileCreated(int shooterId, int targetId, int missileId)
     {
-        bool value = true;
-        switch (missileId)
-        {
-            case 0:
-                missileLeft1Hit = value;
-                break;
-            case 1:
-                missileLeft2Hit = value;
-                break;
-            case 2:
-                missileRight1Hit = value;
-                break;
-            case 3:
-                missileRight2Hit = value;
-                break;
-        }
+        RpcMissileCreated(shooterId, targetId, missileId);
+    }
+
+    [ClientRpc]
+    public void RpcMissileCreated(int shooterId, int targetId, int missileId)
+    {
+        var shooter = gameObject;
+        var missileComponents = shooter.GetComponent<MissileController>().missiles[missileId];
+
+        missileComponents.Body.transform.parent = null;
+        missileComponents.TargetPos = shooter.transform.position;
+        missileComponents.TargetPos = shooter.transform.position;
+        missileComponents.IsTriggered = true;
+        addMissileTrail(missileComponents.Body);
+
+        enableMissileIcon(missileComponents);
     }
 
     [Command]
-    private void CmdProvideTargetIdHit(int targetId)
+    private void CmdBroadcastMissileUpdate(int shooterId, int targetId, int missileId, Vector3 missilePosition)
     {
-        hitTargetId = targetId;
+        RpcUpdateMissile(shooterId, targetId, missileId, missilePosition);
     }
 
+    [ClientRpc]
+    public void RpcUpdateMissile(int shooterId, int targetId, int missileId, Vector3 missilePosition)
+    {
+        var playerId = GetComponent<Player_ID>();
+        if (playerId.ServerAssignedId == shooterId)
+        {
+            Debug.Log("I am a shooter, is local player: "+ playerId.isLocalPlayer);
+            globalIterationCounter = 0.0f;
+            var shooter = GetComponent<Player_ID>().GetPlayerByRemoteAssignedId(shooterId);
+            shooter.GetComponent<MissileController>().missiles[missileId].TargetPos = missilePosition;
+        }
+        else if (playerId.ServerAssignedId == targetId)
+        {
+            Debug.Log("I am a target, is local player: " + playerId.isLocalPlayer);
+        }
 
+    }
+    
     [ClientCallback]
-    public void TransmitMissileHit(int missileId, int targetId)
+    public void TransmitMissileHit(MissileComponents missileComponents)
     {
         if (isLocalPlayer)
         {
-            CmdProvideMissileHit(missileId);
-            CmdProvideTargetIdHit(targetId);
+            CmdMissileHit(missileComponents.ShooterId, missileComponents.TargetId, missileComponents.MissileId);
+            //CmdProvideTargetIdHit(targetId);
         }
     }
 
     [ClientCallback]
-    private void TransmitPosition()
+    public void TransmitPosition(Vector3 missilePosition)
     {
-        //if (isLocalPlayer && Vector3.Distance(myTransform.position, lastPos) > threshold)
         if (isLocalPlayer)
         {
-            //Debug.Log(missileController.missiles[0].IsTriggered);
-            if (missileController.missiles[0].IsTriggered)
-                CmdProvideMissilePositionToServer(missileController.missiles[0].Body.transform.localPosition, 0);
+            for (int i = 0; i < 4; i++)
+            {
+                if (missileController.missiles[i].IsTriggered)
+                    CmdBroadcastMissileUpdate(
+                        missileController.missiles[i].ShooterId,
+                        missileController.missiles[i].TargetId,
+                        i,
+                        missilePosition);
+            }
+            
 
-            if (missileController.missiles[1].IsTriggered)
-                CmdProvideMissilePositionToServer(missileController.missiles[1].Body.transform.localPosition, 1);
-
-            if (missileController.missiles[2].IsTriggered)
-                CmdProvideMissilePositionToServer(missileController.missiles[2].Body.transform.localPosition, 2);
-
-            if (missileController.missiles[3].IsTriggered)
-                CmdProvideMissilePositionToServer(missileController.missiles[3].Body.transform.localPosition, 3);
         }
     }
 }

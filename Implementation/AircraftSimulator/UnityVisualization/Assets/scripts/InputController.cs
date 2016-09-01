@@ -14,6 +14,7 @@ public class InputController : MonoBehaviour {
     private CameraSmoothFollow cameraSmoothFollow;
     private MissileController missileController;
     private RawImage battleMap;
+    public static bool BattleMapEnabled = false;
 
     private Vector3 steeringSensitivity = new Vector3(0.1f, 0.05f, 0.3f);
     private bool readKeyboardInput;
@@ -91,7 +92,7 @@ public class InputController : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            battleMap.enabled = !battleMap.enabled;
+            battleMap.enabled = BattleMapEnabled = !battleMap.enabled;
         }
     }
 

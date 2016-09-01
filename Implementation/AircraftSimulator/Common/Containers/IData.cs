@@ -77,13 +77,17 @@ namespace Common.Containers
         int MissileTargetId { get; set; }
         int ShooterId { get; set; }
         int MissileId { get; set; }
+        /// <summary>
+        /// it may be shooter or target, depending on context
+        /// </summary>
+        float[] Velocity { get; set; }
         ActionType Response { get; set; }
         DataType InputType { get; set; }
         Shooters.ShooterType ShooterType { get; set; }
         DataType OutputType { get; set; }
         float[][] Array { get; set; }
-        float [,] Get2DimArray();
-        void Set2DimArray(float [,] value);
+        float[,] Get2DimArray();
+        void Set2DimArray(float[,] value);
         int N { get; }
         int M { get; }
     }

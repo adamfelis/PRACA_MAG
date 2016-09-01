@@ -72,6 +72,7 @@ public static class Tags
     public static string WarningDestroyed = "WarningDestroyed";
     public static string WarningHit = "WarningHit";
     public static string WarningLostSteering = "WarningLostSteering";
+    public static string MissileIcon = "MissileIcon";
     #endregion
 
     #region  inspector-main scene

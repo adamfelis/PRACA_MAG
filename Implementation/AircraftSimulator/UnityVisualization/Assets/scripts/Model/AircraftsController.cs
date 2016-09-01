@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.scripts;
+using Assets.scripts.Data_Manipulation;
 using Assets.scripts.Model;
 using Assets.scripts.UI;
 using UnityEngine.Networking;
@@ -23,10 +24,18 @@ public class AircraftsController : NetworkBehaviour
     public bool FirstResponseReceived { get; set; }
 
     public MissileController MissileController;
+
+    private FileWriter fileWriter = new FileWriter();
+    private string longitudinal = "longitudinal.txt";
+    private string lateral = "lateral.txt";
+    private string control = "control.txt";
     // Use this for initialization
     public void Initialize ()
 	{
-	    GameObject body = this.gameObject;
+        //fileWriter.CreateFile(longitudinal);
+        //fileWriter.CreateFile(lateral);
+        //fileWriter.CreateFile(control);
+        GameObject body = this.gameObject;
         Aircraft = new Aircraft()
 	    {
 	        Body = body,
@@ -50,7 +59,9 @@ public class AircraftsController : NetworkBehaviour
             Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.green);
             body.AddComponent<GUIUpdater>().Aircraft = Aircraft;
             var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
-            trailerRenderer.material = Resources.Load("trail_my", typeof (Material)) as Material;
+            //trailerRenderer.material = Resources.Load("trail_my", typeof (Material)) as Material;
+            trailerRenderer.material = Resources.Load("my", typeof(Material)) as Material;
+            trailerRenderer.startWidth = trailerRenderer.endWidth = 20;
             //MissileController = body.AddComponent<MissileController>();
             //MissileController.Initialize();
             var applicationManager = GameObject.FindGameObjectWithTag(Tags.ApplicationManager);
@@ -61,15 +72,36 @@ public class AircraftsController : NetworkBehaviour
         {
             Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
             var trailerRenderer = Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).transform.parent.GetComponent<TrailRenderer>();
-            trailerRenderer.material = Resources.Load("trail_enemy", typeof(Material)) as Material;
+            //trailerRenderer.material = Resources.Load("trail_enemy", typeof(Material)) as Material;
+            trailerRenderer.material = Resources.Load("enemy", typeof(Material)) as Material;
+            trailerRenderer.startWidth = trailerRenderer.endWidth = 20;
         }
-        Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().enabled = true;
+        //Tags.FindGameObjectWithTagInParent(Tags.TrailMarker, name).GetComponent<MeshRenderer>().enabled = true;
 	}
 
+    private float timeCounter = 0.0f;
     void Update()
     {
         if (isLocalPlayer)
+        {
             Aircraft.aircraftInterpolator.Interpolate(Time.deltaTime);
+            float a = 0.0f;
+            timeCounter += Time.deltaTime;
+            if (timeCounter > Time.fixedDeltaTime)
+            {
+                a = 1.0f;
+                timeCounter = 0.0f;
+            }
+            string content = Aircraft.Velocity.x.ToString() + " " + Aircraft.Velocity.y.ToString() + " " + Aircraft.q + " " +
+                             Aircraft.Theta * Mathf.Rad2Deg + " " + a;
+            //Debug.Log(content);
+            fileWriter.Write(longitudinal, content);
+            content = Aircraft.Velocity.z.ToString() + " " + Aircraft.p.ToString() + " " + Aircraft.r + " " +
+                             Aircraft.Phi * Mathf.Rad2Deg + " " + Aircraft.Psi * Mathf.Rad2Deg + " " + a;
+            fileWriter.Write(lateral, content);
+            content = Aircraft.Eta * Mathf.Rad2Deg + " " + Aircraft.Xi * Mathf.Rad2Deg + " " + Aircraft.Zeta * Mathf.Rad2Deg + " " + Aircraft.Tau + " " + a;
+            fileWriter.Write(control, content);
+        }
     }
 
     void FixedUpdate()

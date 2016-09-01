@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.scripts.Data_Manipulation;
 using UnityEngine;
 
 namespace Assets.scripts
@@ -48,7 +49,6 @@ namespace Assets.scripts
         private SceneController sceneController;
 
         public GameObject Body;
-
         public AircraftInterpolator(GameObject Body, SceneController sceneController)
         {
             this.Body = Body;
@@ -169,6 +169,21 @@ namespace Assets.scripts
                 previousVelocity.z = targetVelocityZ;
                 targetVelocityZ = value;
             }
+        }
+
+        public float CurrentTheta
+        {
+            get { return currentTheta; }
+        }
+
+        public float CurrentPhi
+        {
+            get { return currentPhi; }
+        }
+
+        public float CurrentPsi
+        {
+            get { return currentPsi; }
         }
 
         public void SetupInitial(float theta0, float phi0, float psi0, Vector3 V0)
@@ -310,7 +325,6 @@ namespace Assets.scripts
             if (sceneController.LongitudinalRotationActive)
                 interpolateLongitudinalRotation(singleIterationTime);
             #endregion
-
         }
 
         private void interpolateVelocity(float t)

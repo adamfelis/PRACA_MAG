@@ -13,6 +13,13 @@ namespace Assets.scripts
         float TargetPhi { get; set; }
         float TargetPsi { get; set; }
 
+       float CurrentTheta { get; }
+        
+       float CurrentPhi { get; }
+        
+        float CurrentPsi { get; }
+
+
         float TargetPositionX { get; set; }
         float TargetPositionY { get; set; }
         float TargetPositionZ { get; set; }

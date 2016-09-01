@@ -122,7 +122,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return trimValueToRange(aircraftInterpolator.TargetTheta * Mathf.Deg2Rad);
+            return trimValueToRange(aircraftInterpolator.CurrentTheta * Mathf.Deg2Rad);
         }
     }
     /// <summary>
@@ -132,7 +132,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return trimValueToRange(aircraftInterpolator.TargetPsi * Mathf.Deg2Rad);
+            return trimValueToRange(aircraftInterpolator.CurrentPsi * Mathf.Deg2Rad);
         }
     }
     /// <summary>
@@ -142,7 +142,7 @@ public class Aircraft : IAircraft
     {
         get
         {
-            return trimValueToRange(aircraftInterpolator.TargetPhi * Mathf.Deg2Rad);
+            return trimValueToRange(aircraftInterpolator.CurrentPhi * Mathf.Deg2Rad);
         }
     }
 

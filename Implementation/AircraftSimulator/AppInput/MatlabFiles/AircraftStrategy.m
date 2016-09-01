@@ -169,8 +169,8 @@ classdef AircraftStrategy < handle & Strategy
            Nbar = 1.1549e+03;
            %Nbar = 2;
            %K = zeros(2,4);
-           obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
-           obj.B_longitudinal = Nbar * obj.B_longitudinal;
+%            obj.A_longitudinal = obj.A_longitudinal - obj.B_longitudinal * K;
+%            obj.B_longitudinal = Nbar * obj.B_longitudinal;
            
            C = eye(5);
            R = eye(2);

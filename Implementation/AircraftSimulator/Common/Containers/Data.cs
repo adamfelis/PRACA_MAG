@@ -55,6 +55,13 @@ namespace Common.Containers
             get; set;
         }
 
+        private float[] velocity;
+        public float[] Velocity
+        {
+            get { return velocity; }
+            set { velocity = value; }
+        }
+
         public int ShooterId
         {
             get; set;

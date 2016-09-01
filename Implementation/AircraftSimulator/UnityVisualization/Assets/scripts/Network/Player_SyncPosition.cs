@@ -4,19 +4,27 @@ using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-[NetworkSettings(channel = 1, sendInterval = 0.033f)]
+//[NetworkSettings(channel = 1, sendInterval = 0.033f)]
 public class Player_SyncPosition : NetworkBehaviour
 {
     /// <summary>
     /// Server will automatically sync this value to other clients when variable changes.
     /// </summary>
-    [SyncVar]
+    [SyncVar(hook = "OnPosChanged")]
     private Vector3 syncPos;
     [SerializeField] private Transform myTransform;
     [SerializeField] private float lerpRate = 15;
 
 
+    /// <summary>
+    /// time interval between sending request
+    /// </summary>
     private Vector3 lastPos;
+    /// <summary>
+    /// previous interpolated position
+    /// </summary>
+    private Vector3 previousPos;
+
     private float threshold = 5f;
 
     private NetworkClient nClient;
@@ -25,11 +33,23 @@ public class Player_SyncPosition : NetworkBehaviour
     private float globalIterationCounter = 0.0f;
     private Player_ID playerId;
 
+    public Vector3 Velocity
+    {
+        get { return (myTransform.position - previousPos)/(Time.deltaTime); }
+    }
+
+    private void OnPosChanged(Vector3 v)
+    {
+        globalIterationCounter = 0;
+    }
+
+
     void Start()
     {
         nClient = GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<NetworkManager>().client;
         playerId = transform.root.gameObject.GetComponent<Player_ID>();
         myTransform = transform;
+        previousPos = Vector3.zero;
         //latencyText = GameObject.FindGameObjectWithTag(Tags.ServerLatency).GetComponent<Text>();
         //if (latencyText == null)
         //    Debug.Log("latency text missing");
@@ -64,7 +84,7 @@ public class Player_SyncPosition : NetworkBehaviour
             if (diff < eps)
                 globalIterationCounter = 0.0f;
 
-
+            previousPos = myTransform.position;
             myTransform.position = Vector3.Lerp(myTransform.position, syncPos, t);
         }
     }
@@ -84,7 +104,8 @@ public class Player_SyncPosition : NetworkBehaviour
     [ClientCallback]
     void TransmitPosition()
     {
-        if (isLocalPlayer && Vector3.Distance(myTransform.position, lastPos) > threshold)
+        //if (isLocalPlayer && Vector3.Distance(myTransform.position, lastPos) > threshold)
+        if (isLocalPlayer)
         {
             CmdProvidePositionToServer(myTransform.position);
             lastPos = myTransform.position;

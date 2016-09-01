@@ -160,13 +160,14 @@ namespace AircraftsManager
         }
 
         // TODO : return type has to be changed
-        public List<IData> GetMissileData(int sender, int missileId)
+        public List<IData> GetMissileData(int sender, int missileId, float[] velocity)
         {
             if (!instance.activeShooters.ContainsKey(sender))
                 throw new Shooter.InvalidShooterIdException();
             List<IData> data = new List<IData>();
             data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { sender } }, Sender = "shooter_id" });
             data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { new float[1] { missileId } }, Sender = "missile_id" });
+            data.Add(new Data() { InputType = DataType.Float, Array = new float[1][] { velocity }, Sender = "velocity" });
             Missile.Missile missile = instance.activeShooters[sender].GetMissile(missileId);
             List <Common.Strategy> strategies = missile.MissileFlightContext.Strategies;
             foreach (Common.Strategy strategy in strategies)

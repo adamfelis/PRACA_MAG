@@ -25,7 +25,11 @@ public class CameraMovement : MonoBehaviour {
         offset = transform.localEulerAngles;
     }
 
-	void Update () {
+	void Update ()
+	{
+
+	    if (!InputController.BattleMapEnabled)
+	        return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         transform.Translate(0, scroll * zoomSpeed, scroll * zoomSpeed, Space.World);

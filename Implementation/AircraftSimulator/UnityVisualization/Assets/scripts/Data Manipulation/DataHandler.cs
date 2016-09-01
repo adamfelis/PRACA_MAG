@@ -96,7 +96,7 @@ namespace Assets.scripts.Data_Manipulation
                 {
                     case MessageConcreteType.MissileAddedResponse:
                         unityShellNotifier.NotifyUnityShell("Missile added response received");
-                        aircraftsController.MissileController.BeginFly(data.MissileId, data.MissileTargetId);
+                        aircraftsController.MissileController.BeginFly(data.ShooterId, data.MissileTargetId, data.MissileId);
                         break;
                     case MessageConcreteType.MissileDataResponse:
                         MissileData missileData = new MissileData(data.Array);
@@ -133,7 +133,7 @@ namespace Assets.scripts.Data_Manipulation
             //velocity in Z axis (w)
             var velocityY = data.Array[0][1];
             //rotary velocity in y axis (q)
-            var q = data.Array[0][2];
+            aircraft.q = data.Array[0][2];
 
             ///NOTE MINUS
             var theta = data.Array[0][3];

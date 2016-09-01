@@ -76,6 +76,9 @@ namespace Assets.scripts
 
         public void SendMissileRequestToServer(MissileData missileData)
         {
+            var targetGameObject = aircraftsController.GetComponent<Player_ID>().GetPlayerByRemoteAssignedId(missileData.TargetId);
+            var globalTargetVelocity = targetGameObject.GetComponent<Player_SyncPosition>().Velocity;
+
             communicator.ClientInputPriveleges.SendDataRequest(
             new DataList()
             {
@@ -92,7 +95,8 @@ namespace Assets.scripts
                         InputType = DataType.Matrix,
                         OutputType = DataType.Vector,//???????????????????????????
                         Response = ActionType.ResponseRequired,
-                        Array = missileData.GetData()
+                        Array = missileData.GetData(),
+                        Velocity = new []{ globalTargetVelocity.x, globalTargetVelocity.y, globalTargetVelocity.z},
                     }
                 }
             });
@@ -100,7 +104,13 @@ namespace Assets.scripts
 
         public void SendMissileFiredToServer(MissileData missileData)
         {
-            var aircraft = aircraftsController.Aircraft;
+            //var aircraft = aircraftsController.Aircraft;
+            //var localVelocity = aircraft.Velocity;
+            //var globalVelocity = aircraft.Body.transform.TransformDirection(localVelocity);
+
+            var targetGameObject = aircraftsController.GetComponent<Player_ID>().GetPlayerByRemoteAssignedId(missileData.TargetId);
+            var globalTargetVelocity = targetGameObject.GetComponent<Player_SyncPosition>().Velocity;
+
             communicator.ClientInputPriveleges.SendDataRequest(
             new DataList()
             {
@@ -124,7 +134,8 @@ namespace Assets.scripts
                         InputType = DataType.Matrix,
                         OutputType = DataType.Vector,//???????????????????????????
                         Response = ActionType.ResponseRequired,
-                        Array = missileData.GetData()
+                        Array = missileData.GetData(),
+                        Velocity = new []{ globalTargetVelocity.x, globalTargetVelocity.y, globalTargetVelocity.z},
                     }
                 }
             });

@@ -1,0 +1,12 @@
+﻿<Properties StartupItem="UnityVisualization.CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\ext\MapGenerator\Assets\Code\GameController.cs">
+    <Files>
+      <File FileName="Assets\ext\MapGenerator\Assets\Code\GameController.cs" Line="18" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
