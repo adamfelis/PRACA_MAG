@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace TerrainGenerator
 {
     public class ChunkCache
     {
-        private readonly int MaxChunkThreads = 3;
+        private readonly int MaxChunkThreads = 100;
 
         private Dictionary<Vector2i, TerrainChunk> RequestedChunks { get; set; }
 
@@ -81,19 +84,37 @@ namespace TerrainGenerator
             return LoadedChunks.Keys.ToList();
         }
 
-        private void GenerateHeightmapForAvailableChunks()
+        private IDictionary<Thread, bool> taskCompleted = new Dictionary<Thread, bool>(); 
+        public void GenerateHeightmapForAvailableChunks()
         {
             var requestedChunks = RequestedChunks.ToList();
             if (requestedChunks.Count > 0 && ChunksBeingGenerated.Count < MaxChunkThreads)
             {
-                var chunksToAdd = requestedChunks.Take(MaxChunkThreads - ChunksBeingGenerated.Count);
+                var chunksToAdd = requestedChunks.Take(MaxChunkThreads - ChunksBeingGenerated.Count);              
                 foreach (var chunkEntry in chunksToAdd)
                 {
                     ChunksBeingGenerated.Add(chunkEntry.Key, chunkEntry.Value);
                     RequestedChunks.Remove(chunkEntry.Key);
-
-                    chunkEntry.Value.GenerateHeightmap();
+                    Thread t = chunkEntry.Value.GenerateHeightmap(OnTaskCompleted);
+                    if (initialization)
+                    {
+                        taskCompleted.Add(new KeyValuePair<Thread, bool>(t, false));
+                    }
                 }
+                generatedTasks = true;
+            }
+        }
+
+        private bool generatedTasks = false;
+        private bool initialization = true;
+        private void OnTaskCompleted(Thread t)
+        {
+            if (!initialization)
+                return;
+            taskCompleted[t] = true;
+            if (generatedTasks && taskCompleted.All(thread => thread.Value == true))
+            {
+                initialization = false;
             }
         }
 

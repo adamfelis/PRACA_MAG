@@ -11,7 +11,11 @@ namespace Assets.Scripts
         // Use this for initialization
         public override void OnStartLocalPlayer()
         {
-            //GameObject.FindGameObjectWithTag(Tags.EnvironmentCreator).GetComponent<GameController>().enabled = true;
+            var gameController = GameObject.FindGameObjectWithTag(Tags.EnvironmentCreator).GetComponent<GameController>();
+
+            gameController.Player = transform;
+            gameController.AircraftController = GetComponent<AircraftsController>();
+            gameController.StartAll();
         }
 
         public override void PreStartClient()

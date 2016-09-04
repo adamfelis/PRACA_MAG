@@ -73,6 +73,7 @@ public static class Tags
     public static string WarningHit = "WarningHit";
     public static string WarningLostSteering = "WarningLostSteering";
     public static string MissileIcon = "MissileIcon";
+    public static string Loading = "Loading";
     #endregion
 
     #region  inspector-main scene

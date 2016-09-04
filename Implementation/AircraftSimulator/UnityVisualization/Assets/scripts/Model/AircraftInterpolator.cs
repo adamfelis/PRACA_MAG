@@ -46,6 +46,8 @@ namespace Assets.scripts
         private bool interpolationActive = false;
         private float wholeInterpolationTime = Time.fixedDeltaTime;
 
+        private float animationSpeedFactor = 1f;
+
         private SceneController sceneController;
 
         public GameObject Body;
@@ -277,7 +279,7 @@ namespace Assets.scripts
             currentPositionX += (targetVelocityX * remaining);
             currentPositionY += (targetVelocityY * remaining);
             currentPositionZ += (targetVelocityZ * remaining);
-            Body.transform.Translate(new Vector3(targetVelocityX, targetVelocityY, targetVelocityZ) * remaining, Space.Self);
+            Body.transform.Translate(new Vector3(targetVelocityX, targetVelocityY, targetVelocityZ) * remaining * animationSpeedFactor, Space.Self);
 
             //Debug.Log("current theta: " + currentTheta + " target theta: " + targetTheta);
 
@@ -370,7 +372,7 @@ namespace Assets.scripts
             //Body.transform.Translate(TargetVelocityX * Time.deltaTime, Space.Self);
             currentPositionY += (currentVelocity.y * singleIterationTime);
             currentPositionZ += (currentVelocity.z * singleIterationTime);
-            Body.transform.Translate(new Vector3(0, currentVelocity.y, currentVelocity.z) * singleIterationTime, Space.Self);
+            Body.transform.Translate(new Vector3(0, currentVelocity.y, currentVelocity.z) * singleIterationTime * animationSpeedFactor, Space.Self);
 
             //float delta = targetPositionX - prevPositionX;
             //delta *= singleIteration;
@@ -394,7 +396,7 @@ namespace Assets.scripts
             //Body.transform.Translate(velocity * Time.deltaTime, Space.Self);
 
             currentPositionX += (currentVelocity.x * singleIterationTime);
-            Body.transform.Translate(new Vector3(currentVelocity.x, 0, 0) * singleIterationTime, Space.Self);
+            Body.transform.Translate(new Vector3(currentVelocity.x, 0, 0) * singleIterationTime * animationSpeedFactor, Space.Self);
 
             //float delta = targetPositionZ - prevPositionZ;
             //delta *= singleIteration;

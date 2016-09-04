@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using UnityEngine;
 
 namespace TerrainGenerator
@@ -21,7 +22,9 @@ namespace TerrainGenerator
 
         private object HeightmapThreadLockObject { get; set; }
 
-        public TerrainChunk(TerrainChunkSettings settings, NoiseProvider noiseProvider, int x, int z)
+        private Transform ChunkParent { get; set; }
+
+        public TerrainChunk(TerrainChunkSettings settings, NoiseProvider noiseProvider, int x, int z, Transform parent)
         {
             HeightmapThreadLockObject = new object();
 
@@ -30,17 +33,19 @@ namespace TerrainGenerator
             Neighborhood = new TerrainChunkNeighborhood();
 
             Position = new Vector2i(x, z);
+
+            ChunkParent = parent;
         }
 
         #region Heightmap stuff
-
-        public void GenerateHeightmap()
+        public Thread GenerateHeightmap(Action<Thread> onThreadCompleted)
         {
-            var thread = new Thread(GenerateHeightmapThread);
+            Thread thread = new Thread(() => GenerateHeightmapThread(onThreadCompleted));
             thread.Start();
+            return thread;
         }
 
-        private void GenerateHeightmapThread()
+        private void GenerateHeightmapThread(Action<Thread> onThreadCompleted)
         {
             lock (HeightmapThreadLockObject)
             {
@@ -58,6 +63,7 @@ namespace TerrainGenerator
                 }
 
                 Heightmap = heightmap;
+                onThreadCompleted(Thread.CurrentThread);
             }
         }
 
@@ -85,6 +91,7 @@ namespace TerrainGenerator
 
             Data.size = new Vector3(Settings.Length, Settings.Height, Settings.Length);
             var newTerrainGameObject = Terrain.CreateTerrainGameObject(Data);
+            newTerrainGameObject.transform.SetParent(ChunkParent);
             newTerrainGameObject.transform.position = new Vector3(Position.X * Settings.Length, 0, Position.Z * Settings.Length);
 
             Terrain = newTerrainGameObject.GetComponent<Terrain>();
@@ -92,6 +99,7 @@ namespace TerrainGenerator
             Terrain.materialType = UnityEngine.Terrain.MaterialType.Custom;
             Terrain.materialTemplate = Settings.TerrainMaterial;
             Terrain.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
+            Terrain.castShadows = false;
             Terrain.Flush();
         }
 

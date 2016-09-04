@@ -10,16 +10,23 @@ namespace TerrainGenerator
 
         public Texture2D FlatTexture;
         public Texture2D SteepTexture;
+        public Transform ChunksParent;
+
 
         private TerrainChunkSettings Settings;
 
         private NoiseProvider NoiseProvider;
 
         private ChunkCache Cache;
+        private const int heightMapResolution = 129;
+        private const int alphaMapResolution = 129;
+        private const int length = 2500;
+        private const int height = 1500;
 
         private void Awake()
         {
-            Settings = new TerrainChunkSettings(129, 129, 100, 40, FlatTexture, SteepTexture, TerrainMaterial);
+            Settings = new TerrainChunkSettings(heightMapResolution, alphaMapResolution, length, height, FlatTexture,
+                SteepTexture, TerrainMaterial);
             NoiseProvider = new NoiseProvider();
 
             Cache = new ChunkCache();
@@ -27,10 +34,6 @@ namespace TerrainGenerator
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-            }
-
             Cache.Update();
         }
 
@@ -38,7 +41,7 @@ namespace TerrainGenerator
         {
             if (Cache.ChunkCanBeAdded(x, z))
             {
-                var chunk = new TerrainChunk(Settings, NoiseProvider, x, z);
+                var chunk = new TerrainChunk(Settings, NoiseProvider, x, z, ChunksParent);
                 Cache.AddNewChunk(chunk);
             }
         }
@@ -65,7 +68,7 @@ namespace TerrainGenerator
             return result;
         }
 
-        public void UpdateTerrain(Vector3 worldPosition, int radius)
+        public int UpdateTerrain(Vector3 worldPosition, int radius)
         {
             var chunkPosition = GetChunkPosition(worldPosition);
             var newPositions = GetChunkPositionsInRadius(chunkPosition, radius);
@@ -79,6 +82,8 @@ namespace TerrainGenerator
 
             foreach (var position in chunksToRemove)
                 RemoveChunk(position.X, position.Z);
+
+            return positionsToGenerate.Count;
         }
 
         public Vector2i GetChunkPosition(Vector3 worldPosition)

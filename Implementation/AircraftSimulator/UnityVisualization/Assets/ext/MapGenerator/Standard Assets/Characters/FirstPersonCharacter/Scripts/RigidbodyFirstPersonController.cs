@@ -132,17 +132,34 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jump = true;
             }
+
+            GroundCheck();
+            Vector3 input = GetInput();
+
+            var translationForward = Camera.main.transform.forward * input.x;
+            var translationStrafe = Camera.main.transform.right * input.y;
+            var translationUp = Camera.main.transform.up * input.z;
+            transform.Translate(translationForward + translationStrafe + translationUp, Space.World);
+        }
+
+        Vector3 translationForwardOld;
+        private void OnDrawGizmos()
+        {
+            Vector3 input = GetInput();
+            var translationForward = Camera.main.transform.forward * input.x * 100;
+            if (translationForward == Vector3.zero)
+                translationForward = translationForwardOld;
+            else
+            {
+                translationForwardOld = translationForward;
+            }
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(transform.position, transform.position + translationForward);
         }
 
 
         private void FixedUpdate()
         {
-            GroundCheck();
-            Vector2 input = GetInput();
-
-            var translationForward = Quaternion.LookRotation(Camera.main.transform.forward)*Vector3.one * input.x;
-            var translationStrafe = Quaternion.LookRotation(Camera.main.transform.right) * Vector3.one * input.y;
-            transform.Translate(translationForward + translationStrafe);
 
             //if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             //{
@@ -211,15 +228,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
 
 
-        private Vector2 GetInput()
+        private Vector3 GetInput()
         {
-            
-            Vector2 input = new Vector2
-                {
-                    x = CrossPlatformInputManager.GetAxis("Horizontal"),
-                    y = CrossPlatformInputManager.GetAxis("Vertical")
-                };
-			movementSettings.UpdateDesiredTargetSpeed(input);
+
+            Vector3 input = new Vector3();
+            if (Input.GetKey(KeyCode.W))
+                input.x = 1.0f;
+            if (Input.GetKey(KeyCode.S))
+                input.x = -1.0f;
+            if (Input.GetKey(KeyCode.A))
+                input.y = -1.0f;
+            if (Input.GetKey(KeyCode.D))
+                input.y = 1.0f;
+            if (Input.GetKey(KeyCode.DownArrow))
+                input.z = -1.0f;
+            if (Input.GetKey(KeyCode.UpArrow))
+                input.z = 1.0f;
+            //movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
         }
 

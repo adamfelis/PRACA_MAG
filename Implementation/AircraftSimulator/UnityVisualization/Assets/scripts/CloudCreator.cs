@@ -8,16 +8,18 @@ public class CloudCreator : MonoBehaviour, ICloudCreator
 {
     public event NewCenterHandler NewCenterReached;
     Vector3 offset = new Vector3(10.0f, 10.0f, 10.0f);
-    float cameraFarPlan = 2000.0f;
+    float cameraFarPlan = 5000.0f;
     private System.Random r;
     private IList<GameObject> cloudContainers;
+    private int bottomLayer = -1;
+    private int upLayer = 1;
     // Use this for initialization
     void Start ()
 	{
          r = new System.Random();
         cloudContainers = new List<GameObject>();
         for (int i = -1; i <= 1; i++)
-            for (int j = -1; j <= 1; j++)
+            for (int j = bottomLayer; j <= upLayer; j++)
                 for (int k = -1; k <= 1; k++)
                 {
                     GameObject instance = (GameObject) Instantiate(Resources.Load("cloudPrefab"));
@@ -25,9 +27,23 @@ public class CloudCreator : MonoBehaviour, ICloudCreator
                     instance.transform.position = new Vector3(cameraFarPlan * i, cameraFarPlan * j, cameraFarPlan * k);
                     cloudContainers.Add(instance);
 
-                    var cloudToy = instance.transform.FindChild("CloudsToy Mngr").GetComponent<CloudsToy>();
+                    CloudsToy cloudToy;
+                    cloudToy = instance.transform.FindChild("CloudsToy Mngr").GetComponent<CloudsToy>();
                     cloudToy.Side = new Vector3(cameraFarPlan, cameraFarPlan, cameraFarPlan);
                     cloudToy.DisappearMultiplier = 1000;
+                    cloudToy.MaxWithCloud = 600;
+                    cloudToy.MaxDepthCloud = 600;
+                    cloudToy.MaxTallCloud = 300;
+                    cloudToy.NumberClouds = 8;
+                    if (j == -1 || j == 1)
+                    {
+                        //cloudToy.NumberClouds = 0;
+                    }
+                    else
+                    {
+                    }
+
+                    cloudToy.IsAnimate = false;
                     instance.AddComponent<BoxCollider>().size = cloudToy.Side;
                     instance.GetComponent<BoxCollider>().isTrigger = true;
 
@@ -83,7 +99,7 @@ public class CloudCreator : MonoBehaviour, ICloudCreator
         IList<Vector3> newPositions = new List<Vector3>();
         
         for (int i = -1; i <= 1; i++)
-            for (int j = -1; j <= 1; j++)
+            for (int j = bottomLayer; j <= upLayer; j++)
                 for (int k = -1; k <= 1; k++)
                 {
                     var newPosition = new Vector3(cloudToy.Side.x * i, cloudToy.Side.y * j, cloudToy.Side.z * k) + center;
@@ -101,7 +117,7 @@ public class CloudCreator : MonoBehaviour, ICloudCreator
         for (int i = -1; i <= 1; i += 2)
         {
             float x = center.x + i * cloudToy.Side.x / 2;
-            for (int j = -1; j <= 1; j += 2)
+            for (int j = bottomLayer; j <= upLayer; j += 2)
             {
                 float y = center.y + j * cloudToy.Side.y / 2;
                 for (int k = -1; k <= 1; k += 2)
@@ -128,8 +144,4 @@ public class CloudCreator : MonoBehaviour, ICloudCreator
         }
     }
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
