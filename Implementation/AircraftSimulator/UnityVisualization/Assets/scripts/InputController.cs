@@ -50,6 +50,7 @@ public class InputController : MonoBehaviour {
             if (!readKeyboardInput && isJoystickConnected)
                 testJoystick();
         }
+        testFreeCamera();
     }
 
     private const float throttleMinRange = 0.1f;
@@ -86,6 +87,14 @@ public class InputController : MonoBehaviour {
 
         aircraft.RotateSteersJoystick(deltaAileron, deltaRudder, -deltaElevator);
         aircraft.Tau = throttle;
+    }
+
+    private void testFreeCamera()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            cameraSmoothFollow.toggleFreeCamera();
+        }
     }
 
     private void testBattleMap()

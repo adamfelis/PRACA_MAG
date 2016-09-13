@@ -80,6 +80,7 @@ public static class Tags
     public static string ApplicationManager = "ApplicationManager";
     public static string CameraManager = "CameraManager";
     public static string MainCamera = "MainCamera";
+    public static string FreeCamera = "FreeCamera";
     public static string RadarCamera = "RadarCamera";
     public static string EnvironmentCreator = "EnvironmentCreator";
     public static string Player = "Player";

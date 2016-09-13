@@ -41,6 +41,7 @@ public class Player_SyncPosition : NetworkBehaviour
     private void OnPosChanged(Vector3 v)
     {
         globalIterationCounter = 0;
+        syncPos = v;
     }
 
 

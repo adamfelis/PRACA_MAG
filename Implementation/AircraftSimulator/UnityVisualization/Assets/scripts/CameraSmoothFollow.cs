@@ -25,10 +25,24 @@ namespace Assets.scripts
     }
     public class CameraSmoothFollow : MonoBehaviour
     {
-        private Transform backCamera, frontCamera, leftCamera, rightCamera, mainCamera, radarCamera;
+        private Transform backCamera, frontCamera, leftCamera, rightCamera, mainCamera,freeCamera, radarCamera;
         private bool animationPending = false;
         private bool animationOnInterrupted = false;
         private InterpolationType type = InterpolationType.Normal;
+
+        private void Update()
+        {
+            var r = freeCamera.rotation.eulerAngles;
+            freeCamera.rotation = Quaternion.Euler(r.x, r.y, 0.0f);
+        }
+
+        public void toggleFreeCamera()
+        {
+            bool freeCameraEnabled = !freeCamera.gameObject.GetComponent<Camera>().enabled;
+            mainCamera.gameObject.GetComponent<Camera>().enabled = !freeCameraEnabled;
+            freeCamera.gameObject.GetComponent<Camera>().enabled = freeCameraEnabled;  
+        }
+
         public float T(float t)
         {
             switch (type)
@@ -55,7 +69,9 @@ namespace Assets.scripts
             rightCamera = transform.FindChild("RightCamera");
             mainCamera = transform.FindChild("MainCamera");
             radarCamera = transform.FindChild("RadarCamera");
+            freeCamera = transform.FindChild("FreeCamera");
             mainCamera.GetComponent<AudioListener>().enabled = true;
+            freeCamera.gameObject.GetComponent<Camera>().enabled = false;
         }
 
         public Camera MainCamera
@@ -112,7 +128,8 @@ namespace Assets.scripts
                 t = T(t);
                 mainCamera.rotation = Quaternion.Lerp(captured.rotation, target.rotation, t);
                 mainCamera.position = Vector3.Lerp(captured.position, target.position, t);
-
+                freeCamera.rotation = Quaternion.Lerp(captured.rotation, target.rotation, t);
+                freeCamera.position = Vector3.Lerp(captured.position, target.position, t);
                 animationTime += Time.deltaTime;
                 if (animationTime > 1.0f)
                     animationTime = 1.0f;
@@ -120,6 +137,8 @@ namespace Assets.scripts
             }
             mainCamera.rotation = target.rotation;
             mainCamera.position = target.position;
+            freeCamera.rotation = target.rotation;
+            freeCamera.position = target.position;
         }
 
         private float minZoomRange = -5.0f;
